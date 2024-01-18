@@ -1,5 +1,7 @@
 package chess;
 
+import chess.pieceMovesCalculator.BishopMovesCalculator;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -11,7 +13,11 @@ import java.util.Collection;
  */
 public class ChessPiece {
 
+    private ChessPiece.PieceType pieceType;
+    private ChessGame.TeamColor teamColor;
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
+        this.pieceType = type;
+        this.teamColor = pieceColor;
     }
 
     /**
@@ -30,14 +36,14 @@ public class ChessPiece {
      * @return Which team this chess piece belongs to
      */
     public ChessGame.TeamColor getTeamColor() {
-        throw new RuntimeException("Not implemented");
+        return this.teamColor;
     }
 
     /**
      * @return which type of chess piece this piece is
      */
     public PieceType getPieceType() {
-        throw new RuntimeException("Not implemented");
+        return this.pieceType;
     }
 
     /**
@@ -48,6 +54,13 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        return new ArrayList<>();
+        ArrayList<ChessMove> moveList = new ArrayList<ChessMove>();
+
+        if (this.pieceType.equals(PieceType.BISHOP)) {
+            BishopMovesCalculator bishopMoves = new BishopMovesCalculator(board, myPosition);
+            moveList = bishopMoves.getValidMoves();
+        }
+
+        return moveList;
     }
 }

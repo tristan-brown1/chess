@@ -1,6 +1,7 @@
 package chess;
 
 import chess.pieceMovesCalculator.BishopMovesCalculator;
+import chess.pieceMovesCalculator.RookMovesCalculator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,6 +61,31 @@ public class ChessPiece {
             BishopMovesCalculator bishopMoves = new BishopMovesCalculator(board, myPosition);
             moveList = bishopMoves.getValidMoves();
         }
+
+        if (this.pieceType.equals(PieceType.ROOK)){
+            RookMovesCalculator rookMoves = new RookMovesCalculator(board, myPosition);
+            moveList = rookMoves.getValidMoves();
+        }
+
+//        if (this.pieceType.equals(PieceType.QUEEN)){
+//            QueenMovesCalculator queenMoves = new QueenMovesCalculator(board, myPosition);
+//            moveList = queenMoves.getValidMoves();
+//        }
+//
+//        if (this.pieceType.equals(PieceType.KING)){
+//            QueenMovesCalculator kingMoves = new KingMovesCalculator(board, myPosition);
+//            moveList = kingMoves.getValidMoves();
+//        }
+//
+//        if (this.pieceType.equals(PieceType.KNIGHT)){
+//            QueenMovesCalculator knightMoves = new KnightMovesCalculator(board, myPosition);
+//            moveList = knightMoves.getValidMoves();
+//        }
+//
+//        if (this.pieceType.equals(PieceType.PAWN)){
+//            QueenMovesCalculator pawnMoves = new PawnMovesCalculator(board, myPosition);
+//            moveList = pawnMoves.getValidMoves();
+//        }
 
         return moveList;
     }

@@ -47,4 +47,24 @@ public class ChessMove {
     public ChessPiece.PieceType getPromotionPiece() {
         return this.promotionPiece;
     }
+
+
+    @Override
+    public boolean equals(Object o){
+        if(o == null){return false;}
+        if(o == this){return true;}
+
+        if(this.getClass() != o.getClass()){
+            return false;
+        }
+
+        ChessMove other = (ChessMove)o;
+
+        return (this.startPosition.equals(other.startPosition) && (this.endPosition.equals(other.endPosition)));
+    }
+
+    @Override
+    public int hashCode() {
+        return this.startPosition.hashCode() * this.endPosition.hashCode();
+    }
 }

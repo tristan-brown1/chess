@@ -31,4 +31,23 @@ public class ChessPosition {
     public int getColumn() {
         return col;
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(o == null){return false;}
+        if(o == this){return true;}
+
+        if(this.getClass() != o.getClass()){
+            return false;
+        }
+
+        ChessPosition other = (ChessPosition)o;
+
+        return (this.row == other.getRow()) && (this.col == other.getColumn());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.row * this.col;
+    }
 }

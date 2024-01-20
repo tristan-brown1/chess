@@ -58,6 +58,10 @@ public class ChessMove {
             return false;
         }
 
+        if(this.getPromotionPiece() != ((ChessMove) o).getPromotionPiece()){
+            return false;
+        }
+
         ChessMove other = (ChessMove)o;
 
         return (this.startPosition.equals(other.startPosition) && (this.endPosition.equals(other.endPosition)));
@@ -65,6 +69,12 @@ public class ChessMove {
 
     @Override
     public int hashCode() {
-        return this.startPosition.hashCode() * this.endPosition.hashCode();
+        if(this.getPromotionPiece() != null){
+            return (this.startPosition.hashCode() * this.endPosition.hashCode() * this.promotionPiece.hashCode()) + 1 ;
+        }
+        else{
+            return this.startPosition.hashCode() * this.endPosition.hashCode();
+        }
+
     }
 }

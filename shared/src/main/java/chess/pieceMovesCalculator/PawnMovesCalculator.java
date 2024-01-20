@@ -139,7 +139,7 @@ public class PawnMovesCalculator {
             ArrayList<ChessMove> copyMoves = new ArrayList<ChessMove>(validMoves);
             int counter = 0;
             for (ChessMove move : copyMoves){
-                if(move.getEndPosition().getRow() == 1){
+                if(move.getEndPosition().getRow() == 8){
                     ChessMove replacementMove = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.QUEEN);
                     validMoves.set(counter,replacementMove);
                     ChessMove rookPromo = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.ROOK);

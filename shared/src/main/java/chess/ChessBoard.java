@@ -9,7 +9,7 @@ import java.util.Arrays;
  * signature of the existing methods.
  */
 public class ChessBoard {
-    private final ChessPiece[][] squares = new ChessPiece[8][8];
+    private ChessPiece[][] squares = new ChessPiece[8][8];
     public ChessBoard() {
 
     }
@@ -44,6 +44,7 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
+
 //        for(int i = 1; i<=8; i++){
 //            System.out.print("ChessPosition newPosition = new ChessPosition(2,i);\n");
 //            System.out.print("ChessPiece newPiece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);\n");
@@ -59,7 +60,6 @@ public class ChessBoard {
         ChessPosition pW1Position = new ChessPosition(2,1);
         ChessPiece pW1 = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
         addPiece(pW1Position,pW1);
-
         ChessPosition pW2Position = new ChessPosition(2,2);
         ChessPiece pW2 = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
         addPiece(pW2Position,pW2);
@@ -174,6 +174,20 @@ public class ChessBoard {
         ChessPiece bishopBB = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
         addPiece(bishopBBPosition,bishopBB);
 
+        int counter = 0;
+        for (int i = 0; i<8; i++) {
+            for (int j = 0; j<8; j++) {
+                if(this.squares[i][j] == null){
+                    counter++;
+                    break;
+                }
+                System.out.print(this.squares[i][j].getPieceType().toString());
+
+            }
+            System.out.println();
+        }
+        System.out.print(counter);
+
     }
 
     @Override
@@ -185,8 +199,8 @@ public class ChessBoard {
             return false;
         }
 
-        ChessBoard other = (ChessBoard) o;
+        ChessBoard other = (ChessBoard)o;
 
-        return (Arrays.deepEquals(this.squares,other.getBoard()));
+        return (Arrays.deepEquals(this.squares, other.getBoard()));
     }
 }

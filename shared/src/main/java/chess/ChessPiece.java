@@ -94,4 +94,24 @@ public class ChessPiece {
 
         return moveList;
     }
+
+    @Override
+    public int hashCode() {
+            return this.pieceType.hashCode() - this.teamColor.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(o == null){return false;}
+        if(o == this){return true;}
+
+        if(this.getClass() != o.getClass()){
+            return false;
+        }
+
+        ChessPiece other = (ChessPiece) o;
+
+        return (this.pieceType.equals(other.pieceType) && (this.teamColor.equals(other.teamColor)));
+    }
+
 }

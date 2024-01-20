@@ -1,11 +1,10 @@
 package chess.pieceMovesCalculator;
 
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessMove;
-import chess.ChessPosition;
+import chess.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 
 public class PawnMovesCalculator {
 
@@ -13,13 +12,14 @@ public class PawnMovesCalculator {
     private ChessPosition myPosition;
 
     ArrayList<ChessMove> validMoves = new ArrayList<ChessMove>();
+    HashSet<ChessMove> hashValidMoves = new HashSet<ChessMove>();
 
     public PawnMovesCalculator(ChessBoard board, ChessPosition myPosition){
         this.board = board;
         this.myPosition = myPosition;
     }
 
-    public ArrayList<ChessMove> getValidMoves() {
+    public Collection<ChessMove> getValidMoves() {
 //        ArrayList<ChessMove> validMoves = new ArrayList<ChessMove>();
         int columnNum = myPosition.getColumn();
         int rowNum = myPosition.getRow();
@@ -38,14 +38,15 @@ public class PawnMovesCalculator {
 
 
 //        black
-
         if (board.getPiece(myPosition).getTeamColor().equals(ChessGame.TeamColor.BLACK)){
             if(myPosition.getRow() == 7){
                 rowNum = rowNum - 2;
                 ChessPosition newPosition = new ChessPosition(rowNum, columnNum);
-                ChessMove newMove = new ChessMove(myPosition, newPosition);
-                validMoves.add(newMove);
-
+                if(board.getPiece(newPosition) == null && board.getPiece(straightDown) == null){
+                    ChessMove newMove = new ChessMove(myPosition, newPosition);
+                    validMoves.add(newMove);
+                    System.out.printf("(%d, %d)", rowNum,columnNum);
+                }
             }
 
             if(board.getPiece(botRight) != null){
@@ -67,11 +68,33 @@ public class PawnMovesCalculator {
                 columnNum = myPosition.getColumn();
                 rowNum = myPosition.getRow();
                 rowNum = rowNum - 1;
-
                 ChessPosition newPosition = new ChessPosition(rowNum, columnNum);
-                ChessMove newMove = new ChessMove(myPosition, newPosition);
-                validMoves.add(newMove);
+                if(board.getPiece(newPosition) == null){
+                    ChessMove newMove = new ChessMove(myPosition, newPosition);
+                    validMoves.add(newMove);
+                }
             }
+//      check to see if the valid move gets promotion piece
+
+            ArrayList<ChessMove> copyMoves = new ArrayList<ChessMove>(validMoves);
+            int counter = 0;
+            for (ChessMove move : copyMoves){
+                    if(move.getEndPosition().getRow() == 1){
+                        ChessMove replacementMove = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.QUEEN);
+                        validMoves.set(counter,replacementMove);
+                        ChessMove rookPromo = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.ROOK);
+                        ChessMove bishopPromo = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.BISHOP);
+                        ChessMove knightPromo = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.KNIGHT);
+                        validMoves.add(rookPromo);
+                        validMoves.add(bishopPromo);
+                        validMoves.add(knightPromo);
+                    }
+                    counter++;
+            }
+
+//            ig we gotta turn it into a hash set or sum
+            hashValidMoves.addAll(validMoves);
+
 
         }
 
@@ -81,8 +104,10 @@ public class PawnMovesCalculator {
             if(myPosition.getRow() == 2){
                 rowNum = rowNum + 2;
                 ChessPosition newPosition = new ChessPosition(rowNum, columnNum);
-                ChessMove newMove = new ChessMove(myPosition, newPosition);
-                validMoves.add(newMove);
+                if(board.getPiece(newPosition) == null && (board.getPiece(straightUp) == null)){
+                    ChessMove newMove = new ChessMove(myPosition, newPosition);
+                    validMoves.add(newMove);
+                }
             }
 
             if(board.getPiece(topRight) != null) {
@@ -105,9 +130,30 @@ public class PawnMovesCalculator {
                 rowNum = rowNum + 1;
 
                 ChessPosition newPosition = new ChessPosition(rowNum, columnNum);
-                ChessMove newMove = new ChessMove(myPosition, newPosition);
-                validMoves.add(newMove);
+                if(board.getPiece(newPosition) == null){
+                    ChessMove newMove = new ChessMove(myPosition, newPosition);
+                    validMoves.add(newMove);
+                }
             }
+            //            check to see if the valid move gets promotion piece
+            ArrayList<ChessMove> copyMoves = new ArrayList<ChessMove>(validMoves);
+            int counter = 0;
+            for (ChessMove move : copyMoves){
+                if(move.getEndPosition().getRow() == 1){
+                    ChessMove replacementMove = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.QUEEN);
+                    validMoves.set(counter,replacementMove);
+                    ChessMove rookPromo = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.ROOK);
+                    ChessMove bishopPromo = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.BISHOP);
+                    ChessMove knightPromo = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.KNIGHT);
+                    validMoves.add(rookPromo);
+                    validMoves.add(bishopPromo);
+                    validMoves.add(knightPromo);
+                }
+                counter++;
+            }
+
+//            ig we gotta turn it into a hash set or sum
+            hashValidMoves.addAll(validMoves);
 
 
         }
@@ -117,7 +163,7 @@ public class PawnMovesCalculator {
 
 
 
-        return validMoves;
+        return hashValidMoves;
     }
 
 //    public ChessMove goodMove(int rowNum, int columnNum){

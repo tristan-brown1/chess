@@ -1,6 +1,8 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -10,6 +12,10 @@ import java.util.Collection;
  */
 public class ChessGame {
 
+    private ChessBoard gameBoard = new ChessBoard();
+    private TeamColor TeamColor;
+
+
     public ChessGame() {
 
     }
@@ -18,7 +24,7 @@ public class ChessGame {
      * @return Which team's turn it is
      */
     public TeamColor getTeamTurn() {
-        throw new RuntimeException("Not implemented");
+        return TeamColor;
     }
 
     /**
@@ -27,7 +33,7 @@ public class ChessGame {
      * @param team the team whose turn it is
      */
     public void setTeamTurn(TeamColor team) {
-        throw new RuntimeException("Not implemented");
+        this.TeamColor = team;
     }
 
     /**
@@ -46,7 +52,29 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
+        Collection<ChessMove> validMoves = new HashSet<ChessMove>();
+        ChessPiece currentPiece = gameBoard.getPiece(startPosition);
+        validMoves = currentPiece.pieceMoves(gameBoard,startPosition);
+        Collection<ChessMove> newValidMoves = new HashSet<>();
+
+        for (ChessMove move : validMoves) {
+//            simulate the board
+            ChessGame tempGame = new ChessGame();
+            tempGame.setBoard(this.gameBoard);
+            try{
+                tempGame.makeMove(move);
+            }
+            catch (Exception e){
+                System.out.println("whoopsidaisies");
+            }
+//            check if the move puts them in check or checkmate or stalemate
+            if (!(tempGame.isInCheck(this.TeamColor) && tempGame.isInCheckmate(this.TeamColor) && tempGame.isInStalemate(this.TeamColor))){
+                newValidMoves.add(move);
+            }
+//            return the updates list of valid moves that avoids those scenarios
+        }
+
+        return validMoves;
     }
 
     /**
@@ -56,7 +84,7 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+
     }
 
     /**
@@ -96,7 +124,7 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        throw new RuntimeException("Not implemented");
+        this.gameBoard = board;
     }
 
     /**
@@ -105,6 +133,6 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
+        return this.gameBoard;
     }
 }

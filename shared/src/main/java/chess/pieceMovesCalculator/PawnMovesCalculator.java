@@ -45,7 +45,6 @@ public class PawnMovesCalculator {
                 if(board.getPiece(newPosition) == null && board.getPiece(straightDown) == null){
                     ChessMove newMove = new ChessMove(myPosition, newPosition);
                     validMoves.add(newMove);
-                    System.out.printf("(%d, %d)", rowNum,columnNum);
                 }
             }
 

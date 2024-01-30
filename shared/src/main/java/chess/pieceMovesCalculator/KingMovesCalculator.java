@@ -30,10 +30,8 @@ public class KingMovesCalculator {
 
             if (board.getPiece(newPosition) == null) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", rowNum, columnNum);
             } else if (board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", rowNum, columnNum);
             }
         }
 
@@ -47,10 +45,8 @@ public class KingMovesCalculator {
 
             if (board.getPiece(newPosition) == null) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", rowNum, columnNum);
             } else if (board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", rowNum, columnNum);
             }
         }
 
@@ -64,10 +60,8 @@ public class KingMovesCalculator {
 
             if (board.getPiece(newPosition) == null) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", rowNum, columnNum);
             } else if (board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", rowNum, columnNum);
             }
         }
 
@@ -82,10 +76,8 @@ public class KingMovesCalculator {
 
             if (board.getPiece(newPosition) == null) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", rowNum, columnNum);
             } else if (board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", rowNum, columnNum);
             }
         }
 
@@ -103,10 +95,8 @@ public class KingMovesCalculator {
 
             if (board.getPiece(newPosition) == null) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", rowNum, columnNum);
             } else if (board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", rowNum, columnNum);
             }
         }
 
@@ -124,10 +114,8 @@ public class KingMovesCalculator {
 
             if (board.getPiece(newPosition) == null) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", rowNum, columnNum);
             } else if (board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", rowNum, columnNum);
             }
         }
 
@@ -144,10 +132,8 @@ public class KingMovesCalculator {
 
             if (board.getPiece(newPosition) == null) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", rowNum, columnNum);
             } else if (board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", rowNum, columnNum);
             }
         }
 
@@ -164,10 +150,8 @@ public class KingMovesCalculator {
 
             if (board.getPiece(newPosition) == null) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", rowNum, columnNum);
             } else if (board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", rowNum, columnNum);
             }
         }
 

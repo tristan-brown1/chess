@@ -27,10 +27,8 @@ public class RookMovesCalculator {
 
             if (board.getPiece(newPosition) == null) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", i, columnNum);
             } else if (board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", i, columnNum);
                 break;
             } else if (board.getPiece(newPosition).getTeamColor() == board.getPiece(myPosition).getTeamColor()) {
                 break;
@@ -45,10 +43,8 @@ public class RookMovesCalculator {
 
             if (board.getPiece(newPosition) == null) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", i, columnNum);
             } else if (board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", i, columnNum);
                 break;
             } else if (board.getPiece(newPosition).getTeamColor() == board.getPiece(myPosition).getTeamColor()) {
                 break;
@@ -63,10 +59,8 @@ public class RookMovesCalculator {
 
             if (board.getPiece(newPosition) == null) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", i, columnNum);
             } else if (board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", i, columnNum);
                 break;
             } else if (board.getPiece(newPosition).getTeamColor() == board.getPiece(myPosition).getTeamColor()) {
                 break;
@@ -81,10 +75,8 @@ public class RookMovesCalculator {
 
             if (board.getPiece(newPosition) == null) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", i, columnNum);
             } else if (board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
                 validMoves.add(newMove);
-                System.out.printf("(%d, %d)", i, columnNum);
                 break;
             } else if (board.getPiece(newPosition).getTeamColor() == board.getPiece(myPosition).getTeamColor()) {
                 break;

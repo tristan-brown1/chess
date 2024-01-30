@@ -173,21 +173,6 @@ public class ChessBoard {
         ChessPosition bishopBBPosition = new ChessPosition(8,6);
         ChessPiece bishopBB = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
         addPiece(bishopBBPosition,bishopBB);
-
-        int counter = 0;
-        for (int i = 0; i<8; i++) {
-            for (int j = 0; j<8; j++) {
-                if(this.squares[i][j] == null){
-                    counter++;
-                    break;
-                }
-                System.out.print(this.squares[i][j].getPieceType().toString());
-
-            }
-            System.out.println();
-        }
-        System.out.print(counter);
-
     }
 
     @Override

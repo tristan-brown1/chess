@@ -25,12 +25,14 @@ public class PawnMovesCalculator {
         int rowNum = myPosition.getRow();
         int blackStartRow = 7;
         int whiteStartRow = 2;
+
         ChessPosition botRight = new ChessPosition(rowNum - 1,columnNum + 1);
         ChessPosition botLeft = new ChessPosition(rowNum - 1,columnNum - 1);
         ChessPosition topRight = new ChessPosition(rowNum + 1,columnNum + 1);
         ChessPosition topLeft = new ChessPosition(rowNum + 1,columnNum - 1);
         ChessPosition straightDown = new ChessPosition(rowNum - 1,columnNum);
         ChessPosition straightUp = new ChessPosition(rowNum + 1,columnNum);
+
 
 
 //        These chess moves have the potential to also have promotion piece info!!
@@ -48,29 +50,36 @@ public class PawnMovesCalculator {
                 }
             }
 
-            if(board.getPiece(botRight) != null){
-                if(board.getPiece(botRight).getTeamColor().equals(ChessGame.TeamColor.WHITE)){
-                    ChessMove newMove = new ChessMove(myPosition, botRight);
-                    validMoves.add(newMove);
+            if(isNotOutOfBounds(botRight)) {
+                if (board.getPiece(botRight) != null) {
+                    if (board.getPiece(botRight).getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
+                        ChessMove newMove = new ChessMove(myPosition, botRight);
+                        validMoves.add(newMove);
 //                    System.out.printf("(%d, %d)", rowNum - 1,columnNum + 1);
+                    }
                 }
             }
 
-            if(board.getPiece(botLeft) != null) {
-                if(board.getPiece(botLeft).getTeamColor().equals(ChessGame.TeamColor.WHITE)){
-                    ChessMove newMove = new ChessMove(myPosition, botLeft);
-                    validMoves.add(newMove);
+
+            if(isNotOutOfBounds(botLeft)) {
+                if (board.getPiece(botLeft) != null) {
+                    if (board.getPiece(botLeft).getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
+                        ChessMove newMove = new ChessMove(myPosition, botLeft);
+                        validMoves.add(newMove);
+                    }
                 }
             }
 
-            if(board.getPiece(straightDown) == null){
-                columnNum = myPosition.getColumn();
-                rowNum = myPosition.getRow();
-                rowNum = rowNum - 1;
-                ChessPosition newPosition = new ChessPosition(rowNum, columnNum);
-                if(board.getPiece(newPosition) == null){
-                    ChessMove newMove = new ChessMove(myPosition, newPosition);
-                    validMoves.add(newMove);
+            if(isNotOutOfBounds(straightDown)) {
+                if (board.getPiece(straightDown) == null) {
+                    columnNum = myPosition.getColumn();
+                    rowNum = myPosition.getRow();
+                    rowNum = rowNum - 1;
+                    ChessPosition newPosition = new ChessPosition(rowNum, columnNum);
+                    if (board.getPiece(newPosition) == null) {
+                        ChessMove newMove = new ChessMove(myPosition, newPosition);
+                        validMoves.add(newMove);
+                    }
                 }
             }
 //      check to see if the valid move gets promotion piece
@@ -109,29 +118,36 @@ public class PawnMovesCalculator {
                 }
             }
 
-            if(board.getPiece(topRight) != null) {
-                if(board.getPiece(topRight).getTeamColor().equals(ChessGame.TeamColor.BLACK)){
-                    ChessMove newMove = new ChessMove(myPosition, topRight);
-                    validMoves.add(newMove);
+            if(isNotOutOfBounds(topRight)) {
+                if (board.getPiece(topRight) != null) {
+                    if (board.getPiece(topRight).getTeamColor().equals(ChessGame.TeamColor.BLACK)) {
+                        ChessMove newMove = new ChessMove(myPosition, topRight);
+                        validMoves.add(newMove);
+                    }
                 }
             }
 
-            if(board.getPiece(topLeft) != null) {
-                if(board.getPiece(topLeft).getTeamColor().equals(ChessGame.TeamColor.BLACK)){
-                    ChessMove newMove = new ChessMove(myPosition, topLeft);
-                    validMoves.add(newMove);
+
+            if(isNotOutOfBounds(topLeft)){
+                if (board.getPiece(topLeft) != null) {
+                    if (board.getPiece(topLeft).getTeamColor().equals(ChessGame.TeamColor.BLACK)) {
+                        ChessMove newMove = new ChessMove(myPosition, topLeft);
+                        validMoves.add(newMove);
+                    }
                 }
             }
 
-            if(board.getPiece(straightUp) == null){
-                columnNum = myPosition.getColumn();
-                rowNum = myPosition.getRow();
-                rowNum = rowNum + 1;
+            if(isNotOutOfBounds(straightUp)){
+                if(board.getPiece(straightUp) == null){
+                    columnNum = myPosition.getColumn();
+                    rowNum = myPosition.getRow();
+                    rowNum = rowNum + 1;
 
-                ChessPosition newPosition = new ChessPosition(rowNum, columnNum);
-                if(board.getPiece(newPosition) == null){
-                    ChessMove newMove = new ChessMove(myPosition, newPosition);
-                    validMoves.add(newMove);
+                    ChessPosition newPosition = new ChessPosition(rowNum, columnNum);
+                    if(board.getPiece(newPosition) == null){
+                        ChessMove newMove = new ChessMove(myPosition, newPosition);
+                        validMoves.add(newMove);
+                    }
                 }
             }
             //            check to see if the valid move gets promotion piece
@@ -159,10 +175,16 @@ public class PawnMovesCalculator {
 
 //        capture special case
 
-
-
-
         return hashValidMoves;
+    }
+
+    public boolean isNotOutOfBounds(ChessPosition position){
+        if((position.getRow() >= 1 && position.getRow() <= 8) && (position.getColumn() >= 1 && position.getColumn() <= 8)) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
 //    public ChessMove goodMove(int rowNum, int columnNum){

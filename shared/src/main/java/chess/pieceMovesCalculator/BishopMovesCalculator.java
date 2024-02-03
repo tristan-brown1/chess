@@ -6,17 +6,19 @@ import chess.ChessPosition;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 public class BishopMovesCalculator {
     private ChessBoard board;
     private ChessPosition myPosition;
+    HashSet<ChessMove> hashValidMoves = new HashSet<ChessMove>();
 
     public BishopMovesCalculator(ChessBoard board, ChessPosition myPosition){
         this.board = board;
         this.myPosition = myPosition;
     }
 
-    public ArrayList<ChessMove> getValidMoves(){
+    public Collection<ChessMove> getValidMoves(){
         ArrayList<ChessMove> validMoves = new ArrayList<ChessMove>();
 
         int columnNum = myPosition.getColumn();
@@ -113,7 +115,7 @@ public class BishopMovesCalculator {
                 }
             }
         }
-
-        return validMoves;
+        hashValidMoves.addAll(validMoves);
+        return hashValidMoves;
     }
 }

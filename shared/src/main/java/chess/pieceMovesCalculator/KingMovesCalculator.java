@@ -5,18 +5,21 @@ import chess.ChessMove;
 import chess.ChessPosition;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 
 public class KingMovesCalculator {
 
     private ChessBoard board;
     private ChessPosition myPosition;
+    HashSet<ChessMove> hashValidMoves = new HashSet<ChessMove>();
 
     public KingMovesCalculator(ChessBoard board, ChessPosition myPosition){
         this.board = board;
         this.myPosition = myPosition;
     }
 
-    public ArrayList<ChessMove> getValidMoves() {
+    public Collection<ChessMove> getValidMoves() {
         ArrayList<ChessMove> validMoves = new ArrayList<ChessMove>();
         int columnNum = myPosition.getColumn();
         int rowNum = myPosition.getRow();
@@ -156,7 +159,7 @@ public class KingMovesCalculator {
         }
 
 
-
-        return validMoves;
+        hashValidMoves.addAll(validMoves);
+        return hashValidMoves;
     }
 }

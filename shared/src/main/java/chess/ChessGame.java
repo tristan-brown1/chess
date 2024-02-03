@@ -3,6 +3,7 @@ package chess;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -13,7 +14,7 @@ import java.util.HashSet;
 public class ChessGame {
 
     private ChessBoard gameBoard = new ChessBoard();
-    private TeamColor TeamColor;
+    private static TeamColor TeamColor;
 
 
     public ChessGame() {
@@ -60,23 +61,31 @@ public class ChessGame {
         for (ChessMove move : validMoves) {
 //            simulate the board
             ChessGame tempGame = new ChessGame();
-            tempGame.setBoard(this.gameBoard);
-            try{
-                tempGame.makeMove(move);
-            }
-            catch (Exception e){
-                System.out.println("whoopsidaisies");
-            }
+            ChessBoard tempBoard = createDeepCopy(this.gameBoard);
+            tempGame.setBoard(tempBoard);
 
+            tempBoard.addPiece(move.getEndPosition(),tempBoard.getPiece(move.getStartPosition()));
+            tempBoard.removePiece(move.getStartPosition());
 
 //            check if the move puts them in check or checkmate or stalemate
-            if (!(tempGame.isInCheck(this.TeamColor) && tempGame.isInCheckmate(this.TeamColor) && tempGame.isInStalemate(this.TeamColor))){
+            if (!(tempGame.isInCheck(tempBoard.getPiece(move.getEndPosition()).getTeamColor()) && tempGame.isInCheckmate(tempBoard.getPiece(move.getEndPosition()).getTeamColor()))){
                 newValidMoves.add(move);
             }
 //            return the updates list of valid moves that avoids those scenarios
         }
 
         return newValidMoves;
+    }
+
+    public ChessBoard createDeepCopy(ChessBoard board){
+        ChessBoard copyBoard = new ChessBoard();
+
+        for (int i = 1; i <= 8; i++){
+            for (int j = 1; j <= 8; j++) {
+                copyBoard.addPiece(new ChessPosition(i,j),board.getPiece(new ChessPosition(i,j)));
+            }
+        }
+        return copyBoard;
     }
 
     /**
@@ -86,37 +95,36 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        ChessPiece currentPiece = this.gameBoard.getPiece(move.getStartPosition());
         Collection<ChessMove> validMoves;
-        validMoves = currentPiece.pieceMoves(this.gameBoard,move.getStartPosition());
-//        if(!validMoves.contains(move)){
-//            throw new InvalidMoveException();
-//        }
-
-//        ChessGame tempGame = new ChessGame();
-//        tempGame.setBoard(this.gameBoard);
-//        tempGame.getBoard().addPiece(move.getEndPosition(),tempGame.gameBoard.getPiece(move.getStartPosition()));
-//        tempGame.getBoard().removePiece(move.getStartPosition());
-//
-//        if(tempGame.isInCheck(this.TeamColor)){
-//            throw new InvalidMoveException();
-//        }
+        validMoves = validMoves(move.getStartPosition());
         if(!validMoves.contains(move)){
-            throw new InvalidMoveException();
+            throw new InvalidMoveException("move is not contained in validMoves");
         }
-//        if(this.TeamColor != this.gameBoard.getPiece(move.getStartPosition()).getTeamColor()){
-//            throw new InvalidMoveException();
-//        }
-        if(move.getPromotionPiece() != null){
+        else if(this.TeamColor != this.gameBoard.getPiece(move.getStartPosition()).getTeamColor()){
+            throw new InvalidMoveException("move is of the wrong color");
+        }
+        else if(move.getPromotionPiece() != null){
             ChessPiece replacementPiece = new ChessPiece(this.gameBoard.getPiece(move.getStartPosition()).getTeamColor(),move.getPromotionPiece());
             this.gameBoard.addPiece(move.getEndPosition(),replacementPiece);
             this.gameBoard.removePiece(move.getStartPosition());
+            if(TeamColor == TeamColor.WHITE){
+                setTeamTurn(TeamColor.BLACK);
+            }
+            else{
+                setTeamTurn(TeamColor.WHITE);
+            }
         }
-        else{
+        else {
             this.gameBoard.addPiece(move.getEndPosition(),this.gameBoard.getPiece(move.getStartPosition()));
             this.gameBoard.removePiece(move.getStartPosition());
-        }
+            if(TeamColor == TeamColor.WHITE){
+                setTeamTurn(TeamColor.BLACK);
+            }
+            else{
+                setTeamTurn(TeamColor.WHITE);
+            }
 
+        }
 
     }
 
@@ -128,17 +136,19 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
 //        check the current board to see if the passed in color is in check
+        ChessGame.TeamColor otherTeam;
+        if(teamColor == ChessGame.TeamColor.WHITE){
+            otherTeam = ChessGame.TeamColor.BLACK;
+        }
+        else{
+            otherTeam = ChessGame.TeamColor.WHITE;
+        }
         ChessPosition kingPosition = kingPosition(teamColor);
-        for (int i = 1; i <= 8; i++){
-            for (int j = 1; j <= 8; j++){
-                ChessPosition targetPosition = new ChessPosition(i,j);
-                if(this.gameBoard.getPiece(targetPosition) != null){
-                    ChessPiece targetPiece = this.gameBoard.getPiece((targetPosition));
-                    for(ChessMove  move : targetPiece.pieceMoves(this.gameBoard,targetPosition)){
-                        if(move.getEndPosition().equals(kingPosition)){
-                            return true;
-                        }
-                    }
+        Collection<ChessPosition> teamPositions = getTeamPositions(otherTeam);
+        for (ChessPosition position : teamPositions){
+            for(ChessMove move : this.gameBoard.getPiece(position).pieceMoves(this.gameBoard,position)){
+                if(move.getEndPosition().equals(kingPosition)){
+                    return true;
                 }
             }
         }
@@ -153,7 +163,7 @@ public class ChessGame {
                 if(this.gameBoard.getPiece(targetPosition) != null) {
                     ChessPiece targetPiece = this.gameBoard.getPiece((targetPosition));
                     if(targetPiece.getPieceType() == ChessPiece.PieceType.KING && targetPiece.getTeamColor() == teamColor){
-                        kingPosition = new ChessPosition(i,j);
+                        kingPosition = targetPosition;
                     }
                 }
             }
@@ -168,7 +178,7 @@ public class ChessGame {
                 ChessPosition targetPosition = new ChessPosition(i, j);
                 if(this.gameBoard.getPiece(targetPosition) != null) {
                     ChessPiece targetPiece = this.gameBoard.getPiece((targetPosition));
-                    if(targetPiece.getTeamColor().equals(teamColor)){
+                    if(targetPiece.getTeamColor() == teamColor){
                         teamPositions.add(targetPosition);
                     }
                 }
@@ -206,17 +216,12 @@ public class ChessGame {
      */
     public boolean isInStalemate(TeamColor teamColor) {
         Collection<ChessPosition> positionList = this.getTeamPositions(teamColor);
-        boolean answer = false;
         for (ChessPosition position : positionList){
-            if(validMoves(position) == null){
-                answer = true;
-            }
-            else{
-                answer = false;
-                break;
+            if(validMoves(position).isEmpty()){
+                return true;
             }
         }
-        return answer;
+        return false;
     }
 
     /**
@@ -235,5 +240,18 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return this.gameBoard;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessGame chessGame = (ChessGame) o;
+        return Objects.deepEquals(gameBoard, chessGame.getBoard()) && TeamColor == chessGame.TeamColor;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.gameBoard.hashCode() + this.TeamColor.hashCode();
     }
 }

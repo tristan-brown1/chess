@@ -10,6 +10,7 @@ import chess.pieceMovesCalculator.PawnMovesCalculator;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Represents a single chess piece
@@ -60,7 +61,7 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection<ChessMove> moveList = new ArrayList<ChessMove>();
+        Collection<ChessMove> moveList = new HashSet<>();
 
         if (this.pieceType.equals(PieceType.BISHOP)) {
             BishopMovesCalculator bishopMoves = new BishopMovesCalculator(board, myPosition);

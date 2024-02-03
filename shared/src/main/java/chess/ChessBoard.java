@@ -181,18 +181,16 @@ public class ChessBoard {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessBoard that = (ChessBoard) o;
+        return Arrays.deepEquals(squares, that.squares);
+    }
 
     @Override
-    public boolean equals(Object o){
-        if(o == null){return false;}
-        if(o == this){return true;}
-
-        if(this.getClass() != o.getClass()){
-            return false;
-        }
-
-        ChessBoard other = (ChessBoard)o;
-
-        return (Arrays.deepEquals(this.squares, other.getBoard()));
+    public int hashCode() {
+        return Arrays.deepHashCode(this.squares);
     }
 }

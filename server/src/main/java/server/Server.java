@@ -25,7 +25,8 @@ public class Server {
 
 
 //        register handler
-
+        //        clear handler
+//        Spark.post("/user", this::registerHandler);
 
 //        clear handler
         Spark.delete("/db", this::clearAppHandler);
@@ -55,12 +56,24 @@ public class Server {
     private Object clearAppHandler(Request req, Response res) throws DataAccessException {
         if (service != null){
             service.clearAll();
+            res.status(200);
         }
         else {
-            throw new DataAccessException("Service was null");
+            res.status(500);
+            throw new DataAccessException("Error: description");
         }
-        res.status(204);
         return "";
     }
+
+//    private Object registerHandler(Request req, Response res) throws DataAccessException {
+//        if (service != null){
+//            service.clearAll();
+//        }
+//        else {
+//            throw new DataAccessException("Service was null");
+//        }
+//        res.status(200);
+//        return res.body();
+//    }
 
 }

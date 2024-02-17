@@ -2,7 +2,7 @@ package server.DAOs;
 
 import dataAccess.DataAccessException;
 
-public class SQLUserDAO implements UserDAO{
+public abstract class SQLUserDAO implements UserDAO{
 
 
 

@@ -23,4 +23,18 @@ public class ChessService {
             throw new DataAccessException("dataAccess was null");
         }
     }
+
+    public String register(String username,String password,String email) throws DataAccessException {
+        if(this.dataAccess != null){
+            if(dataAccess.getUser(username) == null){
+                dataAccess.createUser(username,password,email);
+                return dataAccess.createAuth(username);
+            }
+        }
+        else{
+            throw new DataAccessException("dataAccess was null");
+        }
+        return null;
+    }
+
 }

@@ -1,6 +1,7 @@
-package server.DAOs;
+package dataAccess.DAOs;
 
 import dataAccess.DataAccessException;
+import server.AuthData;
 import server.UserData;
 
 public interface DAO {
@@ -11,5 +12,5 @@ public interface DAO {
 
     void createUser(String username, String password, String email) throws DataAccessException;
 
-    String createAuth(String username) throws DataAccessException;
+    AuthData createAuth(String username) throws DataAccessException;
 }

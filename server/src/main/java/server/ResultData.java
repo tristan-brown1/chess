@@ -16,6 +16,7 @@ public class ResultData {
     private String authToken;
     private String password;
     private String email;
+    private Integer gameID;
 
     public ResultData(){
         this.status = 200;
@@ -27,6 +28,7 @@ public class ResultData {
         this.password = null;
         this.authToken = null;
         this.email = null;
+
     }
 
     public void setMessage(String message) {
@@ -46,10 +48,12 @@ public class ResultData {
 
     public void setAuthData(AuthData authData) {
         this.authData = authData;
+        this.authToken = authData.getAuthToken();
     }
 
     public void setGameData(GameData gameData) {
         this.gameData = gameData;
+        this.gameID = gameData.getGameID();
     }
 
     public String getMessage() {

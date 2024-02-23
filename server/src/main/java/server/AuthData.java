@@ -12,4 +12,8 @@ public class AuthData {
         this.username = username;
     }
 
+    public String getAuthToken(){
+        return this.authToken;
+    }
+
 }

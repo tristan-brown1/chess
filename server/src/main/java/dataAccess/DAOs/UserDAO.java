@@ -5,10 +5,10 @@ import server.UserData;
 public interface UserDAO {
 
 
-    public void clearAll();
+    void clearAll();
 
-    public UserData getUser(String username);
+    UserData getUser(String username);
 
-    public void createUser(String username, String password, String email);
+    UserData createUser(String username, String password, String email);
 
 }

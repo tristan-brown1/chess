@@ -7,7 +7,11 @@ import java.util.HashMap;
 
 public class MemoryUserDAO implements UserDAO{
 
-    final private HashMap<String, UserData> user = new HashMap<>();
+    final private HashMap<String, UserData> user;
+
+    public MemoryUserDAO(){
+        user = new HashMap<String, UserData>();
+    }
 
     public void clearAll() {
         user.clear();
@@ -16,9 +20,10 @@ public class MemoryUserDAO implements UserDAO{
     public UserData getUser(String username) {
         return user.getOrDefault(username, null);
     }
-    public void createUser(String username, String password, String email){
+    public UserData createUser(String username, String password, String email){
         UserData newUser = new UserData(username,password,email);
         user.put(username,newUser);
+        return newUser;
     }
 
 

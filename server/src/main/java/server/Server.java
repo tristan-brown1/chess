@@ -21,7 +21,7 @@ public class Server {
     public int run(int desiredPort) {
         Spark.port(desiredPort);
 
-        Spark.staticFiles.location("/resources");
+        Spark.staticFiles.location("/resources/web");
 
         // Register your endpoints and handle exceptions here.
         Spark.get("/", this::test);
@@ -62,26 +62,24 @@ public class Server {
 
     private Object registerHandler(Request req, Response res) throws DataAccessException {
         HashMap<String, Object> yourHashMap = new Gson().fromJson(req.body(), HashMap.class);
-        String username = yourHashMap.get("username").toString();
-        String password = yourHashMap.get("password").toString();
-        String email = yourHashMap.get("email").toString();
-        UserData newUser = new UserData(username,password,email);
-        AuthData authData = null;
+        if ((yourHashMap.containsKey("username") && yourHashMap.containsKey("password") && yourHashMap.containsKey("email"))){
+            String username = yourHashMap.get("username").toString();
+            String password = yourHashMap.get("password").toString();
+            String email = yourHashMap.get("email").toString();
 
-        if (service != null){
-            authData = service.register(username,password,email);
-            res.status(200);
-        }
-        else if(username != null){
-//            authToken = service.register(username,password,email);
-            res.status(200);
+            UserData newUser = new UserData(username,password,email);
+            ResultData statusData = service.register(username,password,email);
+            AuthData authData = statusData.getAuthData();
+            res.status(statusData.getStatus());
+            return new Gson().toJson(statusData);
         }
         else {
-//            throw new DataAccessException("Service was null");
-            res.status(400);
+            ResultData resultData = new ResultData();
+            resultData.setStatus(400);
+            resultData.setMessage("Error:Bad Request");
+            res.status(resultData.getStatus());
+            return new Gson().toJson(resultData);
         }
-
-        return new Gson().toJson(authData);
     }
 
     private Object loginHandler(Request req, Response res) throws DataAccessException {
@@ -89,34 +87,28 @@ public class Server {
         String username = yourHashMap.get("username").toString();
         String password = yourHashMap.get("password").toString();
         ResultData statusData = service.login(username,password);
-        AuthData authData = statusData.getAuthData();
-        if(authData == null){
-            res.status(statusData.getStatus());
-            return new Gson().toJson(statusData);
-        }
-
-        else {
-            res.status(200);
-
-            return new Gson().toJson(authData);
-        }
+        res.status(statusData.getStatus());
+        return new Gson().toJson(statusData);
     }
     private Object logoutHandler(Request req, Response res) throws DataAccessException {
-
-        return "";
+        String authToken = req.headers("authorization");
+        ResultData statusData = service.logout(authToken);
+        res.status(statusData.getStatus());
+        return new Gson().toJson(statusData);
     }
     private Object listGameHandler(Request req, Response res) throws DataAccessException {
-
         return "";
     }
     private Object createGameHandler(Request req, Response res) throws DataAccessException {
-
-        return "";
+        String authToken = req.headers("authorization");
+        HashMap<String, Object> yourHashMap = new Gson().fromJson(req.body(), HashMap.class);
+        String gameName = yourHashMap.get("gameName").toString();
+        ResultData statusData = service.createGame(authToken,gameName);
+        res.status(statusData.getStatus());
+        return new Gson().toJson(statusData);
     }
     private Object joinGameHandler(Request req, Response res) throws DataAccessException {
 
         return "";
     }
-
-
 }

@@ -1,4 +1,4 @@
-package server;
+package model;
 
 import service.ChessService;
 
@@ -16,4 +16,7 @@ public class AuthData {
         return this.authToken;
     }
 
+    public String getUsername() {
+        return username;
+    }
 }

@@ -1,7 +1,6 @@
 package dataAccess.DAOs;
 
-import dataAccess.DataAccessException;
-import server.UserData;
+import model.UserData;
 
 import java.util.HashMap;
 
@@ -25,10 +24,4 @@ public class MemoryUserDAO implements UserDAO{
         user.put(username,newUser);
         return newUser;
     }
-
-
-
-
-
-
 }

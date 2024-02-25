@@ -1,7 +1,6 @@
 package dataAccess.DAOs;
 
-import dataAccess.DataAccessException;
-import server.AuthData;
+import model.AuthData;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -32,6 +31,7 @@ public class MemoryAuthDAO implements AuthDAO{
     public void deleteAuth(String authToken){
         auth.remove(authToken);
     }
+
 
 
 }

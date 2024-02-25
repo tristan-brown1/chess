@@ -96,6 +96,24 @@ class ChessServiceTest {
     }
 
     @Test
+    void listGames() throws DataAccessException {
+
+        ResultData resultData = myService.register(username,password,email);
+        authToken = resultData.getAuthData().getAuthToken();
+        resultData = myService.createGame(authToken,gameName);
+        int expected = 200;
+        int actual = resultData.getStatus();
+        Assertions.assertEquals(expected,actual);
+
+        resultData = myService.createGame(authToken,null);
+        expected = 400;
+        actual = resultData.getStatus();
+        Assertions.assertEquals(expected,actual);
+
+    }
+
+
+    @Test
     void clear() throws DataAccessException {
 
     }

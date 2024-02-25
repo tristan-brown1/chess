@@ -2,11 +2,14 @@ package server;
 
 import com.google.gson.Gson;
 import dataAccess.DataAccessException;
-import dataAccess.DAOs.DAO;
+import model.AuthData;
+import model.UserData;
 import service.ChessService;
 import spark.*;
 
 import java.util.HashMap;
+
+import static java.lang.Integer.parseInt;
 
 public class Server {
     private final ChessService service;
@@ -97,18 +100,48 @@ public class Server {
         return new Gson().toJson(statusData);
     }
     private Object listGameHandler(Request req, Response res) throws DataAccessException {
-        return "";
+        String authToken = req.headers("authorization");
+        ResultData statusData = service.listGames(authToken);
+        res.status(statusData.getStatus());
+        return new Gson().toJson(statusData);
     }
     private Object createGameHandler(Request req, Response res) throws DataAccessException {
         String authToken = req.headers("authorization");
+        String gameName = "";
         HashMap<String, Object> yourHashMap = new Gson().fromJson(req.body(), HashMap.class);
-        String gameName = yourHashMap.get("gameName").toString();
+        if(yourHashMap.get("gameName") != null){
+            gameName = yourHashMap.get("gameName").toString();
+        }
         ResultData statusData = service.createGame(authToken,gameName);
         res.status(statusData.getStatus());
         return new Gson().toJson(statusData);
     }
     private Object joinGameHandler(Request req, Response res) throws DataAccessException {
+        String authToken = req.headers("authorization");
+        HashMap<String, Object> yourHashMap = new Gson().fromJson(req.body(), HashMap.class);
+        String playerColor = null;
+        String gameIDString = null;
+        int gameID = 0;
+        ResultData statusData = null;
 
-        return "";
+        if(yourHashMap.get("playerColor") != null && yourHashMap.get("gameID") != null){
+            playerColor = yourHashMap.get("playerColor").toString();
+            gameIDString = yourHashMap.get("gameID").toString().substring(0,gameIDString.length() - 2);
+            gameID = parseInt(gameIDString);
+            if(gameID != 0){
+                statusData = service.joinGame(authToken,playerColor,gameID);
+            }
+        }
+        else if(yourHashMap.get("gameID") != null){
+            gameIDString = yourHashMap.get("gameID").toString().substring(0,3);
+            gameID = parseInt(gameIDString);
+            statusData = service.joinGame(authToken,null,gameID);
+        }
+        else{
+
+        }
+
+        res.status(statusData.getStatus());
+        return new Gson().toJson(statusData);
     }
 }

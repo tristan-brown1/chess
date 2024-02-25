@@ -2,10 +2,10 @@ package service;
 
 import dataAccess.DAOs.*;
 import dataAccess.DataAccessException;
-import org.eclipse.jetty.server.Authentication;
-import server.AuthData;
+import model.AuthData;
+import model.GameData;
 import server.ResultData;
-import server.UserData;
+import model.UserData;
 
 public class ChessService {
 
@@ -104,11 +104,55 @@ public class ChessService {
                 resultData.setMessage("Error: Unauthorized");
             }
         }
+        return resultData;
+    }
 
+    public ResultData listGames(String authToken) throws DataAccessException {
+        ResultData resultData = new ResultData();
+        if(authToken == null){
+            resultData.setStatus(400);
+            resultData.setMessage("Error: bad request");
+        }
+        else{
+            if(authDAO.getAuth(authToken) != null){
+                resultData.setGameSet(gameDAO.getGames());
+                resultData.setStatus(200);
+            }
+            else {
+                resultData.setStatus(401);
+                resultData.setMessage("Error: Unauthorized");
+            }
+        }
+        return resultData;
+    }
+
+    public ResultData joinGame(String authToken, String playerColor, int gameID) throws DataAccessException {
+        ResultData resultData = new ResultData();
+        if(authToken == null){
+            resultData.setStatus(400);
+            resultData.setMessage("Error: bad request");
+        }
+        else{
+            AuthData authData = authDAO.getAuth(authToken);
+            if(authData != null){
+                GameData gameData = gameDAO.getGame(gameID);
+                if((gameData != null) && (playerColor.toLowerCase().contains("white") || playerColor.toLowerCase().contains("black"))){
+                    gameDAO.updateGame(gameData, playerColor, authData.getUsername());
+                    resultData.setStatus(200);
+                }
+                else{
+                    resultData.setStatus(403);
+                    resultData.setMessage("Error Forbidden");
+                }
+            }
+            else {
+                resultData.setStatus(401);
+                resultData.setMessage("Error: Unauthorized");
+            }
+        }
         return resultData;
     }
 
 
 
-
-}
+    }

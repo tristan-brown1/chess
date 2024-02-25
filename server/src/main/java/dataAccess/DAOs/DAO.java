@@ -1,8 +1,8 @@
 package dataAccess.DAOs;
 
 import dataAccess.DataAccessException;
-import server.AuthData;
-import server.UserData;
+import model.AuthData;
+import model.UserData;
 
 public interface DAO {
 

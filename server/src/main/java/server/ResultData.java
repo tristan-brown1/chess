@@ -1,8 +1,10 @@
 package server;
 
-import server.AuthData;
-import server.GameData;
-import server.UserData;
+import model.AuthData;
+import model.GameData;
+import model.UserData;
+
+import java.util.HashSet;
 
 public class ResultData {
 
@@ -17,6 +19,7 @@ public class ResultData {
     private String password;
     private String email;
     private Integer gameID;
+    private HashSet games;
 
     public ResultData(){
         this.status = 200;
@@ -28,6 +31,7 @@ public class ResultData {
         this.password = null;
         this.authToken = null;
         this.email = null;
+        this.games = null;
 
     }
 
@@ -74,5 +78,12 @@ public class ResultData {
 
     public GameData getGameData() {
         return gameData;
+    }
+
+    public void setGameSet(HashSet games) {
+        this.games = games;
+    }
+    public HashSet getGameSet() {
+        return this.games;
     }
 }

@@ -20,6 +20,9 @@ public class ResultData {
     private String email;
     private Integer gameID;
     private HashSet games;
+    private String whiteUsername;
+    private String blackUsername;
+    private String gameName;
 
     public ResultData(){
         this.status = 200;
@@ -58,6 +61,9 @@ public class ResultData {
     public void setGameData(GameData gameData) {
         this.gameData = gameData;
         this.gameID = gameData.getGameID();
+        this.gameName = gameData.getGameName();
+        this.whiteUsername = gameData.getWhiteUsername();
+        this.blackUsername = gameData.getBlackUsername();
     }
 
     public String getMessage() {

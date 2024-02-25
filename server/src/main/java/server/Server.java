@@ -122,26 +122,54 @@ public class Server {
         String playerColor = null;
         String gameIDString = null;
         int gameID = 0;
-        ResultData statusData = null;
 
-        if(yourHashMap.get("playerColor") != null && yourHashMap.get("gameID") != null){
-            playerColor = yourHashMap.get("playerColor").toString();
-            gameIDString = yourHashMap.get("gameID").toString().substring(0,gameIDString.length() - 2);
-            gameID = parseInt(gameIDString);
-            if(gameID != 0){
+        try{
+            if(yourHashMap.size() == 2){
+                playerColor = yourHashMap.get("playerColor").toString();
+                gameIDString = yourHashMap.get("gameID").toString();
+                String gameIDString2 = gameIDString.substring(0,gameIDString.length() - 2);
+                gameID = parseInt(gameIDString2);
+                ResultData statusData = new ResultData();
                 statusData = service.joinGame(authToken,playerColor,gameID);
+                res.status(statusData.getStatus());
+                return new Gson().toJson(statusData);
             }
+            else{
+                gameIDString = yourHashMap.get("gameID").toString();
+                String gameIDString2 = gameIDString.substring(0,gameIDString.length() - 2);
+                gameID = parseInt(gameIDString2);
+                ResultData statusData = new ResultData();
+                statusData = service.joinGame(authToken,null,gameID);
+                res.status(statusData.getStatus());
+                return new Gson().toJson(statusData);
+            }
+        }catch(Exception e){
+            ResultData statusData = new ResultData();
+            statusData.setStatus(400);
+            statusData.setMessage("Error Bad Request");
+            res.status(statusData.getStatus());
+            return new Gson().toJson(statusData);
         }
-        else if(yourHashMap.get("gameID") != null){
-            gameIDString = yourHashMap.get("gameID").toString().substring(0,3);
-            gameID = parseInt(gameIDString);
-            statusData = service.joinGame(authToken,null,gameID);
-        }
-        else{
 
-        }
+//        if(yourHashMap.get("playerColor") != null && yourHashMap.get("gameID") != null){
+//            playerColor = yourHashMap.get("playerColor").toString();
+//            gameIDString = yourHashMap.get("gameID").toString().substring(0,gameIDString.length() - 2);
+//            gameID = parseInt(gameIDString);
+//            if(gameID != 0){
+//                statusData = service.joinGame(authToken,playerColor,gameID);
+//            }
+//        }
+//        else if(yourHashMap.get("gameID") != null){
+//            gameIDString = yourHashMap.get("gameID").toString().substring(0,3);
+//            gameID = parseInt(gameIDString);
+//            statusData = service.joinGame(authToken,null,gameID);
+//        }
+//        else{
+//
+//        }
+//
+//        res.status(statusData.getStatus());
+//        return new Gson().toJson(statusData);
 
-        res.status(statusData.getStatus());
-        return new Gson().toJson(statusData);
     }
 }

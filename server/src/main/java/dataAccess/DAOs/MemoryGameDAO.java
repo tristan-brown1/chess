@@ -32,8 +32,7 @@ public class MemoryGameDAO implements GameDAO{
     }
 
     public GameData getGame(int gameID){
-        GameData currentGame = game.get(gameID);
-        return currentGame;
+        return game.getOrDefault(gameID,null);
     }
 
     public void updateGame(GameData gameData, String playerColor, String username){
@@ -41,12 +40,12 @@ public class MemoryGameDAO implements GameDAO{
         GameData currentGame = game.get(gameData.getGameID());
         if(playerColor.toLowerCase().contains("white")){
             currentGame.setWhiteUsername(username);
+            game.put(currentGame.getGameID(),currentGame);
         }
         else if (playerColor.toLowerCase().contains("black")){
             currentGame.setBlackUsername(username);
+            game.put(currentGame.getGameID(),currentGame);
         }
 
     }
-
-
 }

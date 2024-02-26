@@ -66,16 +66,8 @@ public class ResultData {
         this.blackUsername = gameData.getBlackUsername();
     }
 
-    public String getMessage() {
-        return message;
-    }
-
     public int getStatus() {
         return status;
-    }
-
-    public UserData getUserData() {
-        return userData;
     }
 
     public AuthData getAuthData() {
@@ -88,8 +80,5 @@ public class ResultData {
 
     public void setGameSet(HashSet games) {
         this.games = games;
-    }
-    public HashSet getGameSet() {
-        return this.games;
     }
 }

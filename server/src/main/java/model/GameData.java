@@ -41,10 +41,6 @@ public class GameData {
         this.gameName = gameName;
     }
 
-    public void setGame(ChessGame game) {
-        this.game = game;
-    }
-
     public int getGameID() {
         return gameID;
     }

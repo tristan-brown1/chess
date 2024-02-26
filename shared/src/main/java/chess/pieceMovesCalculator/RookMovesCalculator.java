@@ -24,6 +24,7 @@ public class RookMovesCalculator {
         int columnNum = myPosition.getColumn();
         int rowNum = myPosition.getRow();
 
+//        right
         for (int i = (myPosition.getRow() + 1); i <= 8; i++) {
 
             ChessPosition newPosition = new ChessPosition(i, columnNum);
@@ -40,6 +41,7 @@ public class RookMovesCalculator {
 
         }
 
+//        left
         for (int i = (myPosition.getRow() - 1); i >= 1; i--) {
 
             ChessPosition newPosition = new ChessPosition(i, columnNum);
@@ -56,6 +58,7 @@ public class RookMovesCalculator {
 
         }
 
+//        up
         for (int i = (myPosition.getColumn() + 1); i <= 8; i++) {
 
             ChessPosition newPosition = new ChessPosition(rowNum,i);
@@ -72,6 +75,7 @@ public class RookMovesCalculator {
 
         }
 
+//        down
         for (int i = (myPosition.getColumn() - 1); i >= 1; i--) {
 
             ChessPosition newPosition = new ChessPosition(rowNum,i);
@@ -90,6 +94,7 @@ public class RookMovesCalculator {
         hashValidMoves.addAll(validMoves);
         return hashValidMoves;
     }
+
 
 }
 

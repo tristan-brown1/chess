@@ -21,6 +21,7 @@ public class BishopMovesCalculator {
     public Collection<ChessMove> getValidMoves(){
         ArrayList<ChessMove> validMoves = new ArrayList<ChessMove>();
 
+//        right up
         int columnNum = myPosition.getColumn();
         for (int i = (myPosition.getRow() + 1); i <= 8; i++){
             if(columnNum < 8){
@@ -40,9 +41,9 @@ public class BishopMovesCalculator {
                 break;
             }
 
-//            System.out.printf("(%d, %d)", i, columnNum);
         }
 
+//        right down
         columnNum = myPosition.getColumn();
         for (int i = (myPosition.getRow() - 1); i >= 1; i--){
             if(columnNum < 8){
@@ -60,13 +61,13 @@ public class BishopMovesCalculator {
                 else if(board.getPiece(newPosition).getTeamColor() == board.getPiece(myPosition).getTeamColor()){
                     break;
                 }
-//                System.out.printf("(%d, %d)", i, columnNum);
                 if (columnNum == 8){
                     break;
                 }
             }
         }
 
+//        left up
         columnNum = myPosition.getColumn();
         for (int i = (myPosition.getRow() + 1); i <= 8; i++){
 
@@ -85,13 +86,13 @@ public class BishopMovesCalculator {
                 else if(board.getPiece(newPosition).getTeamColor() == board.getPiece(myPosition).getTeamColor()){
                     break;
                 }
-//                System.out.printf("(%d, %d)", i, columnNum);
                 if(columnNum == 1){
                     break;
                 }
             }
         }
 
+//        left down
         columnNum = myPosition.getColumn();
         for (int i = (myPosition.getRow() - 1); i >= 1; i--){
             if(columnNum > 1){
@@ -109,7 +110,6 @@ public class BishopMovesCalculator {
                 else if(board.getPiece(newPosition).getTeamColor() == board.getPiece(myPosition).getTeamColor()){
                     break;
                 }
-//                System.out.printf("(%d, %d)", i, columnNum);
                 if (columnNum == 1){
                     break;
                 }

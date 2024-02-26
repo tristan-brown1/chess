@@ -20,7 +20,6 @@ public class PawnMovesCalculator {
     }
 
     public Collection<ChessMove> getValidMoves() {
-//        ArrayList<ChessMove> validMoves = new ArrayList<ChessMove>();
         int columnNum = myPosition.getColumn();
         int rowNum = myPosition.getRow();
         int blackStartRow = 7;
@@ -34,14 +33,9 @@ public class PawnMovesCalculator {
         ChessPosition straightUp = new ChessPosition(rowNum + 1,columnNum);
 
 
-
-//        These chess moves have the potential to also have promotion piece info!!
-//        first move special case
-
-
 //        black
         if (board.getPiece(myPosition).getTeamColor().equals(ChessGame.TeamColor.BLACK)){
-            if(myPosition.getRow() == 7){
+            if(myPosition.getRow() == blackStartRow){
                 rowNum = rowNum - 2;
                 ChessPosition newPosition = new ChessPosition(rowNum, columnNum);
                 if(board.getPiece(newPosition) == null && board.getPiece(straightDown) == null){
@@ -55,11 +49,9 @@ public class PawnMovesCalculator {
                     if (board.getPiece(botRight).getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
                         ChessMove newMove = new ChessMove(myPosition, botRight);
                         validMoves.add(newMove);
-//                    System.out.printf("(%d, %d)", rowNum - 1,columnNum + 1);
                     }
                 }
             }
-
 
             if(isNotOutOfBounds(botLeft)) {
                 if (board.getPiece(botLeft) != null) {
@@ -99,17 +91,12 @@ public class PawnMovesCalculator {
                     }
                     counter++;
             }
-
-//            ig we gotta turn it into a hash set or sum
-            hashValidMoves.addAll(validMoves);
-
-
         }
 
 
 //        white
         if (board.getPiece(myPosition).getTeamColor().equals(ChessGame.TeamColor.WHITE)){
-            if(myPosition.getRow() == 2){
+            if(myPosition.getRow() == whiteStartRow){
                 rowNum = rowNum + 2;
                 ChessPosition newPosition = new ChessPosition(rowNum, columnNum);
                 if(board.getPiece(newPosition) == null && (board.getPiece(straightUp) == null)){
@@ -150,6 +137,7 @@ public class PawnMovesCalculator {
                     }
                 }
             }
+
             //            check to see if the valid move gets promotion piece
             ArrayList<ChessMove> copyMoves = new ArrayList<ChessMove>(validMoves);
             int counter = 0;
@@ -166,15 +154,9 @@ public class PawnMovesCalculator {
                 }
                 counter++;
             }
-
-//            ig we gotta turn it into a hash set or sum
-            hashValidMoves.addAll(validMoves);
-
-
         }
-
-//        capture special case
-
+        //            turn into hashset in order to avoid compatibility problems
+        hashValidMoves.addAll(validMoves);
         return hashValidMoves;
     }
 
@@ -186,21 +168,5 @@ public class PawnMovesCalculator {
             return false;
         }
     }
-
-//    public ChessMove goodMove(int rowNum, int columnNum){
-//        ChessPosition newPosition = new ChessPosition(rowNum, columnNum);
-//        ChessMove newMove = new ChessMove(myPosition, newPosition);
-//
-//        if (board.getPiece(newPosition) == null) {
-//            return newMove;
-//
-//        } else if (board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
-//            return newMove;
-//
-//        }
-//
-//        return null;
-//    }
-
 
 }

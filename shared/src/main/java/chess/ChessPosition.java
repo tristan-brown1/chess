@@ -33,17 +33,11 @@ public class ChessPosition {
     }
 
     @Override
-    public boolean equals(Object o){
-        if(o == null){return false;}
-        if(o == this){return true;}
-
-        if(this.getClass() != o.getClass()){
-            return false;
-        }
-
-        ChessPosition other = (ChessPosition)o;
-
-        return (this.row == other.getRow()) && (this.col == other.getColumn());
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessPosition position = (ChessPosition) o;
+        return row == position.row && col == position.col;
     }
 
     @Override

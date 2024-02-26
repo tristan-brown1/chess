@@ -1,6 +1,6 @@
 package chess;
 
-import java.util.ArrayList;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -60,6 +60,7 @@ public class ChessGame {
 
         for (ChessMove move : validMoves) {
 //            simulate the board
+
             ChessGame tempGame = new ChessGame();
             ChessBoard tempBoard = createDeepCopy(this.gameBoard);
             tempGame.setBoard(tempBoard);
@@ -68,10 +69,11 @@ public class ChessGame {
             tempBoard.removePiece(move.getStartPosition());
 
 //            check if the move puts them in check or checkmate or stalemate
+
             if (!(tempGame.isInCheck(tempBoard.getPiece(move.getEndPosition()).getTeamColor()) && tempGame.isInCheckmate(tempBoard.getPiece(move.getEndPosition()).getTeamColor()))){
                 newValidMoves.add(move);
             }
-//            return the updates list of valid moves that avoids those scenarios
+//            return the updated list of valid moves that avoids those scenarios
         }
 
         return newValidMoves;

@@ -24,9 +24,7 @@ public class KnightMovesCalculator {
         int columnNum = myPosition.getColumn();
         int rowNum = myPosition.getRow();
 
-
 //        up left
-
         columnNum = myPosition.getColumn();
         rowNum = myPosition.getRow();
 
@@ -46,7 +44,6 @@ public class KnightMovesCalculator {
 
 
 //        up right
-
         columnNum = myPosition.getColumn();
         rowNum = myPosition.getRow();
 
@@ -66,7 +63,6 @@ public class KnightMovesCalculator {
 
 
 //        left up
-
         columnNum = myPosition.getColumn();
         rowNum = myPosition.getRow();
 
@@ -86,7 +82,6 @@ public class KnightMovesCalculator {
 
 
 //        left down
-
         columnNum = myPosition.getColumn();
         rowNum = myPosition.getRow();
 
@@ -105,7 +100,6 @@ public class KnightMovesCalculator {
         }
 
 //        right up
-
         columnNum = myPosition.getColumn();
         rowNum = myPosition.getRow();
 
@@ -124,9 +118,7 @@ public class KnightMovesCalculator {
         }
 
 
-
 //        right down
-
         columnNum = myPosition.getColumn();
         rowNum = myPosition.getRow();
 
@@ -145,7 +137,6 @@ public class KnightMovesCalculator {
         }
 
 //        down left
-
         columnNum = myPosition.getColumn();
         rowNum = myPosition.getRow();
 
@@ -166,7 +157,6 @@ public class KnightMovesCalculator {
 
 
 //        down right
-
         columnNum = myPosition.getColumn();
         rowNum = myPosition.getRow();
 
@@ -183,7 +173,6 @@ public class KnightMovesCalculator {
                 validMoves.add(newMove);
             }
         }
-
 
         hashValidMoves.addAll(validMoves);
         return hashValidMoves;

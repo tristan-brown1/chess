@@ -2,13 +2,11 @@ package chess;
 
 import chess.pieceMovesCalculator.BishopMovesCalculator;
 import chess.pieceMovesCalculator.RookMovesCalculator;
-import chess.pieceMovesCalculator.QueenMovesCalculator;
 import chess.pieceMovesCalculator.KingMovesCalculator;
 import chess.pieceMovesCalculator.KnightMovesCalculator;
 import chess.pieceMovesCalculator.PawnMovesCalculator;
 
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -74,8 +72,10 @@ public class ChessPiece {
         }
 
         if (this.pieceType.equals(PieceType.QUEEN)){
-            QueenMovesCalculator queenMoves = new QueenMovesCalculator(board, myPosition);
-            moveList = queenMoves.getValidMoves();
+            RookMovesCalculator rookMoves = new RookMovesCalculator(board, myPosition);
+            BishopMovesCalculator bishopMoves = new BishopMovesCalculator(board, myPosition);
+            moveList = rookMoves.getValidMoves();
+            moveList.addAll(bishopMoves.getValidMoves());
         }
 
         if (this.pieceType.equals(PieceType.KING)){
@@ -102,17 +102,11 @@ public class ChessPiece {
     }
 
     @Override
-    public boolean equals(Object o){
-        if(o == null){return false;}
-        if(o == this){return true;}
-
-        if(this.getClass() != o.getClass()){
-            return false;
-        }
-
-        ChessPiece other = (ChessPiece) o;
-
-        return (this.pieceType.equals(other.pieceType) && (this.teamColor.equals(other.teamColor)));
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessPiece piece = (ChessPiece) o;
+        return pieceType == piece.pieceType && teamColor == piece.teamColor;
     }
 
 }

@@ -38,11 +38,11 @@ public class MemoryGameDAO implements GameDAO{
     public void updateGame(GameData gameData, String playerColor, String username){
 
         GameData currentGame = game.get(gameData.getGameID());
-        if(playerColor.toLowerCase().contains("white")){
+        if(playerColor.equalsIgnoreCase("white")){
             currentGame.setWhiteUsername(username);
             game.put(currentGame.getGameID(),currentGame);
         }
-        else if (playerColor.toLowerCase().contains("black")){
+        else if (playerColor.equalsIgnoreCase("black")){
             currentGame.setBlackUsername(username);
             game.put(currentGame.getGameID(),currentGame);
         }

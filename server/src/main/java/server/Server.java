@@ -2,8 +2,6 @@ package server;
 
 import com.google.gson.Gson;
 import dataAccess.DataAccessException;
-import model.AuthData;
-import model.UserData;
 import service.ChessService;
 import spark.*;
 
@@ -14,9 +12,7 @@ import static java.lang.Integer.parseInt;
 public class Server {
     private final ChessService service;
 
-//    public Server(DAO dataAccess) {
-//        service = new ChessService(dataAccess);
-//    }
+
     public Server() {
         this.service = new ChessService();
     }
@@ -27,19 +23,26 @@ public class Server {
         Spark.staticFiles.location("/resources/web");
 
         // Register your endpoints and handle exceptions here.
-        Spark.get("/", this::test);
+        Spark.get("/", this::openTest);
+
 //        register handler
         Spark.post("/user", this::registerHandler);
+
 //        clear handler
         Spark.delete("/db", this::clearAppHandler);
+
 //        login handler
         Spark.post("/session", this::loginHandler);
+
 //        logout handler
         Spark.delete("/session", this::logoutHandler);
+
 //        list games handler
         Spark.get("/game", this::listGameHandler);
+
 //        create game handler
         Spark.post("/game", this::createGameHandler);
+
 //        join game handler
         Spark.put("/game", this::joinGameHandler);
 
@@ -47,7 +50,7 @@ public class Server {
         return Spark.port();
     }
 
-    private Object test(Request request, Response response) {
+    private Object openTest(Request request, Response response) {
         response.status(200);
         return "CS 240 Chess Server Web API";
     }
@@ -70,18 +73,16 @@ public class Server {
             String password = yourHashMap.get("password").toString();
             String email = yourHashMap.get("email").toString();
 
-            UserData newUser = new UserData(username,password,email);
             ResultData statusData = service.register(username,password,email);
-            AuthData authData = statusData.getAuthData();
             res.status(statusData.getStatus());
             return new Gson().toJson(statusData);
         }
         else {
-            ResultData resultData = new ResultData();
-            resultData.setStatus(400);
-            resultData.setMessage("Error:Bad Request");
-            res.status(resultData.getStatus());
-            return new Gson().toJson(resultData);
+            ResultData statusData = new ResultData();
+            statusData.setStatus(400);
+            statusData.setMessage("Error:Bad Request");
+            res.status(statusData.getStatus());
+            return new Gson().toJson(statusData);
         }
     }
 
@@ -89,18 +90,21 @@ public class Server {
         HashMap<String, Object> yourHashMap = new Gson().fromJson(req.body(), HashMap.class);
         String username = yourHashMap.get("username").toString();
         String password = yourHashMap.get("password").toString();
+
         ResultData statusData = service.login(username,password);
         res.status(statusData.getStatus());
         return new Gson().toJson(statusData);
     }
     private Object logoutHandler(Request req, Response res) throws DataAccessException {
         String authToken = req.headers("authorization");
+
         ResultData statusData = service.logout(authToken);
         res.status(statusData.getStatus());
         return new Gson().toJson(statusData);
     }
     private Object listGameHandler(Request req, Response res) throws DataAccessException {
         String authToken = req.headers("authorization");
+
         ResultData statusData = service.listGames(authToken);
         res.status(statusData.getStatus());
         return new Gson().toJson(statusData);
@@ -112,64 +116,44 @@ public class Server {
         if(yourHashMap.get("gameName") != null){
             gameName = yourHashMap.get("gameName").toString();
         }
+
         ResultData statusData = service.createGame(authToken,gameName);
         res.status(statusData.getStatus());
         return new Gson().toJson(statusData);
     }
     private Object joinGameHandler(Request req, Response res) throws DataAccessException {
         String authToken = req.headers("authorization");
-        HashMap<String, Object> yourHashMap = new Gson().fromJson(req.body(), HashMap.class);
+        HashMap<String, Object> tempHashMap = new Gson().fromJson(req.body(), HashMap.class);
         String playerColor = null;
         String gameIDString = null;
         int gameID = 0;
 
         try{
-            if(yourHashMap.size() == 2){
-                playerColor = yourHashMap.get("playerColor").toString();
-                gameIDString = yourHashMap.get("gameID").toString();
+            if(tempHashMap.size() == 2){
+                playerColor = tempHashMap.get("playerColor").toString();
+                gameIDString = tempHashMap.get("gameID").toString();
                 String gameIDString2 = gameIDString.substring(0,gameIDString.length() - 2);
                 gameID = parseInt(gameIDString2);
-                ResultData statusData = new ResultData();
-                statusData = service.joinGame(authToken,playerColor,gameID);
+
+                ResultData statusData = service.joinGame(authToken,playerColor,gameID);
                 res.status(statusData.getStatus());
                 return new Gson().toJson(statusData);
             }
             else{
-                gameIDString = yourHashMap.get("gameID").toString();
+                gameIDString = tempHashMap.get("gameID").toString();
                 String gameIDString2 = gameIDString.substring(0,gameIDString.length() - 2);
                 gameID = parseInt(gameIDString2);
-                ResultData statusData = new ResultData();
-                statusData = service.joinGame(authToken,null,gameID);
+
+                ResultData statusData = service.joinGame(authToken,null,gameID);
                 res.status(statusData.getStatus());
                 return new Gson().toJson(statusData);
             }
-        }catch(Exception e){
+        }catch(Exception badRequest){
             ResultData statusData = new ResultData();
             statusData.setStatus(400);
             statusData.setMessage("Error Bad Request");
             res.status(statusData.getStatus());
             return new Gson().toJson(statusData);
         }
-
-//        if(yourHashMap.get("playerColor") != null && yourHashMap.get("gameID") != null){
-//            playerColor = yourHashMap.get("playerColor").toString();
-//            gameIDString = yourHashMap.get("gameID").toString().substring(0,gameIDString.length() - 2);
-//            gameID = parseInt(gameIDString);
-//            if(gameID != 0){
-//                statusData = service.joinGame(authToken,playerColor,gameID);
-//            }
-//        }
-//        else if(yourHashMap.get("gameID") != null){
-//            gameIDString = yourHashMap.get("gameID").toString().substring(0,3);
-//            gameID = parseInt(gameIDString);
-//            statusData = service.joinGame(authToken,null,gameID);
-//        }
-//        else{
-//
-//        }
-//
-//        res.status(statusData.getStatus());
-//        return new Gson().toJson(statusData);
-
     }
 }

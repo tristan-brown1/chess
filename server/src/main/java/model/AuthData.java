@@ -1,7 +1,5 @@
 package model;
 
-import service.ChessService;
-
 public class AuthData {
 
     private String authToken;

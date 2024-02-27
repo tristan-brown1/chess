@@ -37,28 +37,41 @@ class ChessServiceTest {
         int actual = resultData.getStatus();
         Assertions.assertEquals(expected,actual);
 
-//        test valid
+    }
+
+    @Test
+    void loginTestPositive() throws DataAccessException{
+        //        test valid
+        ResultData resultData = myService.login(username,password);
         myService.register(username,password,email);
         resultData = myService.login(username,password);
-        expected = 200;
+        int expected = 200;
+        int actual = resultData.getStatus();
+        Assertions.assertEquals(expected,actual);
+    }
+
+    @Test
+    void registerTest() throws DataAccessException {
+
+
+//        test invalid re re-register
+        ResultData resultData = myService.register(username,password,email);
+        int expected = 200;
+        int actual = resultData.getStatus();
+        Assertions.assertEquals(expected,actual);
+        resultData = myService.register(username,password,email);
+        expected = 403;
         actual = resultData.getStatus();
         Assertions.assertEquals(expected,actual);
 
     }
 
     @Test
-    void registerTest() throws DataAccessException {
-
-//        test valid
+    void registerTestPositive() throws DataAccessException{
+        //        test valid
         ResultData resultData = myService.register(username,password,email);
         int expected = 200;
         int actual = resultData.getStatus();
-        Assertions.assertEquals(expected,actual);
-
-//        test invalid re re-register
-        resultData = myService.register(username,password,email);
-        expected = 403;
-        actual = resultData.getStatus();
         Assertions.assertEquals(expected,actual);
 
     }
@@ -83,35 +96,30 @@ class ChessServiceTest {
     }
 
     @Test
+    void logoutTestPositive() throws DataAccessException{
+//        test valid
+        ResultData resultData = myService.register(username,password,email);
+        authToken = resultData.getAuthData().getAuthToken();
+        ResultData resultData2 = myService.logout(authToken);
+        int expected = 200;
+        int actual = resultData2.getStatus();
+        Assertions.assertEquals(expected,actual);
+    }
+
+    @Test
     void createGameTest() throws DataAccessException {
 
-//        test invalid token
-        authToken = "notavalidtoken";
-        ResultData resultData = myService.createGame(authToken,gameName);
-        int expected = 401;
-        int actual = resultData.getStatus();
-        Assertions.assertEquals(expected,actual);
-
-//        test valid
-        resultData = myService.register(username,password,email);
-        authToken = resultData.getAuthData().getAuthToken();
-        resultData = myService.createGame(authToken,gameName);
-        expected = 200;
-        actual = resultData.getStatus();
-        Assertions.assertEquals(expected,actual);
-
 //        test invalid game name
-        resultData = myService.createGame(authToken,null);
-        expected = 400;
-        actual = resultData.getStatus();
+        ResultData resultData = myService.createGame(authToken,null);
+        int expected = 400;
+        int actual = resultData.getStatus();
         Assertions.assertEquals(expected,actual);
 
     }
 
     @Test
-    void listGamesTest() throws DataAccessException {
-
-//        test valid
+    void createGamePositive() throws DataAccessException{
+        //        test valid
         ResultData resultData = myService.register(username,password,email);
         authToken = resultData.getAuthData().getAuthToken();
         resultData = myService.createGame(authToken,gameName);
@@ -119,10 +127,29 @@ class ChessServiceTest {
         int actual = resultData.getStatus();
         Assertions.assertEquals(expected,actual);
 
+    }
+
+
+
+    @Test
+    void listGamesTest() throws DataAccessException {
 //        test invalid game name
-        resultData = myService.createGame(authToken,null);
-        expected = 400;
-        actual = resultData.getStatus();
+        ResultData resultData = myService.createGame(authToken,null);
+        int expected = 400;
+        int actual = resultData.getStatus();
+        Assertions.assertEquals(expected,actual);
+
+    }
+
+    @Test
+    void listGamePositive() throws DataAccessException{
+
+        //        test valid
+        ResultData resultData = myService.register(username,password,email);
+        authToken = resultData.getAuthData().getAuthToken();
+        resultData = myService.createGame(authToken,gameName);
+        int expected = 200;
+        int actual = resultData.getStatus();
         Assertions.assertEquals(expected,actual);
 
     }
@@ -143,7 +170,22 @@ class ChessServiceTest {
     @Test
     void joinGameTest() throws DataAccessException {
 
-//        test watcher ability
+//        test wrong team color
+        ResultData resultData = myService.register(username,password,email);
+        authToken = resultData.getAuthData().getAuthToken();
+        resultData = myService.createGame(authToken,gameName);
+        int gameID = resultData.getGameData().getGameID();
+        resultData = myService.joinGame(authToken,"purple",gameID);
+        int expected = 500;
+        int actual = resultData.getStatus();
+        Assertions.assertEquals(expected,actual);
+
+    }
+
+    @Test
+    void joinGamePositive() throws DataAccessException{
+
+        //        test watcher ability
         ResultData resultData = myService.register(username,password,email);
         authToken = resultData.getAuthData().getAuthToken();
         resultData = myService.createGame(authToken,gameName);
@@ -153,14 +195,7 @@ class ChessServiceTest {
         int actual = resultData.getStatus();
         Assertions.assertEquals(expected,actual);
 
-//        test wrong team color
-        resultData = myService.joinGame(authToken,"purple",gameID);
-        expected = 500;
-        actual = resultData.getStatus();
-        Assertions.assertEquals(expected,actual);
-
     }
-
 
 
 

@@ -8,8 +8,8 @@ import java.util.HashSet;
 
 public class PawnMovesCalculator {
 
-    private ChessBoard board;
-    private ChessPosition myPosition;
+    private final ChessBoard board;
+    private final ChessPosition myPosition;
 
     ArrayList<ChessMove> validMoves = new ArrayList<ChessMove>();
     HashSet<ChessMove> hashValidMoves = new HashSet<ChessMove>();
@@ -24,7 +24,6 @@ public class PawnMovesCalculator {
         int rowNum = myPosition.getRow();
         int blackStartRow = 7;
         int whiteStartRow = 2;
-
         ChessPosition botRight = new ChessPosition(rowNum - 1,columnNum + 1);
         ChessPosition botLeft = new ChessPosition(rowNum - 1,columnNum - 1);
         ChessPosition topRight = new ChessPosition(rowNum + 1,columnNum + 1);
@@ -32,23 +31,20 @@ public class PawnMovesCalculator {
         ChessPosition straightDown = new ChessPosition(rowNum - 1,columnNum);
         ChessPosition straightUp = new ChessPosition(rowNum + 1,columnNum);
 
-
 //        black
         if (board.getPiece(myPosition).getTeamColor().equals(ChessGame.TeamColor.BLACK)){
             if(myPosition.getRow() == blackStartRow){
                 rowNum = rowNum - 2;
                 ChessPosition newPosition = new ChessPosition(rowNum, columnNum);
                 if(board.getPiece(newPosition) == null && board.getPiece(straightDown) == null){
-                    ChessMove newMove = new ChessMove(myPosition, newPosition);
-                    validMoves.add(newMove);
+                    addMove(newPosition);
                 }
             }
 
             if(isNotOutOfBounds(botRight)) {
                 if (board.getPiece(botRight) != null) {
                     if (board.getPiece(botRight).getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
-                        ChessMove newMove = new ChessMove(myPosition, botRight);
-                        validMoves.add(newMove);
+                        addMove(botRight);
                     }
                 }
             }
@@ -56,8 +52,7 @@ public class PawnMovesCalculator {
             if(isNotOutOfBounds(botLeft)) {
                 if (board.getPiece(botLeft) != null) {
                     if (board.getPiece(botLeft).getTeamColor().equals(ChessGame.TeamColor.WHITE)) {
-                        ChessMove newMove = new ChessMove(myPosition, botLeft);
-                        validMoves.add(newMove);
+                        addMove(botLeft);
                     }
                 }
             }
@@ -69,47 +64,27 @@ public class PawnMovesCalculator {
                     rowNum = rowNum - 1;
                     ChessPosition newPosition = new ChessPosition(rowNum, columnNum);
                     if (board.getPiece(newPosition) == null) {
-                        ChessMove newMove = new ChessMove(myPosition, newPosition);
-                        validMoves.add(newMove);
+                        addMove(newPosition);
                     }
                 }
             }
 //      check to see if the valid move gets promotion piece
-
-            ArrayList<ChessMove> copyMoves = new ArrayList<ChessMove>(validMoves);
-            int counter = 0;
-            for (ChessMove move : copyMoves){
-                    if(move.getEndPosition().getRow() == 1){
-                        ChessMove replacementMove = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.QUEEN);
-                        validMoves.set(counter,replacementMove);
-                        ChessMove rookPromo = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.ROOK);
-                        ChessMove bishopPromo = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.BISHOP);
-                        ChessMove knightPromo = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.KNIGHT);
-                        validMoves.add(rookPromo);
-                        validMoves.add(bishopPromo);
-                        validMoves.add(knightPromo);
-                    }
-                    counter++;
-            }
+            checkForPromo(1);
         }
-
-
 //        white
         if (board.getPiece(myPosition).getTeamColor().equals(ChessGame.TeamColor.WHITE)){
             if(myPosition.getRow() == whiteStartRow){
                 rowNum = rowNum + 2;
                 ChessPosition newPosition = new ChessPosition(rowNum, columnNum);
                 if(board.getPiece(newPosition) == null && (board.getPiece(straightUp) == null)){
-                    ChessMove newMove = new ChessMove(myPosition, newPosition);
-                    validMoves.add(newMove);
+                    addMove(newPosition);
                 }
             }
 
             if(isNotOutOfBounds(topRight)) {
                 if (board.getPiece(topRight) != null) {
                     if (board.getPiece(topRight).getTeamColor().equals(ChessGame.TeamColor.BLACK)) {
-                        ChessMove newMove = new ChessMove(myPosition, topRight);
-                        validMoves.add(newMove);
+                        addMove(topRight);
                     }
                 }
             }
@@ -118,8 +93,7 @@ public class PawnMovesCalculator {
             if(isNotOutOfBounds(topLeft)){
                 if (board.getPiece(topLeft) != null) {
                     if (board.getPiece(topLeft).getTeamColor().equals(ChessGame.TeamColor.BLACK)) {
-                        ChessMove newMove = new ChessMove(myPosition, topLeft);
-                        validMoves.add(newMove);
+                        addMove(topLeft);
                     }
                 }
             }
@@ -132,41 +106,43 @@ public class PawnMovesCalculator {
 
                     ChessPosition newPosition = new ChessPosition(rowNum, columnNum);
                     if(board.getPiece(newPosition) == null){
-                        ChessMove newMove = new ChessMove(myPosition, newPosition);
-                        validMoves.add(newMove);
+                        addMove(newPosition);
                     }
                 }
             }
-
             //            check to see if the valid move gets promotion piece
-            ArrayList<ChessMove> copyMoves = new ArrayList<ChessMove>(validMoves);
-            int counter = 0;
-            for (ChessMove move : copyMoves){
-                if(move.getEndPosition().getRow() == 8){
-                    ChessMove replacementMove = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.QUEEN);
-                    validMoves.set(counter,replacementMove);
-                    ChessMove rookPromo = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.ROOK);
-                    ChessMove bishopPromo = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.BISHOP);
-                    ChessMove knightPromo = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.KNIGHT);
-                    validMoves.add(rookPromo);
-                    validMoves.add(bishopPromo);
-                    validMoves.add(knightPromo);
-                }
-                counter++;
-            }
+            checkForPromo(8);
         }
         //            turn into hashset in order to avoid compatibility problems
         hashValidMoves.addAll(validMoves);
         return hashValidMoves;
     }
 
+    private void addMove(ChessPosition newPosition) {
+        ChessMove newMove = new ChessMove(myPosition, newPosition);
+        validMoves.add(newMove);
+    }
+
+    private void checkForPromo(int x) {
+        ArrayList<ChessMove> copyMoves = new ArrayList<ChessMove>(validMoves);
+        int counter = 0;
+        for (ChessMove move : copyMoves) {
+            if (move.getEndPosition().getRow() == x) {
+                ChessMove replacementMove = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.QUEEN);
+                validMoves.set(counter, replacementMove);
+                ChessMove rookPromo = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.ROOK);
+                ChessMove bishopPromo = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.BISHOP);
+                ChessMove knightPromo = new ChessMove(myPosition, move.getEndPosition(), ChessPiece.PieceType.KNIGHT);
+                validMoves.add(rookPromo);
+                validMoves.add(bishopPromo);
+                validMoves.add(knightPromo);
+            }
+            counter++;
+        }
+    }
+
     public boolean isNotOutOfBounds(ChessPosition position){
-        if((position.getRow() >= 1 && position.getRow() <= 8) && (position.getColumn() >= 1 && position.getColumn() <= 8)) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return (position.getRow() >= 1 && position.getRow() <= 8) && (position.getColumn() >= 1 && position.getColumn() <= 8);
     }
 
 }

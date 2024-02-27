@@ -9,8 +9,8 @@ import java.util.Collection;
 import java.util.HashSet;
 
 public class BishopMovesCalculator {
-    private ChessBoard board;
-    private ChessPosition myPosition;
+    private final ChessBoard board;
+    private final ChessPosition myPosition;
     HashSet<ChessMove> hashValidMoves = new HashSet<ChessMove>();
 
     public BishopMovesCalculator(ChessBoard board, ChessPosition myPosition){
@@ -24,21 +24,12 @@ public class BishopMovesCalculator {
 //        right up
         int columnNum = myPosition.getColumn();
         for (int i = (myPosition.getRow() + 1); i <= 8; i++){
-            if(columnNum < 8){
+            if(columnNum < 8) {
                 columnNum = columnNum + 1;
-            }
-            ChessPosition newPosition = new ChessPosition(i,columnNum);
-            ChessMove newMove = new ChessMove(myPosition,newPosition);
-
-            if (board.getPiece(newPosition) == null){
-                validMoves.add(newMove);
-            }
-            else if(board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()){
-                validMoves.add(newMove);
-                break;
-            }
-            else if(board.getPiece(newPosition).getTeamColor() == board.getPiece(myPosition).getTeamColor()){
-                break;
+                if (checkForValidMove(i, columnNum, validMoves)) break;
+                if (columnNum == 8) {
+                    break;
+                }
             }
 
         }
@@ -48,19 +39,7 @@ public class BishopMovesCalculator {
         for (int i = (myPosition.getRow() - 1); i >= 1; i--){
             if(columnNum < 8){
                 columnNum = columnNum + 1;
-                ChessPosition newPosition = new ChessPosition(i,columnNum);
-                ChessMove newMove = new ChessMove(myPosition,newPosition);
-
-                if (board.getPiece(newPosition) == null){
-                    validMoves.add(newMove);
-                }
-                else if(board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()){
-                    validMoves.add(newMove);
-                    break;
-                }
-                else if(board.getPiece(newPosition).getTeamColor() == board.getPiece(myPosition).getTeamColor()){
-                    break;
-                }
+                if (checkForValidMove(i, columnNum, validMoves)) break;
                 if (columnNum == 8){
                     break;
                 }
@@ -73,19 +52,7 @@ public class BishopMovesCalculator {
 
             if(columnNum > 1){
                 columnNum = columnNum - 1;
-                ChessPosition newPosition = new ChessPosition(i,columnNum);
-                ChessMove newMove = new ChessMove(myPosition,newPosition);
-
-                if (board.getPiece(newPosition) == null){
-                    validMoves.add(newMove);
-                }
-                else if(board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()){
-                    validMoves.add(newMove);
-                    break;
-                }
-                else if(board.getPiece(newPosition).getTeamColor() == board.getPiece(myPosition).getTeamColor()){
-                    break;
-                }
+                if (checkForValidMove(i, columnNum, validMoves)) break;
                 if(columnNum == 1){
                     break;
                 }
@@ -97,19 +64,7 @@ public class BishopMovesCalculator {
         for (int i = (myPosition.getRow() - 1); i >= 1; i--){
             if(columnNum > 1){
                 columnNum = columnNum - 1;
-                ChessPosition newPosition = new ChessPosition(i,columnNum);
-                ChessMove newMove = new ChessMove(myPosition,newPosition);
-
-                if (board.getPiece(newPosition) == null){
-                    validMoves.add(newMove);
-                }
-                else if(board.getPiece(newPosition).getTeamColor() != board.getPiece(myPosition).getTeamColor()){
-                    validMoves.add(newMove);
-                    break;
-                }
-                else if(board.getPiece(newPosition).getTeamColor() == board.getPiece(myPosition).getTeamColor()){
-                    break;
-                }
+                if (checkForValidMove(i, columnNum, validMoves)) break;
                 if (columnNum == 1){
                     break;
                 }
@@ -117,5 +72,26 @@ public class BishopMovesCalculator {
         }
         hashValidMoves.addAll(validMoves);
         return hashValidMoves;
+    }
+
+    private boolean checkForValidMove(int i, int columnNum, ArrayList<ChessMove> validMoves) {
+
+        ChessMove newMove = createNewMove(i,columnNum);
+
+        if (board.getPiece(newMove.getEndPosition()) == null) {
+            validMoves.add(newMove);
+        } else if (board.getPiece(newMove.getEndPosition()).getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
+            validMoves.add(newMove);
+            return true;
+        } else if (board.getPiece(newMove.getEndPosition()).getTeamColor() == board.getPiece(myPosition).getTeamColor()) {
+            return true;
+        }
+        return false;
+    }
+
+
+    public ChessMove createNewMove(int rowNum, int columnNum){
+        ChessPosition newPosition = new ChessPosition(rowNum, columnNum);
+        return new ChessMove(myPosition, newPosition);
     }
 }

@@ -2,23 +2,33 @@ package service;
 
 import dataAccess.DAOs.*;
 import dataAccess.DataAccessException;
+import dataAccess.DatabaseManager;
 import model.AuthData;
 import model.GameData;
 import server.ResultData;
 import model.UserData;
 
+import java.sql.SQLException;
+
 public class ChessService {
 
-    private final MemoryAuthDAO authDAO;
-    private final MemoryUserDAO userDAO;
-    private final MemoryGameDAO gameDAO;
+    private  AuthDAO authDAO;
+    private  UserDAO userDAO;
+    private  GameDAO gameDAO;
 
 
     public ChessService() {
-        this.authDAO = new MemoryAuthDAO();
-        this.userDAO = new MemoryUserDAO();
-        this.gameDAO = new MemoryGameDAO();
 
+        try{
+            configureDatabase();
+            this.authDAO = new SQLAuthDAO();
+            this.userDAO = new SQLUserDAO();
+            this.gameDAO = new SQLGameDAO();
+        }catch(DataAccessException e){
+            this.authDAO = new MemoryAuthDAO();
+            this.userDAO = new MemoryUserDAO();
+            this.gameDAO = new MemoryGameDAO();
+        }
     }
 
     public void clearAll() throws DataAccessException {
@@ -161,6 +171,60 @@ public class ChessService {
                 resultData.setMessage("Error: description");
                 return resultData;
             }
+        }
+    }
+
+    private final String[] createStatements = {
+
+            """
+            CREATE TABLE IF NOT EXISTS  user (
+              `user_id_num` int NOT NULL AUTO_INCREMENT,
+              `username` varchar(256) NOT NULL,
+              `password` varchar(256) NOT NULL,
+              `email` varchar(256) NOT NULL,
+              `json` TEXT DEFAULT NULL,
+              PRIMARY KEY (`user_id_num`),
+              CONSTRAINT `usernamer` FOREIGN KEY (`username`),
+              INDEX(username)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+            """
+            ,
+            """
+            CREATE TABLE IF NOT EXISTS  game (
+              `game_id_num` int NOT NULL AUTO_INCREMENT,
+              `username` varchar(256) NOT NULL,
+              `gameName` varchar(256) NOT NULL,
+              `gameData` varchar(256) NOT NULL,
+              `gameID` int NOT NULL,
+              `json` TEXT DEFAULT NULL,
+              PRIMARY KEY (`game_id_num`),
+              INDEX(username)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+            """
+            ,
+            """
+            CREATE TABLE IF NOT EXISTS  auth (
+              `auth_id_num` int NOT NULL AUTO_INCREMENT,
+              `username` varchar(256) NOT NULL,
+              `authToken` varchar(256) NOT NULL,
+              `json` TEXT DEFAULT NULL,
+              PRIMARY KEY (`auth_id_num`),
+              INDEX(username)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+            """
+
+    };
+
+    public void configureDatabase() throws DataAccessException {
+        DatabaseManager.createDatabase();
+        try (var conn = DatabaseManager.getConnection()) {
+            for (var statement : createStatements) {
+                try (var preparedStatement = conn.prepareStatement(statement)) {
+                    preparedStatement.executeUpdate();
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
         }
     }
 }

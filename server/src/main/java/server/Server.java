@@ -13,7 +13,7 @@ public class Server {
     private final ChessService service;
 
 
-    public Server() {
+    public Server(){
         this.service = new ChessService();
     }
 

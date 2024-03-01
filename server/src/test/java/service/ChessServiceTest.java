@@ -17,6 +17,9 @@ class ChessServiceTest {
     private String gameName = "newGamePlus";
     private ChessService myService = new ChessService();
 
+    ChessServiceTest() throws DataAccessException {
+    }
+
 
     @BeforeEach
     public void init(){
@@ -197,6 +200,11 @@ class ChessServiceTest {
 
     }
 
+    @Test
+    void connectionTest() throws DataAccessException {
 
+        myService.configureDatabase();
+
+    }
 
 }

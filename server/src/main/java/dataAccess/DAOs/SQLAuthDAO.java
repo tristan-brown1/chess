@@ -10,11 +10,24 @@ import java.util.HashMap;
 
 public class SQLAuthDAO implements AuthDAO{
 
-    public SQLAuthDAO() throws DataAccessException {
 
-    }
-    public void clearAll() {
+    public void clearAll() throws DataAccessException {
+        String[] createStatements = {
+                """
+            DROP TABLE IF EXISTS auth;
+            """
+        };
 
+
+        try (var conn = DatabaseManager.getConnection()) {
+            for (var statement : createStatements) {
+                try (var preparedStatement = conn.prepareStatement(statement)) {
+                    preparedStatement.executeUpdate();
+                }
+            }
+        } catch (SQLException | DataAccessException ex) {
+            throw new DataAccessException(String.format("Unable to clear database: %s", ex.getMessage()));
+        }
     }
 
     @Override

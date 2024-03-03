@@ -207,4 +207,11 @@ class ChessServiceTest {
 
     }
 
+    @Test
+    void clearingTableTest() throws DataAccessException {
+
+        myService.clearAll();
+
+    }
+
 }

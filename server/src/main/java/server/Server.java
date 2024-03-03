@@ -61,9 +61,9 @@ public class Server {
     }
 
     private Object clearAppHandler(Request req, Response res) throws DataAccessException {
-        service.clearAll();
-        res.status(200);
-        return "";
+        ResultData statusData = service.clearAll();
+        res.status(statusData.getStatus());
+        return new Gson().toJson(statusData);
     }
 
     private Object registerHandler(Request req, Response res) throws DataAccessException {

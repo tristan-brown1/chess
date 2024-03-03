@@ -12,7 +12,7 @@ public class MemoryUserDAO implements UserDAO{
         user = new HashMap<String, UserData>();
     }
 
-    public void clearAll() {
+    public void clear() {
         user.clear();
     }
 

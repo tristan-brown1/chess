@@ -29,12 +29,17 @@ public class ChessService {
             this.userDAO = new MemoryUserDAO();
             this.gameDAO = new MemoryGameDAO();
         }
+
     }
 
-    public void clearAll() throws DataAccessException {
+    public ResultData clearAll() throws DataAccessException {
         this.authDAO.clearAll();
-        this.userDAO.clearAll();
+        this.userDAO.clear();
         this.gameDAO.clearAll();
+        configureDatabase();
+        ResultData resultData = new ResultData();
+        resultData.setStatus(200);
+        return resultData;
     }
 
     public ResultData register(String username, String password, String email) throws DataAccessException {
@@ -182,9 +187,7 @@ public class ChessService {
               `username` varchar(256) NOT NULL,
               `password` varchar(256) NOT NULL,
               `email` varchar(256) NOT NULL,
-              `json` TEXT DEFAULT NULL,
               PRIMARY KEY (`user_id_num`),
-              CONSTRAINT `usernamer` FOREIGN KEY (`username`),
               INDEX(username)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
             """
@@ -196,7 +199,6 @@ public class ChessService {
               `gameName` varchar(256) NOT NULL,
               `gameData` varchar(256) NOT NULL,
               `gameID` int NOT NULL,
-              `json` TEXT DEFAULT NULL,
               PRIMARY KEY (`game_id_num`),
               INDEX(username)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
@@ -207,7 +209,6 @@ public class ChessService {
               `auth_id_num` int NOT NULL AUTO_INCREMENT,
               `username` varchar(256) NOT NULL,
               `authToken` varchar(256) NOT NULL,
-              `json` TEXT DEFAULT NULL,
               PRIMARY KEY (`auth_id_num`),
               INDEX(username)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
@@ -221,6 +222,8 @@ public class ChessService {
             for (var statement : createStatements) {
                 try (var preparedStatement = conn.prepareStatement(statement)) {
                     preparedStatement.executeUpdate();
+                }catch(Exception e){
+                    System.out.println("yo");
                 }
             }
         } catch (SQLException ex) {

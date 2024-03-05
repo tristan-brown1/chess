@@ -15,6 +15,6 @@ public interface GameDAO{
 
     public HashSet getGames();
 
-    public GameData createGame(String gameName);
+    public GameData createGame(String gameName) throws DataAccessException;
 
 }

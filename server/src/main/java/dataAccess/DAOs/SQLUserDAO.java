@@ -34,7 +34,16 @@ public class SQLUserDAO implements UserDAO{
     }
 
     @Override
-    public UserData getUser(String username) {
+    public UserData getUser(String username) throws DataAccessException {
+
+//        String[] createUserStatements = {
+//                "SELECT * FROM user " +
+//                        "WHERE + '" + username + "' == username"
+//
+//        };
+//
+//        System.out.println(executeStatement(createUserStatements));
+
         return null;
     }
 

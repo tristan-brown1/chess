@@ -1,10 +1,12 @@
 package service;
 
 import dataAccess.DataAccessException;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import passoffTests.obfuscatedTestClasses.TestServerFacade;
+import passoffTests.testClasses.TestException;
+import passoffTests.testClasses.TestModels;
 import server.ResultData;
+import server.Server;
 
 class ChessServiceTest {
     private String username = "newUser";
@@ -13,6 +15,16 @@ class ChessServiceTest {
     private String authToken;
     private String gameName = "newGamePlus";
     private ChessService myService = new ChessService();
+    private static TestModels.TestUser existingUser;
+
+    private static TestModels.TestUser newUser;
+
+    private static TestModels.TestCreateRequest createRequest;
+
+    private static TestServerFacade serverFacade;
+    private static Server server;
+
+    private String existingAuth;
 
     ChessServiceTest() throws DataAccessException {
     }
@@ -26,6 +38,45 @@ class ChessServiceTest {
         String email = "newemail@mail.com";
         var myService = new ChessService();
 
+    }
+    @BeforeAll
+    public static void init2() {
+        server = new Server();
+        var port = server.run(0);
+        System.out.println("Started test HTTP server on " + port);
+
+        serverFacade = new TestServerFacade("localhost", Integer.toString(port));
+
+        existingUser = new TestModels.TestUser();
+        existingUser.username = "ExistingUser";
+        existingUser.password = "existingUserPassword";
+        existingUser.email = "eu@mail.com";
+
+        newUser = new TestModels.TestUser();
+        newUser.username = "NewUser";
+        newUser.password = "newUserPassword";
+        newUser.email = "nu@mail.com";
+
+        createRequest = new TestModels.TestCreateRequest();
+        createRequest.gameName = "testGame";
+    }
+    @BeforeEach
+    public void setup() throws TestException {
+        serverFacade.clear();
+
+        TestModels.TestRegisterRequest registerRequest = new TestModels.TestRegisterRequest();
+        registerRequest.username = existingUser.username;
+        registerRequest.password = existingUser.password;
+        registerRequest.email = existingUser.email;
+
+        //one user already logged in
+        TestModels.TestLoginRegisterResult regResult = serverFacade.register(registerRequest);
+        existingAuth = regResult.authToken;
+    }
+
+    @AfterAll
+    static void stopServer() {
+        server.stop();
     }
 
     @Test

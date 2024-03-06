@@ -88,7 +88,7 @@ public class SQLAuthDAO implements AuthDAO{
         if(rs != null){
             var username = rs.getString("username");
             var authToken = rs.getString("authToken");
-            return new AuthData(username,authToken);
+            return new AuthData(authToken,username);
         }
         else {
             return null;

@@ -35,13 +35,13 @@ public class SQLGameDAO implements GameDAO{
         GameData currentGame = getGame(gameData.getGameID());
         if(playerColor.equalsIgnoreCase("white")){
             currentGame.setWhiteUsername(username);
-            String createGameStatement = "UPDATE game SET whiteUsername = ? + WHERE gameID = ? );";
+            String createGameStatement = "UPDATE game SET whiteUsername = ? WHERE gameID = ?";
             executeUpdate(createGameStatement,currentGame.getWhiteUsername() ,currentGame.getGameID());
         }
         else if (playerColor.equalsIgnoreCase("black")){
             currentGame.setBlackUsername(username);
-            currentGame.setWhiteUsername(username);
-            String createGameStatement = "UPDATE game SET blackUsername = ? + WHERE gameID = ? );";
+//            currentGame.setWhiteUsername(username);
+            String createGameStatement = "UPDATE game SET blackUsername = ? WHERE gameID = ?";
             executeUpdate(createGameStatement,currentGame.getBlackUsername() ,currentGame.getGameID());
         }
     }

@@ -182,36 +182,29 @@ public class ChessService {
     private final String[] createStatements = {
 
             """
-            CREATE TABLE IF NOT EXISTS  user (
-              `user_id_num` int NOT NULL AUTO_INCREMENT,
-              `username` varchar(256) NOT NULL,
-              `password` varchar(256) NOT NULL,
-              `email` varchar(256) NOT NULL,
-              PRIMARY KEY (`user_id_num`),
-              INDEX(username)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+            CREATE TABLE IF NOT EXISTS `chess`.`user` (
+              `username` VARCHAR(256) NOT NULL,
+              `password` VARCHAR(256) NOT NULL,
+              `email` VARCHAR(256) NOT NULL,
+              PRIMARY KEY (`username`));
             """
             ,
             """
-            CREATE TABLE IF NOT EXISTS  game (
-              `game_id_num` int NOT NULL AUTO_INCREMENT,
-              `username` varchar(256) NOT NULL,
-              `gameName` varchar(256) NOT NULL,
-              `gameData` varchar(256) NOT NULL,
-              `gameID` int NOT NULL,
-              PRIMARY KEY (`game_id_num`),
-              INDEX(username)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+            CREATE TABLE IF NOT EXISTS `chess`.`game` (
+              `gameName` VARCHAR(256) NOT NULL,
+              `whiteUsername` VARCHAR(256) NULL,
+              `blackUsername` VARCHAR(256) NULL,
+              `game` VARCHAR(256) NOT NULL,
+              `gameID` INT NOT NULL,
+              PRIMARY KEY (`gameID`));
             """
             ,
             """
-            CREATE TABLE IF NOT EXISTS  auth (
-              `auth_id_num` int NOT NULL AUTO_INCREMENT,
-              `username` varchar(256) NOT NULL,
-              `authToken` varchar(256) NOT NULL,
-              PRIMARY KEY (`auth_id_num`),
-              INDEX(username)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+            CREATE TABLE IF NOT EXISTS `chess`.`auth` (
+              `username` VARCHAR(256) NOT NULL,
+              `authToken` VARCHAR(256) NOT NULL,
+              PRIMARY KEY (`authToken`));
+            
             """
 
     };

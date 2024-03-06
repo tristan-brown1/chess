@@ -5,6 +5,7 @@ import dataAccess.DatabaseManager;
 import model.AuthData;
 import model.UserData;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.UUID;
@@ -38,14 +39,23 @@ public class SQLAuthDAO implements AuthDAO{
     @Override
     public AuthData getAuth(String authToken) {
 
-//        String[] createUserStatements = {
-//                "INSERT INTO user (username, password, email) VALUES ('" + username + "', '" + password + "', '" + email + "');"
-//        };
-//
-//        executeStatement(createUserStatements);
-
-
-        return null;
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT username,authToken FROM auth WHERE authToken=?";
+            try (var ps = conn.prepareStatement(statement)) {
+                ps.setString(1, authToken);
+                try (var rs = ps.executeQuery()) {
+                    if(rs.next()){
+                        return readAuthData(rs);
+                    }
+                    else {
+                        return null;
+                    }
+                }
+            }
+        } catch (Exception e) {
+//            throw new DataAccessException( String.format("Unable to read data: %s", e.getMessage()));
+            return null;
+        }
     }
 
     @Override
@@ -53,8 +63,7 @@ public class SQLAuthDAO implements AuthDAO{
 
         String[] createUserStatements = {
                 "DELETE FROM auth " +
-                        "WHERE + '" + authToken + "'"
-
+                "WHERE authToken = '" + authToken + "'"
         };
 
         executeStatement(createUserStatements);
@@ -70,6 +79,19 @@ public class SQLAuthDAO implements AuthDAO{
             }
         } catch (SQLException ex) {
             throw new DataAccessException(String.format("Unable to clear database: %s", ex.getMessage()));
+        }
+    }
+
+
+
+    private AuthData readAuthData(ResultSet rs) throws SQLException {
+        if(rs != null){
+            var username = rs.getString("username");
+            var authToken = rs.getString("authToken");
+            return new AuthData(username,authToken);
+        }
+        else {
+            return null;
         }
     }
 

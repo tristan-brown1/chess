@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
+import static java.sql.Statement.RETURN_GENERATED_KEYS;
+import static java.sql.Types.NULL;
+
 public class SQLGameDAO implements GameDAO{
 
 
@@ -32,21 +35,14 @@ public class SQLGameDAO implements GameDAO{
         GameData currentGame = getGame(gameData.getGameID());
         if(playerColor.equalsIgnoreCase("white")){
             currentGame.setWhiteUsername(username);
-            String[] createGameStatement = {
-                    "UPDATE game" +
-                    "SET whiteUsername = '" + currentGame.getWhiteUsername() + "'" +
-                    "WHERE gameID = '" + currentGame.getGameID() +  "');"
-            };
-            executeStatement(createGameStatement);
+            String createGameStatement = "UPDATE game SET whiteUsername = ? + WHERE gameID = ? );";
+            executeUpdate(createGameStatement,currentGame.getWhiteUsername() ,currentGame.getGameID());
         }
         else if (playerColor.equalsIgnoreCase("black")){
             currentGame.setBlackUsername(username);
-            String[] createGameStatement = {
-                    "UPDATE game" +
-                    "SET blackUsername = '" + currentGame.getBlackUsername() + "'" +
-                    "WHERE gameID = '" + currentGame.getGameID() +  "');"
-            };
-            executeStatement(createGameStatement);
+            currentGame.setWhiteUsername(username);
+            String createGameStatement = "UPDATE game SET blackUsername = ? + WHERE gameID = ? );";
+            executeUpdate(createGameStatement,currentGame.getBlackUsername() ,currentGame.getGameID());
         }
     }
 
@@ -98,14 +94,37 @@ public class SQLGameDAO implements GameDAO{
         Random random = new Random();
         newGame.setGameID(random.nextInt(10,10000));
         newGame.setGameName(gameName);
+        String gameJson = new Gson().toJson(newGame.getGame());
 
-        String[] createGameStatement = {
+        String createGameStatement =
             "INSERT INTO game (gameName, whiteUsername, blackUsername, game, gameID) " +
-            "VALUES ('" + newGame.getGameName() + "','" + newGame.getWhiteUsername() + "', '" + newGame.getBlackUsername() + "', '" + newGame.getGame() + "', '" + newGame.getGameID() + "');"
-        };
-        executeStatement(createGameStatement);
+            "VALUES (?,?,?,?,?);";
+        executeUpdate(createGameStatement,gameName,newGame.getWhiteUsername(),newGame.getBlackUsername(),gameJson,newGame.getGameID());
         return newGame;
 
+    }
+
+    private int executeUpdate(String statement, Object... params) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var ps = conn.prepareStatement(statement, RETURN_GENERATED_KEYS)) {
+                for (var i = 0; i < params.length; i++) {
+                    var param = params[i];
+                    if (param instanceof String p) ps.setString(i + 1, p);
+                    else if (param instanceof Integer p) ps.setInt(i + 1, p);
+                    else if (param == null) ps.setNull(i + 1, NULL);
+                }
+                ps.executeUpdate();
+
+                var rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+
+                return 0;
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException(String.format("unable to update database: %s, %s", statement, e.getMessage()));
+        }
     }
 
     private static void executeStatement(String[] createStatements) throws DataAccessException {

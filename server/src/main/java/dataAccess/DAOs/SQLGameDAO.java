@@ -34,7 +34,7 @@ public class SQLGameDAO implements GameDAO{
             currentGame.setWhiteUsername(username);
             String[] createGameStatement = {
                     "UPDATE game" +
-                    "SET whiteUsername = '" + currentGame.getWhiteUsername() +
+                    "SET whiteUsername = '" + currentGame.getWhiteUsername() + "'" +
                     "WHERE gameID = '" + currentGame.getGameID() +  "');"
             };
             executeStatement(createGameStatement);
@@ -43,8 +43,8 @@ public class SQLGameDAO implements GameDAO{
             currentGame.setBlackUsername(username);
             String[] createGameStatement = {
                     "UPDATE game" +
-                            "SET blackUsername = '" + currentGame.getBlackUsername() +
-                            "WHERE gameID = '" + currentGame.getGameID() +  "');"
+                    "SET blackUsername = '" + currentGame.getBlackUsername() + "'" +
+                    "WHERE gameID = '" + currentGame.getGameID() +  "');"
             };
             executeStatement(createGameStatement);
         }
@@ -100,8 +100,8 @@ public class SQLGameDAO implements GameDAO{
         newGame.setGameName(gameName);
 
         String[] createGameStatement = {
-                "INSERT INTO game (gameName, whiteUsername, blackUsername, game, gameID) " +
-                "VALUES ('" + gameName + "', '" + newGame.getWhiteUsername() + "', '" + newGame.getBlackUsername() + "', '" + newGame.getGame() + "', '" + newGame.getGameID() + "');"
+            "INSERT INTO game (gameName, whiteUsername, blackUsername, game, gameID) " +
+            "VALUES ('" + newGame.getGameName() + "','" + newGame.getWhiteUsername() + "', '" + newGame.getBlackUsername() + "', '" + newGame.getGame() + "', '" + newGame.getGameID() + "');"
         };
         executeStatement(createGameStatement);
         return newGame;
@@ -122,7 +122,7 @@ public class SQLGameDAO implements GameDAO{
 
 
     private GameData readGameData(ResultSet rs) throws SQLException {
-        if(rs != null){
+        if(rs!= null){
             var whiteUsername = rs.getString("whiteUsername");
             var blackUsername = rs.getString("blackUsername");
             var gameName = rs.getString("gameName");

@@ -68,14 +68,14 @@ public class SQLUserDAO implements UserDAO{
     }
 
     private UserData readUserData(ResultSet rs) throws SQLException {
-//        if(rs != null){
+        if(rs != null){
             var username = rs.getString("username");
             var password = rs.getString("password");
             var email = rs.getString("email");
             return new UserData(username,password,email);
-//        }
-//        else {
-//            return null;
-//        }
+        }
+        else {
+            return null;
+        }
     }
 }

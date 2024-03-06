@@ -34,7 +34,6 @@ public class ChessService {
     }
 
     public ResultData clearAll(String authToken) throws DataAccessException {
-//        if(this.authDAO.getAuth(authToken) != null){
             this.authDAO.clearAll();
             this.userDAO.clear();
             this.gameDAO.clearAll();
@@ -42,18 +41,10 @@ public class ChessService {
             ResultData resultData = new ResultData();
             resultData.setStatus(200);
             return resultData;
-//        }
-//        else{
-//            ResultData resultData = new ResultData();
-//            resultData.setStatus(400);
-//            resultData.setMessage("Error: bad request");
-//            return resultData;
-//        }
     }
 
     public ResultData register(String username, String password, String email) throws DataAccessException {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String hashedPassword = encoder.encode(password);
+        String hashedPassword = encodePassword(password);
         ResultData resultData = new ResultData();
         UserData userData = userDAO.getUser(username);
         if(userData == null) {
@@ -68,6 +59,11 @@ public class ChessService {
         return resultData;
     }
 
+    private static String encodePassword(String password) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.encode(password);
+    }
+
     public ResultData login(String username, String password) throws DataAccessException {
         ResultData resultData = new ResultData();
         UserData userData = userDAO.getUser(username);
@@ -79,7 +75,6 @@ public class ChessService {
         else{
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             var hashedPassword = userData.getPassword();
-//            password.equals(userData.getPassword())
             if(encoder.matches(password,hashedPassword)){
                 AuthData authData = authDAO.createAuth(username);
                 resultData.setAuthData(authData);

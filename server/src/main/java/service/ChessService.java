@@ -73,9 +73,7 @@ public class ChessService {
             return resultData;
         }
         else{
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            var hashedPassword = userData.getPassword();
-            if(encoder.matches(password,hashedPassword)){
+            if(verifyUser(userData,password)){
                 AuthData authData = authDAO.createAuth(username);
                 resultData.setAuthData(authData);
                 resultData.setUserData(userData);
@@ -231,5 +229,12 @@ public class ChessService {
         } catch (SQLException ex) {
             throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
         }
+    }
+
+    boolean verifyUser(UserData userData, String providedClearTextPassword) {
+        // read the previously hashed password from the database
+        var hashedPassword = userData.getPassword();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.matches(providedClearTextPassword, hashedPassword);
     }
 }

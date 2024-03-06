@@ -5,6 +5,7 @@ import dataAccess.DataAccessException;
 import dataAccess.DatabaseManager;
 import model.AuthData;
 import model.GameData;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import server.ResultData;
 import model.UserData;
 
@@ -32,21 +33,31 @@ public class ChessService {
 
     }
 
-    public ResultData clearAll() throws DataAccessException {
-        this.authDAO.clearAll();
-        this.userDAO.clear();
-        this.gameDAO.clearAll();
-        configureDatabase();
-        ResultData resultData = new ResultData();
-        resultData.setStatus(200);
-        return resultData;
+    public ResultData clearAll(String authToken) throws DataAccessException {
+//        if(this.authDAO.getAuth(authToken) != null){
+            this.authDAO.clearAll();
+            this.userDAO.clear();
+            this.gameDAO.clearAll();
+            configureDatabase();
+            ResultData resultData = new ResultData();
+            resultData.setStatus(200);
+            return resultData;
+//        }
+//        else{
+//            ResultData resultData = new ResultData();
+//            resultData.setStatus(400);
+//            resultData.setMessage("Error: bad request");
+//            return resultData;
+//        }
     }
 
     public ResultData register(String username, String password, String email) throws DataAccessException {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String hashedPassword = encoder.encode(password);
         ResultData resultData = new ResultData();
         UserData userData = userDAO.getUser(username);
         if(userData == null) {
-            resultData.setUserData(this.userDAO.createUser(username, password, email));
+            resultData.setUserData(this.userDAO.createUser(username, hashedPassword, email));
             resultData.setAuthData(this.authDAO.createAuth(username));
             resultData.setStatus(200);
         }
@@ -66,7 +77,10 @@ public class ChessService {
             return resultData;
         }
         else{
-            if(password.equals(userData.getPassword())){
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            var hashedPassword = userData.getPassword();
+//            password.equals(userData.getPassword())
+            if(encoder.matches(password,hashedPassword)){
                 AuthData authData = authDAO.createAuth(username);
                 resultData.setAuthData(authData);
                 resultData.setUserData(userData);

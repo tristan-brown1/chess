@@ -2,12 +2,9 @@ package service;
 
 import dataAccess.DataAccessException;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import server.ResultData;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ChessServiceTest {
     private String username = "newUser";
@@ -162,7 +159,7 @@ class ChessServiceTest {
     void clearTest() throws DataAccessException {
 
         ResultData resultData = myService.register(username,password,email);
-        myService.clearAll();
+        myService.clearAll(authToken);
         int expected = 200;
         int actual = resultData.getStatus();
         Assertions.assertEquals(expected,actual);
@@ -210,7 +207,7 @@ class ChessServiceTest {
     @Test
     void clearingTableTest() throws DataAccessException {
 
-        myService.clearAll();
+        myService.clearAll(authToken);
 
     }
 

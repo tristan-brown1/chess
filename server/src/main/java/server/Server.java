@@ -61,9 +61,11 @@ public class Server {
     }
 
     private Object clearAppHandler(Request req, Response res) throws DataAccessException {
-        ResultData statusData = service.clearAll();
+        String authToken = req.headers("authorization");
+        ResultData statusData = service.clearAll(authToken);
         res.status(statusData.getStatus());
         return new Gson().toJson(statusData);
+
     }
 
     private Object registerHandler(Request req, Response res) throws DataAccessException {

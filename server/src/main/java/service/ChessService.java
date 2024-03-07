@@ -222,8 +222,6 @@ public class ChessService {
             for (var statement : createStatements) {
                 try (var preparedStatement = conn.prepareStatement(statement)) {
                     preparedStatement.executeUpdate();
-                }catch(Exception e){
-                    System.out.println("yo");
                 }
             }
         } catch (SQLException ex) {

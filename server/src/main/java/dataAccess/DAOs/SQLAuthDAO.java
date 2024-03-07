@@ -27,16 +27,19 @@ public class SQLAuthDAO implements AuthDAO{
 
     @Override
     public AuthData createAuth(String username) throws DataAccessException {
-        String authToken = UUID.randomUUID().toString();
-        AuthData newData = new AuthData(authToken,username);
+        if(username == null){
+            return null;
+        }
+        else{
+            String authToken = UUID.randomUUID().toString();
+            AuthData newData = new AuthData(authToken,username);
 
-        String[] createAuthStatement = {
-                "INSERT INTO auth (authToken, username) VALUES ('" + authToken + "', '" + username + "');"
-        };
+            String createAuthStatement = "INSERT INTO auth (authToken, username) VALUES (?,?)";
 
-        executeStatement(createAuthStatement);
+            executeUpdate(createAuthStatement,newData.getAuthToken(),username);
 
-        return newData;
+            return newData;
+        }
     }
 
     @Override
@@ -65,7 +68,6 @@ public class SQLAuthDAO implements AuthDAO{
     public void deleteAuth(String authToken) throws DataAccessException {
         String createUserStatements = "DELETE FROM auth WHERE authToken = ?";
         executeUpdate(createUserStatements,authToken);
-
     }
 
     private static void executeStatement(String[] createStatements) throws DataAccessException {

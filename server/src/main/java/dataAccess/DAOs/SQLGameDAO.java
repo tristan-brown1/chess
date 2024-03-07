@@ -4,12 +4,10 @@ import chess.ChessGame;
 import com.google.gson.Gson;
 import dataAccess.DataAccessException;
 import dataAccess.DatabaseManager;
-import model.AuthData;
 import model.GameData;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -30,20 +28,27 @@ public class SQLGameDAO implements GameDAO{
     }
 
     @Override
-    public void updateGame(GameData gameData, String playerColor, String username) throws DataAccessException {
+    public Object updateGame(GameData gameData, String playerColor, String username) throws DataAccessException {
 
-        GameData currentGame = getGame(gameData.getGameID());
-        if(playerColor.equalsIgnoreCase("white")){
-            currentGame.setWhiteUsername(username);
-            String createGameStatement = "UPDATE game SET whiteUsername = ? WHERE gameID = ?";
-            executeUpdate(createGameStatement,currentGame.getWhiteUsername() ,currentGame.getGameID());
+        if(gameData == null || playerColor == null || username == null){
+            return null;
         }
-        else if (playerColor.equalsIgnoreCase("black")){
-            currentGame.setBlackUsername(username);
+        else{
+            GameData currentGame = getGame(gameData.getGameID());
+            if(playerColor.equalsIgnoreCase("white")){
+                currentGame.setWhiteUsername(username);
+                String createGameStatement = "UPDATE game SET whiteUsername = ? WHERE gameID = ?";
+                executeUpdate(createGameStatement,currentGame.getWhiteUsername() ,currentGame.getGameID());
+            }
+            else if (playerColor.equalsIgnoreCase("black")){
+                currentGame.setBlackUsername(username);
 //            currentGame.setWhiteUsername(username);
-            String createGameStatement = "UPDATE game SET blackUsername = ? WHERE gameID = ?";
-            executeUpdate(createGameStatement,currentGame.getBlackUsername() ,currentGame.getGameID());
+                String createGameStatement = "UPDATE game SET blackUsername = ? WHERE gameID = ?";
+                executeUpdate(createGameStatement,currentGame.getBlackUsername() ,currentGame.getGameID());
+            }
+            return 1;
         }
+        
     }
 
     @Override

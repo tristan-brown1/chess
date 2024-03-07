@@ -1,5 +1,6 @@
 package service;
 
+import dataAccess.DAOs.SQLUserDAO;
 import dataAccess.DataAccessException;
 import org.junit.jupiter.api.*;
 import passoffTests.obfuscatedTestClasses.TestServerFacade;
@@ -27,51 +28,24 @@ class ChessServiceTest {
     private String existingAuth;
 
     ChessServiceTest() throws DataAccessException {
-    }
-
-
-    @BeforeEach
-    public void init(){
-
-        String username = "newUser";
-        String password = "newPassword";
-        String email = "newemail@mail.com";
-        var myService = new ChessService();
 
     }
+
     @BeforeAll
-    public static void init2() {
+    public static void init() {
         server = new Server();
         var port = server.run(0);
         System.out.println("Started test HTTP server on " + port);
 
         serverFacade = new TestServerFacade("localhost", Integer.toString(port));
-
-        existingUser = new TestModels.TestUser();
-        existingUser.username = "ExistingUser";
-        existingUser.password = "existingUserPassword";
-        existingUser.email = "eu@mail.com";
-
-        newUser = new TestModels.TestUser();
-        newUser.username = "NewUser";
-        newUser.password = "newUserPassword";
-        newUser.email = "nu@mail.com";
-
-        createRequest = new TestModels.TestCreateRequest();
-        createRequest.gameName = "testGame";
+        String username = "newUser";
+        String password = "newPassword";
+        String email = "newemail@mail.com";
+        var myService = new ChessService();
     }
     @BeforeEach
     public void setup() throws TestException {
         serverFacade.clear();
-
-        TestModels.TestRegisterRequest registerRequest = new TestModels.TestRegisterRequest();
-        registerRequest.username = existingUser.username;
-        registerRequest.password = existingUser.password;
-        registerRequest.email = existingUser.email;
-
-        //one user already logged in
-        TestModels.TestLoginRegisterResult regResult = serverFacade.register(registerRequest);
-        existingAuth = regResult.authToken;
     }
 
     @AfterAll

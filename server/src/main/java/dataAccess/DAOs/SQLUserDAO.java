@@ -58,13 +58,18 @@ public class SQLUserDAO implements UserDAO{
 
     @Override
     public UserData createUser(String username, String password, String email) throws DataAccessException {
-        UserData newUser = new UserData(username,password,email);
-        String[] createUserStatements = {
-           "INSERT INTO user (username, password, email) VALUES ('" + username + "', '" + password + "', '" + email + "');"
-        };
+        if(username == null || password == null || email == null){
+            return null;
+        }
+        else{
+            UserData newUser = new UserData(username,password,email);
+            String[] createUserStatements = {
+                    "INSERT INTO user (username, password, email) VALUES ('" + username + "', '" + password + "', '" + email + "');"
+            };
 
-        executeStatement(createUserStatements);
-        return newUser;
+            executeStatement(createUserStatements);
+            return newUser;
+        }
     }
 
     private UserData readUserData(ResultSet rs) throws SQLException {

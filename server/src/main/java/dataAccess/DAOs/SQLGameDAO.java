@@ -95,17 +95,22 @@ public class SQLGameDAO implements GameDAO{
     @Override
     public GameData createGame(String gameName) throws DataAccessException {
 
-        GameData newGame = new GameData();
-        Random random = new Random();
-        newGame.setGameID(random.nextInt(10,10000));
-        newGame.setGameName(gameName);
-        String gameJson = new Gson().toJson(newGame.getGame());
+        if(gameName == null){
+            return null;
+        }
+        else{
+            GameData newGame = new GameData();
+            Random random = new Random();
+            newGame.setGameID(random.nextInt(10,10000));
+            newGame.setGameName(gameName);
+            String gameJson = new Gson().toJson(newGame.getGame());
 
-        String createGameStatement =
-            "INSERT INTO game (gameName, whiteUsername, blackUsername, game, gameID) " +
-            "VALUES (?,?,?,?,?);";
-        executeUpdate(createGameStatement,gameName,newGame.getWhiteUsername(),newGame.getBlackUsername(),gameJson,newGame.getGameID());
-        return newGame;
+            String createGameStatement =
+                    "INSERT INTO game (gameName, whiteUsername, blackUsername, game, gameID) " +
+                            "VALUES (?,?,?,?,?);";
+            executeUpdate(createGameStatement,gameName,newGame.getWhiteUsername(),newGame.getBlackUsername(),gameJson,newGame.getGameID());
+            return newGame;
+        }
 
     }
 

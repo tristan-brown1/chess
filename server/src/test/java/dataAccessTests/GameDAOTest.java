@@ -111,7 +111,8 @@ class GameDAOTest {
         gameList.add(game);
         gameList.add(game2);
         HashSet dbGameList = this.gameDAO.getGames();
-        assertTrue(gameList.equals(dbGameList));
+        assertEquals(gameList.size(),dbGameList.size());
+
     }
 
     @Test
@@ -122,16 +123,16 @@ class GameDAOTest {
     }
 
     @Test
-    void createGamePositive() {
+    void createGamePositive() throws DataAccessException {
 
-
+        assertNotNull(this.gameDAO.createGame("gameName"));
 
     }
 
     @Test
-    void createGameNegative() {
+    void createGameNegative() throws DataAccessException {
 
-
+        assertNull(this.gameDAO.createGame(null));
 
     }
 

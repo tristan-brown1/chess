@@ -189,7 +189,7 @@ public class ChessService {
     private final String[] createStatements = {
 
             """
-            CREATE TABLE IF NOT EXISTS `chess`.`user` (
+            CREATE TABLE IF NOT EXISTS `user` (
               `username` VARCHAR(256) NOT NULL,
               `password` VARCHAR(256) NOT NULL,
               `email` VARCHAR(256) NOT NULL,
@@ -197,7 +197,7 @@ public class ChessService {
             """
             ,
             """
-            CREATE TABLE IF NOT EXISTS `chess`.`game` (
+            CREATE TABLE IF NOT EXISTS `game` (
               `gameName` VARCHAR(256) NOT NULL,
               `whiteUsername` VARCHAR(256) NULL,
               `blackUsername` VARCHAR(256) NULL,
@@ -207,7 +207,7 @@ public class ChessService {
             """
             ,
             """
-            CREATE TABLE IF NOT EXISTS `chess`.`auth` (
+            CREATE TABLE IF NOT EXISTS `auth` (
               `username` VARCHAR(256) NOT NULL,
               `authToken` VARCHAR(256) NOT NULL,
               PRIMARY KEY (`authToken`));

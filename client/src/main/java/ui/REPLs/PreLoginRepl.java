@@ -22,9 +22,8 @@ public class PreLoginRepl {
         var result = "";
         printPrompt();
         String line = scanner.nextLine();
-        if(Objects.equals(line, "help")){
+        if(line.equalsIgnoreCase("help")){
             System.out.print(client.help());
-
             while (!result.equals("quit")) {
                 printPrompt();
                 line = scanner.nextLine();

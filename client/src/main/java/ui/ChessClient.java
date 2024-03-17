@@ -2,6 +2,7 @@ package ui;
 
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.Arrays;
 import dataAccess.DataAccessException;
 import dataAccess.ResponseException;
@@ -10,6 +11,9 @@ import dataAccess.ResponseException;
 public class ChessClient {
 
     private String visitorName = null;
+    private String visitorPassword = null;
+    private String visitorEmail = null;
+
     private final ServerFacade server;
     private final String serverUrl;
 
@@ -26,24 +30,40 @@ public class ChessClient {
             var cmd = (tokens.length > 0) ? tokens[0] : "help";
             var params = Arrays.copyOfRange(tokens, 1, tokens.length);
             return switch (cmd) {
-                case "login" -> logIn(params);
+                case "register" -> register(params);
+                case "login" -> login(params);
+
 //                case "list" -> listGames();
                 case "logout" -> logOut();
                 case "quit" -> "quit";
                 default -> help();
             };
-        } catch (ResponseException ex) {
+        } catch (ResponseException | IOException ex) {
             return ex.getMessage();
         }
     }
 
-    public String logIn(String... params) throws ResponseException {
-        if (params.length >= 1) {
+    public String register(String... params) throws ResponseException, IOException {
+        if (params.length >= 3) {
             state = State.LOGGEDIN;
-            visitorName = String.join("-", params);
-            return String.format("You signed in as %s.", visitorName);
+            visitorName = params[0];
+            visitorPassword = params[1];
+            visitorEmail = params[2];
+            server.register(visitorName,visitorPassword,visitorEmail);
+            return String.format("Thanks for registering a new player! \n" +
+                    " You have been logged in as %s.", visitorName);
         }
-        throw new ResponseException(400, "Expected: <yourname>");
+        throw new ResponseException(400, "Expected: <username> <password> <email>");
+    }
+
+    public String login(String... params) throws ResponseException {
+        if (params.length >= 2) {
+            state = State.LOGGEDIN;
+            visitorName = params[0];
+            visitorPassword = params[1];
+            return String.format("You logged in as %s.", visitorName);
+        }
+        throw new ResponseException(400, "Expected: <username> <password>");
     }
 
 //    public String listGames() throws ResponseException {
@@ -60,7 +80,7 @@ public class ChessClient {
     public String logOut() throws ResponseException {
         assertLoggedIn();
         state = State.LOGGEDOUT;
-        return String.format("%s has logged out, Have a nice day!", visitorName);
+        return String.format("%s has been logged out, have a nice day!", visitorName);
     }
 
     public String help() {
@@ -73,12 +93,13 @@ public class ChessClient {
                     """;
         }
         return """
-                - list
-                - adopt <pet id>
-                - rescue <name> <CAT|DOG|FROG|FISH>
-                - adoptAll
-                - signOut
-                - quit
+                - create <NAME> - a game
+                - list - games
+                - join <ID> [WHITE|BLACK|<EMPTY>] - a game
+                - observe <ID> - a game
+                - logout - when you are done
+                - quit - playing chess
+                - help - with possible commands
                 """;
     }
 

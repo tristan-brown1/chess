@@ -23,8 +23,8 @@ public class ServerFacade {
     public void register(String username, String password, String email) throws ResponseException, IOException {
         String path = "/user";
         UserData userData = new UserData(username,password,email);
-//        this.makeRequest("POST", path, userData, UserData.class);
-        this.doPost(serverUrl);
+        this.makeRequest("POST", path, userData, UserData.class);
+//        this.doPost(serverUrl);
     }
 //
 //    public void deletePet(int id) throws ResponseException {
@@ -47,19 +47,19 @@ public class ServerFacade {
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws ResponseException {
         try {
-//            URL url = (new URI(serverUrl + path)).toURL();
-            URI uri = new URI(serverUrl + path);
-            HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
-//            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+            URL url = (new URI(serverUrl + path)).toURL();
+//            URI uri = new URI(serverUrl + path);
+//            HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestMethod(method);
             http.setDoOutput(true);
 
             writeBody(request, http);
             http.connect();
-            try (InputStream respBody = http.getInputStream()) {
-                InputStreamReader inputStreamReader = new InputStreamReader(respBody);
-                System.out.println(new Gson().fromJson(inputStreamReader, Map.class));
-            }
+//            try (InputStream respBody = http.getInputStream()) {
+//                InputStreamReader inputStreamReader = new InputStreamReader(respBody);
+//                System.out.println(new Gson().fromJson(inputStreamReader, Map.class));
+//            }
 
 
             throwIfNotSuccessful(http);

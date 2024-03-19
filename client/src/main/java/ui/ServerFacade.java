@@ -3,6 +3,9 @@ package ui;
 import com.google.gson.Gson;
 import dataAccess.ResponseException;
 import model.UserData;
+import server.ResultData;
+import ui.RequestClasses.LoginRequest;
+import ui.RequestClasses.LogoutRequest;
 //import exception.DataAccessException;
 //import model.Pet;
 
@@ -20,12 +23,25 @@ public class ServerFacade {
     }
 
 
-    public void register(String username, String password, String email) throws ResponseException, IOException {
+    public ResultData register(String username, String password, String email) throws ResponseException, IOException {
         String path = "/user";
         UserData userData = new UserData(username,password,email);
-        this.makeRequest("POST", path, userData, UserData.class);
-//        this.doPost(serverUrl);
+        return this.makeRequest("POST", path, userData);
+
     }
+
+    public ResultData login(String username, String password) throws ResponseException, IOException {
+        String path = "/session";
+        LoginRequest loginRequest = new LoginRequest(username,password);
+        return this.makeRequest("POST", path, loginRequest);
+    }
+
+    public void logout(String authToken) throws ResponseException, IOException {
+        String path = "/session";
+        LogoutRequest logoutRequest = new LogoutRequest(authToken);
+        this.makeRequest("DELETE", path, logoutRequest);
+    }
+
 //
 //    public void deletePet(int id) throws ResponseException {
 //        var path = String.format("/pet/%s", id);
@@ -45,7 +61,7 @@ public class ServerFacade {
 //        return response.pet();
 //    }
 
-    private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) throws ResponseException {
+    private <T> T makeRequest(String method, String path, Object request) throws ResponseException {
         try {
             URL url = (new URI(serverUrl + path)).toURL();
 //            URI uri = new URI(serverUrl + path);
@@ -60,10 +76,8 @@ public class ServerFacade {
 //                InputStreamReader inputStreamReader = new InputStreamReader(respBody);
 //                System.out.println(new Gson().fromJson(inputStreamReader, Map.class));
 //            }
-
-
             throwIfNotSuccessful(http);
-            return readBody(http, responseClass);
+            return readBody(http, (Class<T>)ResultData.class);
         } catch (Exception ex) {
             throw new ResponseException(500, ex.getMessage());
         }
@@ -113,6 +127,16 @@ public class ServerFacade {
             String reqData = new Gson().toJson(request);
             try (OutputStream reqBody = http.getOutputStream()) {
                 reqBody.write(reqData.getBytes());
+            }
+        }
+    }
+
+    private static void writeHeader(Object request, HttpURLConnection http) throws IOException {
+        if (request != null) {
+            http.addRequestProperty("Content-Type", "application/json");
+            String reqData = new Gson().toJson(request);
+            try (OutputStream reqHeader = http.getOutputStream()) {
+                reqHeader.write(reqData.getBytes());
             }
         }
     }

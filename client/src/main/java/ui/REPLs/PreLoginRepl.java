@@ -11,8 +11,8 @@ public class PreLoginRepl {
 
     private final ChessClient client;
 
-    public PreLoginRepl(String serverUrl) {
-        client = new ChessClient(serverUrl);
+    public PreLoginRepl(ChessClient client) {
+        this.client = client;
     }
 
     public void run() {

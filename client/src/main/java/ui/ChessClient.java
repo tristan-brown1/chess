@@ -13,6 +13,7 @@ public class ChessClient {
     private String visitorName = null;
     private String visitorPassword = null;
     private String visitorEmail = null;
+    private String visitorAuthToken = null;
 
     private final ServerFacade server;
     private final String serverUrl;
@@ -32,7 +33,6 @@ public class ChessClient {
             return switch (cmd) {
                 case "register" -> register(params);
                 case "login" -> login(params);
-
 //                case "list" -> listGames();
                 case "logout" -> logOut();
                 case "quit" -> "quit";
@@ -49,18 +49,19 @@ public class ChessClient {
             visitorName = params[0];
             visitorPassword = params[1];
             visitorEmail = params[2];
-            server.register(visitorName,visitorPassword,visitorEmail);
+            this.visitorAuthToken = server.register(visitorName,visitorPassword,visitorEmail).getAuthData().getAuthToken();
             return String.format("Thanks for registering a new player! \n" +
                     " You have been logged in as %s.", visitorName);
         }
         throw new ResponseException(400, "Expected: <username> <password> <email>");
     }
 
-    public String login(String... params) throws ResponseException {
+    public String login(String... params) throws ResponseException, IOException {
         if (params.length >= 2) {
             state = State.LOGGEDIN;
             visitorName = params[0];
             visitorPassword = params[1];
+            this.visitorAuthToken = server.login(visitorName,visitorPassword).getAuthData().getAuthToken();
             return String.format("You logged in as %s.", visitorName);
         }
         throw new ResponseException(400, "Expected: <username> <password>");
@@ -77,8 +78,9 @@ public class ChessClient {
 //        return result.toString();
 //    }
 
-    public String logOut() throws ResponseException {
+    public String logOut() throws ResponseException, IOException {
         assertLoggedIn();
+        server.logout(this.visitorAuthToken);
         state = State.LOGGEDOUT;
         return String.format("%s has been logged out, have a nice day!", visitorName);
     }
@@ -107,6 +109,10 @@ public class ChessClient {
         if (state == State.LOGGEDOUT) {
             throw new ResponseException(400, "You must sign in");
         }
+    }
+
+    public State getState(){
+        return state;
     }
 
 }

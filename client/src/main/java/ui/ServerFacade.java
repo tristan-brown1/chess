@@ -17,6 +17,7 @@ import java.util.Map;
 public class ServerFacade {
 
     private final String serverUrl;
+    private String authToken = null;
 
     public ServerFacade(String url) {
         serverUrl = url;
@@ -38,6 +39,7 @@ public class ServerFacade {
 
     public void logout(String authToken) throws ResponseException, IOException {
         String path = "/session";
+        this.authToken = authToken;
         LogoutRequest logoutRequest = new LogoutRequest(authToken);
         this.makeRequest("DELETE", path, logoutRequest);
     }
@@ -69,6 +71,7 @@ public class ServerFacade {
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestMethod(method);
             http.setDoOutput(true);
+            http.addRequestProperty("authorization", authToken);
 
             writeBody(request, http);
             http.connect();

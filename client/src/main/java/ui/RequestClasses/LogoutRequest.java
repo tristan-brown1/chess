@@ -2,10 +2,10 @@ package ui.RequestClasses;
 
 public class LogoutRequest {
 
-    String authToken;
+    String authorization;
 
-    public LogoutRequest(String username) {
-        this.authToken = authToken;
+    public LogoutRequest(String authToken) {
+        this.authorization = authToken;
     }
 
 }

@@ -14,6 +14,7 @@ public class ChessClient {
     private String visitorPassword = null;
     private String visitorEmail = null;
     private String visitorAuthToken = null;
+    private String newGameName = null;
 
     private final ServerFacade server;
     private final String serverUrl;
@@ -33,9 +34,11 @@ public class ChessClient {
             return switch (cmd) {
                 case "register" -> register(params);
                 case "login" -> login(params);
-//                case "list" -> listGames();
                 case "logout" -> logOut();
-                case "quit" -> "quit";
+                case "create" -> createGame(params);
+                case "list" -> listGames();
+                case "join" -> joinGame();
+                case "quit" -> quit();
                 default -> help();
             };
         } catch (ResponseException | IOException ex) {
@@ -83,6 +86,31 @@ public class ChessClient {
         server.logout(this.visitorAuthToken);
         state = State.LOGGEDOUT;
         return String.format("%s has been logged out, have a nice day!", visitorName);
+    }
+
+    public String createGame(String... params) throws ResponseException, IOException {
+        assertLoggedIn();
+        newGameName = params[0];
+        server.createGame(this.visitorAuthToken,newGameName);
+        return String.format("%s has been logged out, have a nice day!", visitorName);
+    }
+
+    public String listGames() throws ResponseException, IOException {
+        assertLoggedIn();
+        server.logout(this.visitorAuthToken);
+        return String.format("%s has been logged out, have a nice day!", visitorName);
+    }
+
+    public String joinGame() throws ResponseException, IOException {
+        assertLoggedIn();
+        server.logout(this.visitorAuthToken);
+        return String.format("%s has been logged out, have a nice day!", visitorName);
+    }
+
+
+    public String quit(){
+        state = State.QUIT;
+        return "quit";
     }
 
     public String help() {

@@ -14,7 +14,7 @@ public class PostLoginRepl {
     }
 
     public void run() {
-        System.out.println("Welcome to your doom. Type Help if you dare");
+//        System.out.println("Welcome to your doom. Type Help if you dare");
 
         Scanner scanner = new Scanner(System.in);
         var result = "";

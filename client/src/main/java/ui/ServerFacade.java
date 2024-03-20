@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import dataAccess.ResponseException;
 import model.UserData;
 import server.ResultData;
+import ui.RequestClasses.CreateGameRequest;
 import ui.RequestClasses.LoginRequest;
 import ui.RequestClasses.LogoutRequest;
 //import exception.DataAccessException;
@@ -43,6 +44,15 @@ public class ServerFacade {
         LogoutRequest logoutRequest = new LogoutRequest(authToken);
         this.makeRequest("DELETE", path, logoutRequest);
     }
+
+    public void createGame(String authToken,String newGameName) throws ResponseException, IOException {
+        String path = "/game";
+        this.authToken = authToken;
+        CreateGameRequest createGameRequest = new CreateGameRequest(newGameName);
+        this.makeRequest("POST", path, createGameRequest);
+    }
+
+
 
 //
 //    public void deletePet(int id) throws ResponseException {

@@ -35,20 +35,24 @@ public class ChessImage {
     private static void drawChessBoard(PrintStream out) {
 
 
-        drawTop(out);
-        for (int boardCol = 1; boardCol < 9; ++boardCol) {
+        drawRotatedTop(out);
+        drawTopPieceRotatedRow(out);
+        for (int boardCol = 2; boardCol < 8; ++boardCol) {
             drawChessLine(out,boardCol);
         }
         out.print("\n");
-        drawBot(out);
+        drawBotPieceRotatedRow(out);
+        drawRotatedBot(out);
 
         out.print("\n");
 
         drawTop(out);
-        for (int boardCol = 8; boardCol > 0; --boardCol) {
+        drawBotPieceRow(out);
+        for (int boardCol = 7; boardCol > 1; --boardCol) {
             drawInverseChessLine(out,boardCol);
         }
         out.print("\n");
+        drawTopPieceRow(out);
         drawBot(out);
 
     }
@@ -57,6 +61,96 @@ public class ChessImage {
         System.out.print(SET_BG_COLOR_BLACK);
         out.print("    a  b  c  d  e  f  g  h    \n");
     }
+
+    private static void drawRotatedTop(PrintStream out) {
+        System.out.print(SET_BG_COLOR_BLACK);
+        out.print("    h  g  f  e  d  c  b  a    \n");
+    }
+
+    private static void drawTopPieceRow(PrintStream out) {
+        out.print(" 1 ");
+
+        System.out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_BLUE);
+        System.out.print(" R ");
+
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_TEXT_COLOR_BLUE);
+        System.out.print(" N ");
+
+        System.out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_BLUE);
+        System.out.print(" B ");
+
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_TEXT_COLOR_BLUE);
+        System.out.print(" Q ");
+
+        System.out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_BLUE);
+        System.out.print(" K ");
+
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_TEXT_COLOR_BLUE);
+        System.out.print(" B ");
+
+        System.out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_BLUE);
+        System.out.print(" N ");
+
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_TEXT_COLOR_BLUE);
+        System.out.print(" R ");
+
+
+        out.print(SET_TEXT_COLOR_WHITE);
+        System.out.print(SET_BG_COLOR_BLACK);
+        out.print(" 1 ");
+        System.out.print("\n");
+    }
+
+    private static void drawTopPieceRotatedRow(PrintStream out) {
+        out.print(" 1 ");
+
+        System.out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_BLUE);
+        System.out.print(" R ");
+
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_TEXT_COLOR_BLUE);
+        System.out.print(" N ");
+
+        System.out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_BLUE);
+        System.out.print(" B ");
+
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_TEXT_COLOR_BLUE);
+        System.out.print(" K ");
+
+        System.out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_BLUE);
+        System.out.print(" Q ");
+
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_TEXT_COLOR_BLUE);
+        System.out.print(" B ");
+
+        System.out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_BLUE);
+        System.out.print(" N ");
+
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_TEXT_COLOR_BLUE);
+        System.out.print(" R ");
+
+
+        out.print(SET_TEXT_COLOR_WHITE);
+        System.out.print(SET_BG_COLOR_BLACK);
+        out.print(" 1 ");
+        System.out.print("\n");
+    }
+
     private static void drawChessLine(PrintStream out, int boardLine) {
         out.print(" ");
         out.print(boardLine);
@@ -67,7 +161,7 @@ public class ChessImage {
                 if (i % 2 == 0){
                     System.out.print("\u001b[35;100m");
                     if(boardLine == 2){
-                        out.print(SET_TEXT_COLOR_RED);
+                        out.print(SET_TEXT_COLOR_BLUE);
                         System.out.print(" P ");
                     }
                     else{
@@ -78,7 +172,7 @@ public class ChessImage {
                 else{
                     System.out.print(SET_BG_COLOR_DARK_GREY);
                     if(boardLine == 2){
-                        out.print(SET_TEXT_COLOR_RED);
+                        out.print(SET_TEXT_COLOR_BLUE);
                         System.out.print(" P ");
                     }
                     else{
@@ -115,7 +209,7 @@ public class ChessImage {
         out.print(" ");
         out.print(boardLine);
 
-        if(boardLine < 8){
+        if(boardLine < 7){
             out.print(" \n");
         }
     }
@@ -131,7 +225,7 @@ public class ChessImage {
                 if (i % 2 == 0){
                     System.out.print("\u001b[35;100m");
                     if(boardLine == 2){
-                        out.print(SET_TEXT_COLOR_RED);
+                        out.print(SET_TEXT_COLOR_BLUE);
                         System.out.print(" P ");
                     }
                     else{
@@ -141,7 +235,7 @@ public class ChessImage {
                 else{
                     System.out.print(SET_BG_COLOR_DARK_GREY);
                     if(boardLine == 2){
-                        out.print(SET_TEXT_COLOR_RED);
+                        out.print(SET_TEXT_COLOR_BLUE);
                         System.out.print(" P ");
                     }
                     else{
@@ -178,13 +272,102 @@ public class ChessImage {
         out.print(" ");
         out.print(boardLine);
 
-        if(boardLine > 1){
+        if(boardLine > 2){
             out.print(" \n");
         }
     }
 
+    private static void drawBotPieceRow(PrintStream out) {
+        out.print(" 8 ");
+
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_TEXT_COLOR_RED);
+        System.out.print(" R ");
+
+        System.out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_RED);
+        System.out.print(" N ");
+
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_TEXT_COLOR_RED);
+        System.out.print(" B ");
+
+        System.out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_RED);
+        System.out.print(" Q ");
+
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_TEXT_COLOR_RED);
+        System.out.print(" K ");
+
+        System.out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_RED);
+        System.out.print(" B ");
+
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_TEXT_COLOR_RED);
+        System.out.print(" N ");
+
+        System.out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_RED);
+        System.out.print(" R ");
+
+
+        out.print(SET_TEXT_COLOR_WHITE);
+        System.out.print(SET_BG_COLOR_BLACK);
+        out.print(" 8 ");
+        System.out.print("\n");
+    }
+
+    private static void drawBotPieceRotatedRow(PrintStream out) {
+        out.print(" 8 ");
+
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_TEXT_COLOR_RED);
+        System.out.print(" R ");
+
+        System.out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_RED);
+        System.out.print(" N ");
+
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_TEXT_COLOR_RED);
+        System.out.print(" B ");
+
+        System.out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_RED);
+        System.out.print(" K ");
+
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_TEXT_COLOR_RED);
+        System.out.print(" Q ");
+
+        System.out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_RED);
+        System.out.print(" B ");
+
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_TEXT_COLOR_RED);
+        System.out.print(" N ");
+
+        System.out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_RED);
+        System.out.print(" R ");
+
+
+        out.print(SET_TEXT_COLOR_WHITE);
+        System.out.print(SET_BG_COLOR_BLACK);
+        out.print(" 8 ");
+        System.out.print("\n");
+    }
+
     private static void drawBot(PrintStream out) {
         out.print("    a  b  c  d  e  f  g  h    ");
+    }
+
+    private static void drawRotatedBot(PrintStream out) {
+        System.out.print(SET_BG_COLOR_BLACK);
+        out.print("    h  g  f  e  d  c  b  a    \n");
     }
 
 //    private static void drawHeaders(PrintStream out) {

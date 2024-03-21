@@ -41,6 +41,7 @@ public class ChessClient {
                 case "create" -> createGame(params);
                 case "list" -> listGames();
                 case "join" -> joinGame(params);
+                case "observe" -> joinGame(params);
                 case "quit" -> quit();
                 default -> help();
             };

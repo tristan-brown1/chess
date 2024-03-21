@@ -20,19 +20,17 @@ public class ClientMain {
         }
 
         client = new ChessClient(serverUrl);
-//        while(client.getState() != State.QUIT){
-//            while(client.getState() == State.LOGGEDOUT){
-//                new PreLoginRepl(client).run();
-//            }
-//            while(client.getState() == State.LOGGEDIN){
-//                new PostLoginRepl(client).run();
-//            }
-//            while(client.getState() == State.GAMEPLAY){
-//                new GameplayRepl(client).run();
-//            }
-//        }
-
-        new GameplayRepl(client).run();
+        while(client.getState() != State.QUIT){
+            while(client.getState() == State.LOGGEDOUT){
+                new PreLoginRepl(client).run();
+            }
+            while(client.getState() == State.LOGGEDIN){
+                new PostLoginRepl(client).run();
+            }
+            while(client.getState() == State.GAMEPLAY){
+                new GameplayRepl(client).run();
+            }
+        }
 
     }
 }

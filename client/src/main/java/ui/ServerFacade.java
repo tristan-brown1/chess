@@ -110,43 +110,6 @@ public class ServerFacade {
         }
     }
 
-    public void doPost(String urlString) throws IOException {
-        URL url = new URL(urlString);
-
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-        connection.setReadTimeout(5000);
-        connection.setRequestMethod("POST");
-        connection.setDoOutput(true);
-
-        // Set HTTP request headers, if necessary
-        // connection.addRequestProperty("Accept", "text/html");
-
-        connection.connect();
-
-        try(OutputStream requestBody = connection.getOutputStream();) {
-            // Write request body to OutputStream ...
-        }
-
-        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            // Get HTTP response headers, if necessary
-            // Map<String, List<String>> headers = connection.getHeaderFields();
-
-            // OR
-
-            //connection.getHeaderField("Content-Length");
-
-            InputStream responseBody = connection.getInputStream();
-            // Read response body from InputStream ...
-        }
-        else {
-            // SERVER RETURNED AN HTTP ERROR
-
-            InputStream responseBody = connection.getErrorStream();
-            // Read and process error response body from InputStream ...
-        }
-    }
-
 
     private static void writeBody(Object request, HttpURLConnection http) throws IOException {
         if (request != null) {
@@ -154,16 +117,6 @@ public class ServerFacade {
             String reqData = new Gson().toJson(request);
             try (OutputStream reqBody = http.getOutputStream()) {
                 reqBody.write(reqData.getBytes());
-            }
-        }
-    }
-
-    private static void writeHeader(Object request, HttpURLConnection http) throws IOException {
-        if (request != null) {
-            http.addRequestProperty("Content-Type", "application/json");
-            String reqData = new Gson().toJson(request);
-            try (OutputStream reqHeader = http.getOutputStream()) {
-                reqHeader.write(reqData.getBytes());
             }
         }
     }
@@ -187,7 +140,6 @@ public class ServerFacade {
         }
         return response;
     }
-
 
     private boolean isSuccessful(int status) {
         return status / 100 == 2;

@@ -16,7 +16,7 @@ public class PreLoginRepl {
     }
 
     public void run() {
-        System.out.println("Welcome to your doom. Type Help if you dare");
+        System.out.println("Type help to get started!");
 
         Scanner scanner = new Scanner(System.in);
         var result = "";

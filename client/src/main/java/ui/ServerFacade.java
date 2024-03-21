@@ -5,6 +5,7 @@ import dataAccess.ResponseException;
 import model.UserData;
 import server.ResultData;
 import ui.RequestClasses.CreateGameRequest;
+import ui.RequestClasses.JoinGameRequest;
 import ui.RequestClasses.LoginRequest;
 import ui.RequestClasses.LogoutRequest;
 //import exception.DataAccessException;
@@ -50,6 +51,19 @@ public class ServerFacade {
         this.authToken = authToken;
         CreateGameRequest createGameRequest = new CreateGameRequest(newGameName);
         this.makeRequest("POST", path, createGameRequest);
+    }
+
+    public ResultData listGames(String authToken) throws ResponseException, IOException {
+        String path = "/game";
+        this.authToken = authToken;
+        return this.makeRequest("GET", path, null);
+    }
+
+    public void joinGame(String authToken,String playerColor,int gameID) throws ResponseException, IOException {
+        String path = "/game";
+        this.authToken = authToken;
+        JoinGameRequest joinGameRequest = new JoinGameRequest(playerColor,gameID);
+        this.makeRequest("PUT", path, joinGameRequest);
     }
 
 

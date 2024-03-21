@@ -1,5 +1,6 @@
 import chess.*;
 import ui.ChessClient;
+import ui.REPLs.GameplayRepl;
 import ui.REPLs.PostLoginRepl;
 import ui.REPLs.PreLoginRepl;
 import ui.State;
@@ -27,7 +28,7 @@ public class ClientMain {
                 new PostLoginRepl(client).run();
             }
             while(client.getState() == State.GAMEPLAY){
-
+                new GameplayRepl(client).run();
             }
         }
 

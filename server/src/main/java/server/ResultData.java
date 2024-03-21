@@ -81,4 +81,8 @@ public class ResultData {
     public void setGameSet(HashSet games) {
         this.games = games;
     }
+
+    public HashSet getGames(){
+        return this.games;
+    }
 }

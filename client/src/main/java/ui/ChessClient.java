@@ -37,7 +37,7 @@ public class ChessClient {
                 case "logout" -> logOut();
                 case "create" -> createGame(params);
                 case "list" -> listGames();
-                case "join" -> joinGame();
+                case "join" -> joinGame(params);
                 case "quit" -> quit();
                 default -> help();
             };
@@ -70,17 +70,6 @@ public class ChessClient {
         throw new ResponseException(400, "Expected: <username> <password>");
     }
 
-//    public String listGames() throws ResponseException {
-//        assertLoggedIn();
-//        var pets = server.listPets();
-//        var result = new StringBuilder();
-//        var gson = new Gson();
-//        for (var pet : pets) {
-//            result.append(gson.toJson(pet)).append('\n');
-//        }
-//        return result.toString();
-//    }
-
     public String logOut() throws ResponseException, IOException {
         assertLoggedIn();
         server.logout(this.visitorAuthToken);
@@ -97,13 +86,21 @@ public class ChessClient {
 
     public String listGames() throws ResponseException, IOException {
         assertLoggedIn();
-        server.logout(this.visitorAuthToken);
-        return String.format("%s has been logged out, have a nice day!", visitorName);
+        var games = server.listGames(this.visitorAuthToken).getGames();
+        var result = new StringBuilder();
+        var gson = new Gson();
+        for (var game : games) {
+            result.append(gson.toJson(game)).append('\n');
+        }
+        return result.toString();
     }
 
-    public String joinGame() throws ResponseException, IOException {
+    public String joinGame(String... params) throws ResponseException, IOException {
         assertLoggedIn();
-        server.logout(this.visitorAuthToken);
+        int gameID = Integer.parseInt(params[0]);
+        String playerColor = params[1];
+        state = State.GAMEPLAY;
+        server.joinGame(this.visitorAuthToken,playerColor,gameID);
         return String.format("%s has been logged out, have a nice day!", visitorName);
     }
 
@@ -121,6 +118,9 @@ public class ChessClient {
                     - quit - playing chess
                     - help - with possible commands
                     """;
+        }
+        if (state == State.GAMEPLAY){
+            return "congrats big dog, you made it to gameplay";
         }
         return """
                 - create <NAME> - a game

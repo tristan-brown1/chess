@@ -4,8 +4,11 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashSet;
+
 import dataAccess.DataAccessException;
 import dataAccess.ResponseException;
+import model.GameData;
 
 
 public class ChessClient {
@@ -81,16 +84,25 @@ public class ChessClient {
         assertLoggedIn();
         newGameName = params[0];
         server.createGame(this.visitorAuthToken,newGameName);
-        return String.format("%s has been logged out, have a nice day!", visitorName);
+        return String.format("%s has been created! Join now to start playing!", newGameName);
     }
 
     public String listGames() throws ResponseException, IOException {
         assertLoggedIn();
-        var games = server.listGames(this.visitorAuthToken).getGames();
+        HashSet<GameData> games = server.listGames(this.visitorAuthToken).getGames();
         var result = new StringBuilder();
         var gson = new Gson();
-        for (var game : games) {
-            result.append(gson.toJson(game)).append('\n');
+        int counter = 1;
+        for (GameData game : games) {
+            result.append(counter);
+            result.append(": ");
+            result.append(game.getGameName()).append("  ");
+            result.append("Game ID: ").append(game.getGameID()).append("  ");
+            result.append("White Player: ").append(game.getWhiteUsername()).append("  ");
+            result.append("Black Player: ").append(game.getBlackUsername()).append("\n");
+//            result.append(gson.toJson(game)).append('\n');
+
+            counter++;
         }
         return result.toString();
     }
@@ -98,10 +110,15 @@ public class ChessClient {
     public String joinGame(String... params) throws ResponseException, IOException {
         assertLoggedIn();
         int gameID = Integer.parseInt(params[0]);
-        String playerColor = params[1];
         state = State.GAMEPLAY;
-        server.joinGame(this.visitorAuthToken,playerColor,gameID);
-        return String.format("%s has been logged out, have a nice day!", visitorName);
+        if(params.length > 1){
+            String playerColor = params[1];
+            server.joinGame(this.visitorAuthToken,playerColor,gameID);
+        }
+        else{
+            server.joinGame(this.visitorAuthToken,null,gameID);
+        }
+        return "joining game\n";
     }
 
 

@@ -22,22 +22,17 @@ public class PreLoginRepl {
         var result = "";
         printPrompt();
         String line = scanner.nextLine();
-        if(line.equalsIgnoreCase("help")){
-            System.out.print(client.help());
-            while (!result.equals("quit")) {
-                printPrompt();
-                line = scanner.nextLine();
-                try {
-                    result = client.eval(line);
-                    System.out.print(BLUE + result);
-                } catch (Throwable e) {
-                    var msg = e.toString();
-                    System.out.print(msg);
-                }
+        System.out.print(client.help());
+        while (!result.equals("quit") && !result.contains("logged in")){
+            printPrompt();
+            line = scanner.nextLine();
+            try {
+                result = client.eval(line);
+                System.out.print(BLUE + result);
+            } catch (Throwable e) {
+                var msg = e.toString();
+                System.out.print(msg);
             }
-        }
-        else{
-            System.out.println("boom pow you die");
         }
 //        while (!result.equals("quit")) {
 //            printPrompt();

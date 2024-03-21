@@ -19,7 +19,7 @@ public class ResultData {
     private String password;
     private String email;
     private Integer gameID;
-    private HashSet games;
+    private HashSet<GameData> games;
     private String whiteUsername;
     private String blackUsername;
     private String gameName;
@@ -78,11 +78,11 @@ public class ResultData {
         return gameData;
     }
 
-    public void setGameSet(HashSet games) {
+    public void setGameSet(HashSet<GameData> games) {
         this.games = games;
     }
 
-    public HashSet getGames(){
+    public HashSet<GameData> getGames(){
         return this.games;
     }
 }

@@ -1,6 +1,7 @@
 package ui.REPLs;
 
 import ui.ChessClient;
+import ui.ChessImage;
 
 import java.util.Scanner;
 
@@ -19,6 +20,7 @@ public class GameplayRepl {
 
         Scanner scanner = new Scanner(System.in);
         var result = "";
+        loadBoard();
         printPrompt();
         String line = scanner.nextLine();
         if(line.equalsIgnoreCase("help")){
@@ -43,6 +45,11 @@ public class GameplayRepl {
 
     private void printPrompt() {
         System.out.print("\n" + RESET + ">>> " + GREEN);
+    }
+
+    public void loadBoard() {
+        String[] args = {"",""};
+        ChessImage.run();
     }
 
 

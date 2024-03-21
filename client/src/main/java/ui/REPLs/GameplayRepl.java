@@ -48,7 +48,6 @@ public class GameplayRepl {
     }
 
     public void loadBoard() {
-        String[] args = {"",""};
         ChessImage.run();
     }
 

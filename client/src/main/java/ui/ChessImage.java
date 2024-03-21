@@ -33,9 +33,20 @@ public class ChessImage {
     }
 
     private static void drawChessBoard(PrintStream out) {
+
+
         drawTop(out);
         for (int boardCol = 1; boardCol < 9; ++boardCol) {
             drawChessLine(out,boardCol);
+        }
+        out.print("\n");
+        drawBot(out);
+
+        out.print("\n");
+
+        drawTop(out);
+        for (int boardCol = 8; boardCol > 0; --boardCol) {
+            drawInverseChessLine(out,boardCol);
         }
         out.print("\n");
         drawBot(out);
@@ -50,27 +61,51 @@ public class ChessImage {
         out.print(" ");
         out.print(boardLine);
         out.print(" ");
-        out.print(SET_TEXT_COLOR_RED);
 
         for (int i = 0; i < 8; ++i) {
             if(boardLine % 2 == 0){
                 if (i % 2 == 0){
                     System.out.print("\u001b[35;100m");
-                    System.out.print("   ");
+                    if(boardLine == 2){
+                        out.print(SET_TEXT_COLOR_RED);
+                        System.out.print(" P ");
+                    }
+                    else{
+                        System.out.print("   ");
+                    }
+
                 }
                 else{
                     System.out.print(SET_BG_COLOR_DARK_GREY);
-                    System.out.print("   ");
+                    if(boardLine == 2){
+                        out.print(SET_TEXT_COLOR_RED);
+                        System.out.print(" P ");
+                    }
+                    else{
+                        System.out.print("   ");
+                    }
                 }
             }
             else{
                 if (i % 2 == 0){
                     System.out.print(SET_BG_COLOR_DARK_GREY);
-                    System.out.print("   ");
+                    if(boardLine == 7){
+                        out.print(SET_TEXT_COLOR_RED);
+                        System.out.print(" P ");
+                    }
+                    else{
+                        System.out.print("   ");
+                    }
                 }
                 else{
                     System.out.print("\u001b[35;100m");
-                    System.out.print("   ");
+                    if(boardLine == 7){
+                        out.print(SET_TEXT_COLOR_RED);
+                        System.out.print(" P ");
+                    }
+                    else{
+                        System.out.print("   ");
+                    }
                 }
             }
         }
@@ -84,6 +119,70 @@ public class ChessImage {
             out.print(" \n");
         }
     }
+
+    private static void drawInverseChessLine(PrintStream out, int boardLine) {
+        out.print(" ");
+        out.print(boardLine);
+        out.print(" ");
+        out.print(SET_TEXT_COLOR_RED);
+
+        for (int i = 0; i < 8; ++i) {
+            if(boardLine % 2 == 0){
+                if (i % 2 == 0){
+                    System.out.print("\u001b[35;100m");
+                    if(boardLine == 2){
+                        out.print(SET_TEXT_COLOR_RED);
+                        System.out.print(" P ");
+                    }
+                    else{
+                        System.out.print("   ");
+                    }
+                }
+                else{
+                    System.out.print(SET_BG_COLOR_DARK_GREY);
+                    if(boardLine == 2){
+                        out.print(SET_TEXT_COLOR_RED);
+                        System.out.print(" P ");
+                    }
+                    else{
+                        System.out.print("   ");
+                    }
+                }
+            }
+            else{
+                if (i % 2 == 0){
+                    System.out.print(SET_BG_COLOR_DARK_GREY);
+                    if(boardLine == 7){
+                        out.print(SET_TEXT_COLOR_RED);
+                        System.out.print(" P ");
+                    }
+                    else{
+                        System.out.print("   ");
+                    }
+                }
+                else{
+                    System.out.print("\u001b[35;100m");
+                    if(boardLine == 7){
+                        out.print(SET_TEXT_COLOR_RED);
+                        System.out.print(" P ");
+                    }
+                    else{
+                        System.out.print("   ");
+                    }
+                }
+            }
+        }
+
+        out.print(SET_TEXT_COLOR_WHITE);
+        System.out.print(SET_BG_COLOR_BLACK);
+        out.print(" ");
+        out.print(boardLine);
+
+        if(boardLine > 1){
+            out.print(" \n");
+        }
+    }
+
     private static void drawBot(PrintStream out) {
         out.print("    a  b  c  d  e  f  g  h    ");
     }

@@ -26,6 +26,13 @@ public class ServerFacade {
     }
 
 
+    public void clear(String authToken) throws ResponseException, IOException {
+        String path = "/db";
+        LogoutRequest logoutRequest = new LogoutRequest(authToken);
+        this.makeRequest("DELETE", path, logoutRequest);
+
+    }
+
     public ResultData register(String username, String password, String email) throws ResponseException, IOException {
         String path = "/user";
         UserData userData = new UserData(username,password,email);
@@ -39,18 +46,18 @@ public class ServerFacade {
         return this.makeRequest("POST", path, loginRequest);
     }
 
-    public void logout(String authToken) throws ResponseException, IOException {
+    public ResultData logout(String authToken) throws ResponseException, IOException {
         String path = "/session";
         this.authToken = authToken;
         LogoutRequest logoutRequest = new LogoutRequest(authToken);
-        this.makeRequest("DELETE", path, logoutRequest);
+        return this.makeRequest("DELETE", path, logoutRequest);
     }
 
-    public void createGame(String authToken,String newGameName) throws ResponseException, IOException {
+    public ResultData createGame(String authToken,String newGameName) throws ResponseException, IOException {
         String path = "/game";
         this.authToken = authToken;
         CreateGameRequest createGameRequest = new CreateGameRequest(newGameName);
-        this.makeRequest("POST", path, createGameRequest);
+        return this.makeRequest("POST", path, createGameRequest);
     }
 
     public ResultData listGames(String authToken) throws ResponseException, IOException {
@@ -59,11 +66,11 @@ public class ServerFacade {
         return this.makeRequest("GET", path, null);
     }
 
-    public void joinGame(String authToken,String playerColor,int gameID) throws ResponseException, IOException {
+    public ResultData joinGame(String authToken,String playerColor,int gameID) throws ResponseException, IOException {
         String path = "/game";
         this.authToken = authToken;
         JoinGameRequest joinGameRequest = new JoinGameRequest(playerColor,gameID);
-        this.makeRequest("PUT", path, joinGameRequest);
+        return this.makeRequest("PUT", path, joinGameRequest);
     }
 
 

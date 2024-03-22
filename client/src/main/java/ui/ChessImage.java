@@ -59,11 +59,13 @@ public class ChessImage {
 
     private static void drawTop(PrintStream out) {
         System.out.print(SET_BG_COLOR_BLACK);
+        out.print(SET_TEXT_COLOR_WHITE);
         out.print("    a  b  c  d  e  f  g  h    \n");
     }
 
     private static void drawRotatedTop(PrintStream out) {
         System.out.print(SET_BG_COLOR_BLACK);
+        out.print(SET_TEXT_COLOR_WHITE);
         out.print("    h  g  f  e  d  c  b  a    \n");
     }
 

@@ -13,6 +13,7 @@ public class GameplayRepl {
 
     public GameplayRepl(ChessClient client) {
         this.client = client;
+        loadBoard();
     }
 
     public void run() {

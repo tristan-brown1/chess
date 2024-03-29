@@ -27,9 +27,9 @@ public class ClientMain {
             while(client.getState() == State.LOGGEDIN){
                 new PostLoginRepl(client).run();
             }
-            while(client.getState() == State.GAMEPLAY){
-                new GameplayRepl(client).run();
-            }
+//            while(client.getState() == State.GAMEPLAY){
+//                new GameplayRepl(client).run();
+//            }
         }
 
     }

@@ -9,6 +9,7 @@ import java.util.HashSet;
 import dataAccess.DataAccessException;
 import dataAccess.ResponseException;
 import model.GameData;
+import ui.REPLs.GameplayRepl;
 
 
 public class ChessClient {
@@ -111,15 +112,17 @@ public class ChessClient {
     public String joinGame(String... params) throws ResponseException, IOException {
         assertLoggedIn();
         int gameID = Integer.parseInt(params[0]);
-        state = State.GAMEPLAY;
+//        state = State.GAMEPLAY;
         if(params.length > 1){
             String playerColor = params[1];
             server.joinGame(this.visitorAuthToken,playerColor,gameID);
+            new GameplayRepl(this);
         }
         else{
             server.joinGame(this.visitorAuthToken,null,gameID);
+            new GameplayRepl(this);
         }
-        return "joining game\n";
+        return "\njoined game\n";
     }
 
 

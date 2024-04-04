@@ -48,10 +48,10 @@ public class ChessClient {
                 case "list" -> listGames();
                 case "join" -> joinGame(params);
                 case "observe" -> joinGame(params);
-                case "redraw" -> joinGame(params);
-                case "leave" -> joinGame(params);
-                case "make move" -> joinGame(params);
-                case "resign" -> joinGame(params);
+                case "redraw" -> redraw();
+                case "leave" -> leaveGame();
+                case "make move" -> makeMove(params);
+                case "resign" -> resignGame();
                 case "quit" -> quit();
                 default -> help();
             };
@@ -133,6 +133,37 @@ public class ChessClient {
         }
         return "\njoined game\n";
     }
+
+    public String redraw() throws ResponseException, IOException {
+//        assertLoggedIn();
+//        server.logout(this.visitorAuthToken);
+//        state = State.LOGGEDOUT;
+        return String.format("%s has been logged out, have a nice day!", visitorName);
+    }
+
+    public String leaveGame() throws ResponseException, IOException {
+//        assertLoggedIn();
+//        server.logout(this.visitorAuthToken);
+//        state = State.LOGGEDOUT;
+        return String.format("%s has been logged out, have a nice day!", visitorName);
+    }
+
+    public String makeMove(String... params) throws ResponseException, IOException {
+//        assertLoggedIn();
+//        server.logout(this.visitorAuthToken);
+//        state = State.LOGGEDOUT;
+        return String.format("%s has been logged out, have a nice day!", visitorName);
+    }
+
+    public String resignGame() throws ResponseException, IOException {
+//        assertLoggedIn();
+//        server.logout(this.visitorAuthToken);
+//        state = State.LOGGEDOUT;
+        return String.format("%s has been logged out, have a nice day!", visitorName);
+    }
+
+
+
 
 
     public String quit(){

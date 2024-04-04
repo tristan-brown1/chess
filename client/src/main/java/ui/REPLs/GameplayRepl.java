@@ -21,7 +21,6 @@ public class GameplayRepl {
 
         Scanner scanner = new Scanner(System.in);
         var result = "";
-        loadBoard();
         printPrompt();
         String line = scanner.nextLine();
         if(line.equalsIgnoreCase("help")){

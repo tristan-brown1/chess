@@ -22,7 +22,7 @@ public class PostLoginRepl {
         printPrompt();
         String line = "";
 
-        while (!result.equals("quit") && !result.contains("joining game")) {
+        while (!result.equals("quit") && !result.contains("joined game")) {
             printPrompt();
             line = scanner.nextLine();
             try {

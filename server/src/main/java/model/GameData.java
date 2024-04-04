@@ -17,18 +17,32 @@ public class GameData {
         this.blackUsername = blackUsername;
         this.gameName = gameName;
         this.game = game;
+//        if(game == null){
+//            createNewGameBoard();
+//        }
+//        else{
+//            this.game = game;
+//        }
+
     }
 
     public GameData() {
         this.whiteUsername = null;
         this.blackUsername = null;
         this.gameName = null;
+        this.game = null;
+//        createNewGameBoard();
+    }
+
+    private void createNewGameBoard() {
         ChessBoard newBoard = new ChessBoard();
         newBoard.resetBoard();
         ChessGame newGame = new ChessGame();
         newGame.setBoard(newBoard);
         this.game = newGame;
     }
+
+
 
     public void setGameID(int gameID) {
         this.gameID = gameID;

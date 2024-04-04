@@ -121,7 +121,7 @@ public class ChessClient {
     public String joinGame(String... params) throws ResponseException, IOException {
         assertLoggedIn();
         int gameID = Integer.parseInt(params[0]);
-//        state = State.GAMEPLAY;
+        state = State.GAMEPLAY;
         if(params.length > 1){
             String playerColor = params[1];
             server.joinGame(this.visitorAuthToken,playerColor,gameID);
@@ -129,7 +129,7 @@ public class ChessClient {
         }
         else{
             server.joinGame(this.visitorAuthToken,null,gameID);
-            new GameplayRepl(this);
+//            new GameplayRepl(this);
         }
         return "\njoined game\n";
     }

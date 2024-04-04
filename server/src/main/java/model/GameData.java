@@ -1,5 +1,6 @@
 package model;
 
+import chess.ChessBoard;
 import chess.ChessGame;
 
 public class GameData {
@@ -22,7 +23,11 @@ public class GameData {
         this.whiteUsername = null;
         this.blackUsername = null;
         this.gameName = null;
-        this.game = null;
+        ChessBoard newBoard = new ChessBoard();
+        newBoard.resetBoard();
+        ChessGame newGame = new ChessGame();
+        newGame.setBoard(newBoard);
+        this.game = newGame;
     }
 
     public void setGameID(int gameID) {

@@ -10,6 +10,7 @@ import dataAccess.DataAccessException;
 import dataAccess.ResponseException;
 import model.GameData;
 import ui.REPLs.GameplayRepl;
+import ui.websocket.NotificationHandler;
 
 
 public class ChessClient {
@@ -20,6 +21,8 @@ public class ChessClient {
     private String visitorAuthToken = null;
     private String newGameName = null;
 
+//    private final NotificationHandler notificationHandler;
+
     private final ServerFacade server;
     private final String serverUrl;
 
@@ -28,6 +31,8 @@ public class ChessClient {
     public ChessClient(String serverUrl) {
         server = new ServerFacade(serverUrl);
         this.serverUrl = serverUrl;
+//        this.notificationHandler = notificationHandler;
+
     }
 
     public String eval(String input) {
@@ -43,6 +48,10 @@ public class ChessClient {
                 case "list" -> listGames();
                 case "join" -> joinGame(params);
                 case "observe" -> joinGame(params);
+                case "redraw" -> joinGame(params);
+                case "leave" -> joinGame(params);
+                case "make move" -> joinGame(params);
+                case "resign" -> joinGame(params);
                 case "quit" -> quit();
                 default -> help();
             };
@@ -141,7 +150,13 @@ public class ChessClient {
                     """;
         }
         if (state == State.GAMEPLAY){
-            return "congrats big dog, you made it to gameplay";
+            return """
+                - make move <LETTER,NUMBER> to <LETTER,NUMBER>
+                - redraw - redraws the chess board
+                - leave - return to logged-in menu
+                - highlight legal moves - highlights possible legal moves
+                - help - with possible commands
+                """;
         }
         return """
                 - create <NAME> - a game

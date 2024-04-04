@@ -26,7 +26,7 @@ public class GameplayRepl {
         String line = scanner.nextLine();
         if(line.equalsIgnoreCase("help")){
             System.out.print(client.help());
-            while (!result.equals("quit")) {
+            while  (!result.equals("quit") && !result.contains("leave")){
                 printPrompt();
                 line = scanner.nextLine();
                 try {

@@ -11,6 +11,7 @@ import dataAccess.ResponseException;
 import model.GameData;
 import ui.REPLs.GameplayRepl;
 import ui.websocket.NotificationHandler;
+import ui.websocket.WebSocketFacade;
 
 
 public class ChessClient {
@@ -21,18 +22,17 @@ public class ChessClient {
     private String visitorAuthToken = null;
     private String newGameName = null;
 
-//    private final NotificationHandler notificationHandler;
-
+    private final NotificationHandler notificationHandler;
+    private WebSocketFacade ws;
     private final ServerFacade server;
     private final String serverUrl;
 
     private State state = State.LOGGEDOUT;
 
-    public ChessClient(String serverUrl) {
+    public ChessClient(NotificationHandler notificationHandler, String serverUrl) {
+        this.notificationHandler = notificationHandler;
         server = new ServerFacade(serverUrl);
         this.serverUrl = serverUrl;
-//        this.notificationHandler = notificationHandler;
-
     }
 
     public String eval(String input) {
@@ -46,11 +46,10 @@ public class ChessClient {
                 case "logout" -> logOut();
                 case "create" -> createGame(params);
                 case "list" -> listGames();
-                case "join" -> joinGame(params);
-                case "observe" -> joinGame(params);
+                case "join", "observe" -> joinGame(params);
                 case "redraw" -> redraw();
                 case "leave" -> leaveGame();
-                case "make" -> makeMove(params);
+                case "move" -> makeMove(params);
                 case "resign" -> resignGame();
                 case "quit" -> quit();
                 default -> help();
@@ -122,6 +121,7 @@ public class ChessClient {
         assertLoggedIn();
         int gameID = Integer.parseInt(params[0]);
         state = State.GAMEPLAY;
+        ws = new WebSocketFacade(serverUrl, notificationHandler);
         if(params.length > 1){
             String playerColor = params[1];
             server.joinGame(this.visitorAuthToken,playerColor,gameID);
@@ -182,7 +182,7 @@ public class ChessClient {
         }
         if (state == State.GAMEPLAY){
             return """
-                - make move <LETTER,NUMBER> to <LETTER,NUMBER>
+                - move <LETTER,NUMBER> to <LETTER,NUMBER>
                 - redraw - redraws the chess board
                 - leave - return to logged-in menu
                 - highlight legal moves - highlights possible legal moves

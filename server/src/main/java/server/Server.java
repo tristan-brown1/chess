@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import dataAccess.DataAccessException;
+import server.websocket.WebSocketHandler;
 import service.ChessService;
 import spark.*;
 
@@ -11,16 +12,20 @@ import static java.lang.Integer.parseInt;
 
 public class Server {
     private final ChessService service;
+    private final WebSocketHandler webSocketHandler;
 
 
     public Server(){
         this.service = new ChessService();
+        this.webSocketHandler = new WebSocketHandler();
     }
 
     public int run(int desiredPort) {
         Spark.port(desiredPort);
 
         Spark.staticFiles.location("web");
+
+        Spark.webSocket("/connect", webSocketHandler);
 
         // Register your endpoints and handle exceptions here.
         Spark.get("/", this::openTest);

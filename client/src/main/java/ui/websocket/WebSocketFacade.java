@@ -66,5 +66,54 @@ public class WebSocketFacade extends Endpoint {
         }
     }
 
+    public void joinGame(String visitorName) throws ResponseException {
+        try {
+            var newMessage = new ServerMessage(ServerMessage.ServerMessageType.ENTER,visitorName);
+            this.session.getBasicRemote().sendText(new Gson().toJson(newMessage));
+            this.session.close();
+        } catch (IOException ex) {
+            throw new ResponseException(500, ex.getMessage());
+        }
+    }
+
+    public void redraw() throws ResponseException {
+//        try {
+//            var action = new Action(Action.Type.EXIT, visitorName);
+//            this.session.getBasicRemote().sendText(new Gson().toJson(action));
+//            this.session.close();
+//        } catch (IOException ex) {
+//            throw new ResponseException(500, ex.getMessage());
+//        }
+    }
+
+    public void leave(String visitorName) throws ResponseException {
+        try {
+            var serverMessage = new ServerMessage(ServerMessage.ServerMessageType.EXIT,visitorName);
+            this.session.getBasicRemote().sendText(new Gson().toJson(serverMessage));
+        } catch (IOException ex) {
+            throw new ResponseException(500, ex.getMessage());
+        }
+    }
+
+    public void resign() throws ResponseException {
+//        try {
+//            var action = new Action(Action.Type.EXIT, visitorName);
+//            this.session.getBasicRemote().sendText(new Gson().toJson(action));
+//            this.session.close();
+//        } catch (IOException ex) {
+//            throw new ResponseException(500, ex.getMessage());
+//        }
+    }
+
+    public void makeMove() throws ResponseException {
+//        try {
+//            var action = new Action(Action.Type.EXIT, visitorName);
+//            this.session.getBasicRemote().sendText(new Gson().toJson(action));
+//            this.session.close();
+//        } catch (IOException ex) {
+//            throw new ResponseException(500, ex.getMessage());
+//        }
+    }
+
 }
 

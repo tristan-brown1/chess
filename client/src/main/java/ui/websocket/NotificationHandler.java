@@ -1,8 +1,6 @@
 package ui.websocket;
 
 import webSocketMessages.serverMessages.Notification;
-import ui.EscapeSequences.*;
-
 import static ui.EscapeSequences.*;
 
 public class NotificationHandler {

@@ -121,50 +121,45 @@ public class ChessClient {
         assertLoggedIn();
         int gameID = Integer.parseInt(params[0]);
         state = State.GAMEPLAY;
-        ws = new WebSocketFacade(serverUrl, notificationHandler);
         if(params.length > 1){
             String playerColor = params[1];
             server.joinGame(this.visitorAuthToken,playerColor,gameID);
+            ws = new WebSocketFacade(serverUrl, notificationHandler);
+            ws.joinGame(visitorName);
             new GameplayRepl(this);
         }
         else{
             server.joinGame(this.visitorAuthToken,null,gameID);
+            ws = new WebSocketFacade(serverUrl, notificationHandler);
+            ws.joinGame(visitorName);
 //            new GameplayRepl(this);
         }
         return "\njoined game\n";
     }
 
     public String redraw() throws ResponseException, IOException {
-//        assertLoggedIn();
-//        server.logout(this.visitorAuthToken);
-//        state = State.LOGGEDOUT;
-        return String.format("%s has been logged out, have a nice day!", visitorName);
+        ws = new WebSocketFacade(serverUrl, notificationHandler);
+        ws.redraw();
+        return "here is the updated board!";
     }
 
     public String leaveGame() throws ResponseException, IOException {
-//        assertLoggedIn();
-//        server.logout(this.visitorAuthToken);
-//        state = State.LOGGEDOUT;
-        return String.format("%s has been logged out, have a nice day!", visitorName);
+        ws = new WebSocketFacade(serverUrl, notificationHandler);
+        ws.leave(visitorName);
+        return String.format("%s has left the game", visitorName);
     }
 
     public String makeMove(String... params) throws ResponseException, IOException {
-//        assertLoggedIn();
-//        server.logout(this.visitorAuthToken);
-//        state = State.LOGGEDOUT;
-        return String.format("%s has been logged out, have a nice day!", visitorName);
+        ws = new WebSocketFacade(serverUrl, notificationHandler);
+        ws.makeMove();
+        return String.format("%s has made their move!", visitorName);
     }
 
     public String resignGame() throws ResponseException, IOException {
-//        assertLoggedIn();
-//        server.logout(this.visitorAuthToken);
-//        state = State.LOGGEDOUT;
-        return String.format("%s has been logged out, have a nice day!", visitorName);
+        ws = new WebSocketFacade(serverUrl, notificationHandler);
+        ws.resign();
+        return String.format("%s has resigned. GG!", visitorName);
     }
-
-
-
-
 
     public String quit(){
         state = State.QUIT;

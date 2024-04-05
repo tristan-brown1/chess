@@ -50,7 +50,7 @@ public class ChessClient {
                 case "observe" -> joinGame(params);
                 case "redraw" -> redraw();
                 case "leave" -> leaveGame();
-                case "make move" -> makeMove(params);
+                case "make" -> makeMove(params);
                 case "resign" -> resignGame();
                 case "quit" -> quit();
                 default -> help();

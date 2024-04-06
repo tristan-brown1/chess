@@ -34,7 +34,7 @@ public class WebSocketHandler {
     }
 
     private void joinPlayer(Session session) throws IOException {
-        session.getRemote().sendString("You have joined a game");
+        session.getRemote().sendString("got from client to the server!");
     }
 
     private void joinObserver() throws IOException {

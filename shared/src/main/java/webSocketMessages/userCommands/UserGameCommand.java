@@ -30,6 +30,10 @@ public class UserGameCommand {
         return authToken;
     }
 
+    public void setCommandType(CommandType commandType){
+        this.commandType = commandType;
+    }
+
     public CommandType getCommandType() {
         return this.commandType;
     }

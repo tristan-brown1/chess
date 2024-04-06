@@ -4,7 +4,7 @@ import ui.REPLs.GameplayRepl;
 import ui.REPLs.PostLoginRepl;
 import ui.REPLs.PreLoginRepl;
 import ui.State;
-import ui.websocket.NotificationHandler;
+//import ui.websocket.NotificationHandler;
 
 public class ClientMain {
     private static ChessClient client;
@@ -20,7 +20,7 @@ public class ClientMain {
             serverUrl = args[0];
         }
 
-        client = new ChessClient(new NotificationHandler(),serverUrl);
+        client = new ChessClient(serverUrl);
         while(client.getState() != State.QUIT){
             while(client.getState() == State.LOGGEDOUT){
                 new PreLoginRepl(client).run();

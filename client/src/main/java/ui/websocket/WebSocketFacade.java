@@ -5,6 +5,7 @@ import webSocketMessages.serverMessages.ServerMessage;
 import dataAccess.ResponseException;
 import webSocketMessages.serverMessages.Notification;
 import webSocketMessages.serverMessages.Action;
+import webSocketMessages.userCommands.UserGameCommand;
 //import exception.ResponseException;
 
 import javax.swing.*;
@@ -17,14 +18,14 @@ import java.net.URISyntaxException;
 public class WebSocketFacade extends Endpoint {
 
     Session session;
-    NotificationHandler notificationHandler;
+//    NotificationHandler notificationHandler;
 
 
-    public WebSocketFacade(String url, NotificationHandler notificationHandler) throws ResponseException {
+    public WebSocketFacade(String url) throws ResponseException {
         try {
             url = url.replace("http", "ws");
             URI socketURI = new URI(url + "/connect");
-            this.notificationHandler = notificationHandler;
+//            this.notificationHandler = notificationHandler;
 
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             this.session = container.connectToServer(this, socketURI);
@@ -33,8 +34,11 @@ public class WebSocketFacade extends Endpoint {
             this.session.addMessageHandler(new MessageHandler.Whole<String>() {
                 @Override
                 public void onMessage(String message) {
-                    Notification notification = new Gson().fromJson(message, Notification.class);
-                    notificationHandler.notify(notification);
+                    System.out.print(message);
+                    System.out.print("\n");
+                    System.out.print("got a message from the server to the client");
+//                    Notification notification = new Gson().fromJson(message, Notification.class);
+//                    notificationHandler.notify(notification);
                 }
             });
         } catch (DeploymentException | IOException | URISyntaxException ex) {
@@ -47,72 +51,31 @@ public class WebSocketFacade extends Endpoint {
     public void onOpen(Session session, EndpointConfig endpointConfig) {
     }
 
-    public void enterPetShop(String visitorName) throws ResponseException {
-        try {
-            var action = new Action(Action.Type.ENTER, visitorName);
-            this.session.getBasicRemote().sendText(new Gson().toJson(action));
-        } catch (IOException ex) {
-            throw new ResponseException(500, ex.getMessage());
-        }
-    }
-
-    public void leavePetShop(String visitorName) throws ResponseException {
-        try {
-            var action = new Action(Action.Type.EXIT, visitorName);
-            this.session.getBasicRemote().sendText(new Gson().toJson(action));
-            this.session.close();
-        } catch (IOException ex) {
-            throw new ResponseException(500, ex.getMessage());
-        }
-    }
 
     public void joinGame(String visitorName) throws ResponseException {
         try {
-            var newMessage = new Action(Action.Type.ENTER,visitorName);
+            var newMessage = new UserGameCommand(visitorName);
+            newMessage.setCommandType(UserGameCommand.CommandType.JOIN_PLAYER);
             this.session.getBasicRemote().sendText(new Gson().toJson(newMessage));
-            this.session.close();
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
         }
     }
 
     public void redraw() throws ResponseException {
-//        try {
-//            var action = new Action(Action.Type.EXIT, visitorName);
-//            this.session.getBasicRemote().sendText(new Gson().toJson(action));
-//            this.session.close();
-//        } catch (IOException ex) {
-//            throw new ResponseException(500, ex.getMessage());
-//        }
+
     }
 
-//    public void leave(String visitorName) throws ResponseException {
-//        try {
-//            var serverMessage = new ServerMessage(ServerMessage.ServerMessageType.EXIT);
-//            this.session.getBasicRemote().sendText(new Gson().toJson(serverMessage));
-//        } catch (IOException ex) {
-//            throw new ResponseException(500, ex.getMessage());
-//        }
-//    }
+    public void leave(String visitorName) throws ResponseException {
+
+    }
 
     public void resign() throws ResponseException {
-//        try {
-//            var action = new Action(Action.Type.EXIT, visitorName);
-//            this.session.getBasicRemote().sendText(new Gson().toJson(action));
-//            this.session.close();
-//        } catch (IOException ex) {
-//            throw new ResponseException(500, ex.getMessage());
-//        }
+
     }
 
     public void makeMove() throws ResponseException {
-//        try {
-//            var action = new Action(Action.Type.EXIT, visitorName);
-//            this.session.getBasicRemote().sendText(new Gson().toJson(action));
-//            this.session.close();
-//        } catch (IOException ex) {
-//            throw new ResponseException(500, ex.getMessage());
-//        }
+
     }
 
 }

@@ -10,7 +10,7 @@ import dataAccess.DataAccessException;
 import dataAccess.ResponseException;
 import model.GameData;
 import ui.REPLs.GameplayRepl;
-import ui.websocket.NotificationHandler;
+//import ui.websocket.NotificationHandler;
 import ui.websocket.WebSocketFacade;
 
 
@@ -22,15 +22,14 @@ public class ChessClient {
     private String visitorAuthToken = null;
     private String newGameName = null;
 
-    private final NotificationHandler notificationHandler;
+//    private final NotificationHandler notificationHandler;
     private WebSocketFacade ws;
     private final ServerFacade server;
     private final String serverUrl;
 
     private State state = State.LOGGEDOUT;
 
-    public ChessClient(NotificationHandler notificationHandler, String serverUrl) {
-        this.notificationHandler = notificationHandler;
+    public ChessClient( String serverUrl) {
         server = new ServerFacade(serverUrl);
         this.serverUrl = serverUrl;
     }
@@ -124,13 +123,13 @@ public class ChessClient {
         if(params.length > 1){
             String playerColor = params[1];
             server.joinGame(this.visitorAuthToken,playerColor,gameID);
-            ws = new WebSocketFacade(serverUrl, notificationHandler);
+            ws = new WebSocketFacade(serverUrl);
             ws.joinGame(visitorName);
             new GameplayRepl(this);
         }
         else{
             server.joinGame(this.visitorAuthToken,null,gameID);
-            ws = new WebSocketFacade(serverUrl, notificationHandler);
+            ws = new WebSocketFacade(serverUrl);
             ws.joinGame(visitorName);
 //            new GameplayRepl(this);
         }
@@ -138,25 +137,25 @@ public class ChessClient {
     }
 
     public String redraw() throws ResponseException, IOException {
-        ws = new WebSocketFacade(serverUrl, notificationHandler);
+        ws = new WebSocketFacade(serverUrl);
         ws.redraw();
         return "here is the updated board!";
     }
 
     public String leaveGame() throws ResponseException, IOException {
-        ws = new WebSocketFacade(serverUrl, notificationHandler);
+        ws = new WebSocketFacade(serverUrl);
         ws.leave(visitorName);
         return String.format("%s has left the game", visitorName);
     }
 
     public String makeMove(String... params) throws ResponseException, IOException {
-        ws = new WebSocketFacade(serverUrl, notificationHandler);
+        ws = new WebSocketFacade(serverUrl);
         ws.makeMove();
         return String.format("%s has made their move!", visitorName);
     }
 
     public String resignGame() throws ResponseException, IOException {
-        ws = new WebSocketFacade(serverUrl, notificationHandler);
+        ws = new WebSocketFacade(serverUrl);
         ws.resign();
         return String.format("%s has resigned. GG!", visitorName);
     }

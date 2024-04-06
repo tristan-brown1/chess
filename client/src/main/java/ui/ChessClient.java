@@ -50,6 +50,7 @@ public class ChessClient {
                 case "leave" -> leaveGame();
                 case "move" -> makeMove(params);
                 case "resign" -> resignGame();
+                case "highlight" -> highlightMoves();
                 case "quit" -> quit();
                 default -> help();
             };
@@ -124,14 +125,14 @@ public class ChessClient {
             String playerColor = params[1];
             server.joinGame(this.visitorAuthToken,playerColor,gameID);
             ws = new WebSocketFacade(serverUrl);
-            ws.joinGame(visitorName);
+            ws.joinGamePlayer(visitorAuthToken,playerColor,gameID);
             new GameplayRepl(this);
         }
         else{
             server.joinGame(this.visitorAuthToken,null,gameID);
             ws = new WebSocketFacade(serverUrl);
-            ws.joinGame(visitorName);
-//            new GameplayRepl(this);
+            ws.joinGameObserver(visitorAuthToken,gameID);
+            new GameplayRepl(this);
         }
         return "\njoined game\n";
     }
@@ -158,6 +159,12 @@ public class ChessClient {
         ws = new WebSocketFacade(serverUrl);
         ws.resign();
         return String.format("%s has resigned. GG!", visitorName);
+    }
+
+    public String highlightMoves() throws ResponseException, IOException {
+        ws = new WebSocketFacade(serverUrl);
+        ws.highlightMoves();
+        return "here are the potential moves!";
     }
 
     public String quit(){

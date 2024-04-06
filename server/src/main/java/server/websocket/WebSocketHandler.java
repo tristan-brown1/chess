@@ -40,6 +40,8 @@ public class WebSocketHandler {
         int tempGameID = joinPlayer.getGameID();
         String playerColor = joinPlayer.getPlayerColor();
         ChessGame newGame = new ChessGame();
+//        newGame.setBoard();
+
         try {
             var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,newGame);
             session.getRemote().sendString(new Gson().toJson(newMessage));

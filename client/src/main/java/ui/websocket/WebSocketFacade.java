@@ -3,8 +3,6 @@ package ui.websocket;
 import com.google.gson.Gson;
 import webSocketMessages.serverMessages.ServerMessage;
 import dataAccess.ResponseException;
-import webSocketMessages.serverMessages.Notification;
-import webSocketMessages.serverMessages.Action;
 import webSocketMessages.userCommands.UserGameCommand;
 //import exception.ResponseException;
 
@@ -18,14 +16,12 @@ import java.net.URISyntaxException;
 public class WebSocketFacade extends Endpoint {
 
     Session session;
-//    NotificationHandler notificationHandler;
 
 
     public WebSocketFacade(String url) throws ResponseException {
         try {
             url = url.replace("http", "ws");
             URI socketURI = new URI(url + "/connect");
-//            this.notificationHandler = notificationHandler;
 
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             this.session = container.connectToServer(this, socketURI);
@@ -34,11 +30,15 @@ public class WebSocketFacade extends Endpoint {
             this.session.addMessageHandler(new MessageHandler.Whole<String>() {
                 @Override
                 public void onMessage(String message) {
+                    ServerMessage serverMessage = new Gson().fromJson(message, ServerMessage.class);
+                    switch (serverMessage.getServerMessageType()) {
+                        case LOAD_GAME -> loadGame();
+                        case ERROR -> error();
+                        case NOTIFICATION -> notification();
+                    }
                     System.out.print(message);
                     System.out.print("\n");
                     System.out.print("got a message from the server to the client");
-//                    Notification notification = new Gson().fromJson(message, Notification.class);
-//                    notificationHandler.notify(notification);
                 }
             });
         } catch (DeploymentException | IOException | URISyntaxException ex) {
@@ -78,5 +78,15 @@ public class WebSocketFacade extends Endpoint {
 
     }
 
-}
+    private void loadGame(){
 
+    }
+
+    private void notification(){
+
+    }
+
+    private void error(){
+
+    }
+}

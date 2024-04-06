@@ -5,8 +5,6 @@ import com.google.gson.Gson;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
-import webSocketMessages.serverMessages.Notification;
-import webSocketMessages.serverMessages.Action;
 import webSocketMessages.serverMessages.ServerMessage;
 import dataAccess.ResponseException;
 import webSocketMessages.userCommands.UserGameCommand;

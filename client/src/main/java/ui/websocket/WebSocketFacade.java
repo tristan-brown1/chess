@@ -86,14 +86,14 @@ public class WebSocketFacade extends Endpoint {
 //        }
     }
 
-    public void leave(String visitorName) throws ResponseException {
-        try {
-            var serverMessage = new ServerMessage(ServerMessage.ServerMessageType.EXIT,visitorName);
-            this.session.getBasicRemote().sendText(new Gson().toJson(serverMessage));
-        } catch (IOException ex) {
-            throw new ResponseException(500, ex.getMessage());
-        }
-    }
+//    public void leave(String visitorName) throws ResponseException {
+//        try {
+//            var serverMessage = new ServerMessage(ServerMessage.ServerMessageType.EXIT);
+//            this.session.getBasicRemote().sendText(new Gson().toJson(serverMessage));
+//        } catch (IOException ex) {
+//            throw new ResponseException(500, ex.getMessage());
+//        }
+//    }
 
     public void resign() throws ResponseException {
 //        try {

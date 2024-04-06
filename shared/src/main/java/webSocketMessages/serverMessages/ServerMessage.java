@@ -14,12 +14,10 @@ public class ServerMessage {
     public enum ServerMessageType {
         LOAD_GAME,
         ERROR,
-        NOTIFICATION,
-        ENTER,
-        EXIT
+        NOTIFICATION
     }
 
-    public ServerMessage(ServerMessageType type, String visitorName) {
+    public ServerMessage(ServerMessageType type) {
         this.serverMessageType = type;
     }
 

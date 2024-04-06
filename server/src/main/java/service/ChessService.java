@@ -201,7 +201,7 @@ public class ChessService {
               `gameName` VARCHAR(256) NOT NULL,
               `whiteUsername` VARCHAR(256) NULL,
               `blackUsername` VARCHAR(256) NULL,
-              `game` VARCHAR(256) NOT NULL,
+              `game` LONGTEXT NOT NULL,
               `gameID` INT NOT NULL,
               PRIMARY KEY (`gameID`));
             """

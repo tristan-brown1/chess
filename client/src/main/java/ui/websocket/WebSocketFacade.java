@@ -98,7 +98,6 @@ public class WebSocketFacade extends Endpoint {
 
     private void loadGame(ServerMessage serverMessage){
         System.out.print("got to the load board method\n");
-
     }
 
     private void notification(ServerMessage serverMessage){

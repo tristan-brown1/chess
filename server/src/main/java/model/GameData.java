@@ -16,13 +16,14 @@ public class GameData {
         this.whiteUsername = whiteUsername;
         this.blackUsername = blackUsername;
         this.gameName = gameName;
-        this.game = game;
-//        if(game == null){
-//            createNewGameBoard();
-//        }
-//        else{
-//            this.game = game;
-//        }
+//        createNewGameBoard();
+//        this.game = game;
+        if(game == null){
+            createNewGameBoard();
+        }
+        else{
+            this.game = game;
+        }
 
     }
 
@@ -31,7 +32,7 @@ public class GameData {
         this.blackUsername = null;
         this.gameName = null;
         this.game = null;
-//        createNewGameBoard();
+        createNewGameBoard();
     }
 
     private void createNewGameBoard() {
@@ -78,5 +79,8 @@ public class GameData {
 
     public ChessGame getGame() {
         return game;
+    }
+    public void setGame(ChessGame game) {
+        this.game = game;
     }
 }

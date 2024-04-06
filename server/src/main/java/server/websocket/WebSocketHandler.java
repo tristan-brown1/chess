@@ -26,14 +26,15 @@ public class WebSocketHandler {
 
     @OnWebSocketMessage
     public void onMessage(Session session, String message) throws IOException {
-        UserGameCommand action = new Gson().fromJson(message, UserGameCommand.class);
-        switch (action.getCommandType()) {
+        Action action = new Gson().fromJson(message, Action.class);
+        switch (action.type()) {
             case ENTER -> enter(action.visitorName(), session);
             case EXIT -> exit(action.visitorName());
         }
     }
 
     private void enter(String visitorName, Session session) throws IOException {
+        session.getRemote().sendString("You have joined a game");
         connections.add(visitorName, session);
         var message = String.format("%s has joined the game", visitorName);
         var notification = new Notification(Notification.Type.ARRIVAL, message);

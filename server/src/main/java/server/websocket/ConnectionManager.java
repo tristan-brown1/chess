@@ -23,9 +23,9 @@ public class ConnectionManager {
         var removeList = new ArrayList<Connection>();
         for (var c : connections.values()) {
             if (c.session.isOpen()) {
-                if (!c.visitorName.equals(excludeVisitorName)) {
+//                if (!c.visitorName.equals(excludeVisitorName)) {
                     c.send(notification.toString());
-                }
+//                }
             } else {
                 removeList.add(c);
             }

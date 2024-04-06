@@ -68,7 +68,7 @@ public class WebSocketFacade extends Endpoint {
 
     public void joinGame(String visitorName) throws ResponseException {
         try {
-            var newMessage = new ServerMessage(ServerMessage.ServerMessageType.ENTER,visitorName);
+            var newMessage = new Action(Action.Type.ENTER,visitorName);
             this.session.getBasicRemote().sendText(new Gson().toJson(newMessage));
             this.session.close();
         } catch (IOException ex) {

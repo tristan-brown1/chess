@@ -1,5 +1,6 @@
 package ui;
 
+import chess.ChessGame;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.util.HashSet;
 import dataAccess.DataAccessException;
 import dataAccess.ResponseException;
 import model.GameData;
+import server.ResultData;
 import ui.REPLs.GameplayRepl;
 //import ui.websocket.NotificationHandler;
 import ui.websocket.WebSocketFacade;
@@ -123,9 +125,10 @@ public class ChessClient {
         state = State.GAMEPLAY;
         if(params.length > 1){
             String playerColor = params[1];
-            server.joinGame(this.visitorAuthToken,playerColor,gameID);
+            ResultData resultData = server.joinGame(this.visitorAuthToken,playerColor,gameID);
+            ChessGame chessGame = resultData.getGameData().getGame();
             ws = new WebSocketFacade(serverUrl);
-            ws.joinGamePlayer(visitorAuthToken,playerColor,gameID);
+            ws.joinGamePlayer(visitorAuthToken,playerColor,gameID,chessGame);
             new GameplayRepl(this);
         }
         else{

@@ -2,6 +2,7 @@ package ui.websocket;
 
 import chess.ChessGame;
 import com.google.gson.Gson;
+import ui.ChessImage;
 import webSocketMessages.serverMessages.ServerMessage;
 import dataAccess.ResponseException;
 import webSocketMessages.userCommands.JoinObserver;
@@ -19,6 +20,7 @@ import java.net.URISyntaxException;
 public class WebSocketFacade extends Endpoint {
 
     Session session;
+    ChessGame game;
 
 
     public WebSocketFacade(String url) throws ResponseException {
@@ -56,7 +58,8 @@ public class WebSocketFacade extends Endpoint {
     }
 
 
-    public void joinGamePlayer(String authToken, String playerColor, int gameID) throws ResponseException {
+    public void joinGamePlayer(String authToken, String playerColor, int gameID, ChessGame game) throws ResponseException {
+        this.game = game;
         try {
             var newMessage = new JoinPlayer(authToken,gameID,playerColor);
             newMessage.setCommandType(UserGameCommand.CommandType.JOIN_PLAYER);
@@ -98,6 +101,8 @@ public class WebSocketFacade extends Endpoint {
 
     private void loadGame(ServerMessage serverMessage){
         System.out.print("got to the load board method\n");
+//        System.out.print(this.game.getBoard().toString());
+        ChessImage.printCurrentBoard(this.game.getBoard());
     }
 
     private void notification(ServerMessage serverMessage){

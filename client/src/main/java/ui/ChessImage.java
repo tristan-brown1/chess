@@ -1,5 +1,7 @@
 package ui;
 
+import chess.ChessBoard;
+
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
@@ -526,5 +528,8 @@ public class ChessImage {
         setWhite(out);
     }
 
+    public static void printCurrentBoard(ChessBoard chessBoard){
+
+    }
 
 }

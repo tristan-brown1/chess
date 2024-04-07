@@ -144,7 +144,7 @@ public class ChessClient {
 
     public String redraw() throws ResponseException, IOException {
         ws = new WebSocketFacade(serverUrl);
-        ws.redraw();
+        ws.redraw(visitorAuthToken,gameID);
         return "here is the updated board!";
     }
 

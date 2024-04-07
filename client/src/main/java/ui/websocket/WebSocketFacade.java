@@ -79,9 +79,16 @@ public class WebSocketFacade extends Endpoint {
         }
     }
 
-    public void redraw() throws ResponseException {
+    public void redraw(String authToken, int gameID) throws ResponseException {
         System.out.print("redrawing board");
-        ChessImage.printCurrentBoard(this.game.getBoard());
+
+        try {
+            var newMessage = new JoinObserver(authToken,gameID);
+            newMessage.setCommandType(UserGameCommand.CommandType.JOIN_OBSERVER);
+            this.session.getBasicRemote().sendText(new Gson().toJson(newMessage));
+        } catch (IOException ex) {
+            throw new ResponseException(500, ex.getMessage());
+        }
     }
 
     public void leave(String authToken, int gameID) throws ResponseException {
@@ -112,6 +119,7 @@ public class WebSocketFacade extends Endpoint {
     private void loadGame(String message){
         System.out.print("got to the load board method\n");
         LoadGame loadGame = new Gson().fromJson(message, LoadGame.class);
+        this.game = loadGame.getGame();
         ChessImage.printCurrentBoard(loadGame.getGame().getBoard());
     }
 

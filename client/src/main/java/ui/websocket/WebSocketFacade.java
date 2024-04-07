@@ -3,10 +3,13 @@ package ui.websocket;
 import chess.ChessGame;
 import com.google.gson.Gson;
 import ui.ChessImage;
+import webSocketMessages.serverMessages.LoadGame;
+import webSocketMessages.serverMessages.Notification;
 import webSocketMessages.serverMessages.ServerMessage;
 import dataAccess.ResponseException;
 import webSocketMessages.userCommands.JoinObserver;
 import webSocketMessages.userCommands.JoinPlayer;
+import webSocketMessages.userCommands.Leave;
 import webSocketMessages.userCommands.UserGameCommand;
 //import exception.ResponseException;
 
@@ -35,14 +38,12 @@ public class WebSocketFacade extends Endpoint {
             this.session.addMessageHandler(new MessageHandler.Whole<String>() {
                 @Override
                 public void onMessage(String message) {
-//                    System.out.print(message);
-//                    System.out.print("\n");
-//                    System.out.print("got a message from the server to the client\n");
                     ServerMessage serverMessage = new Gson().fromJson(message, ServerMessage.class);
+
                     switch (serverMessage.getServerMessageType()) {
-                        case LOAD_GAME -> loadGame(serverMessage);
-                        case ERROR -> error(serverMessage);
-                        case NOTIFICATION -> notification(serverMessage);
+                        case LOAD_GAME -> loadGame(message);
+                        case ERROR -> error(message);
+                        case NOTIFICATION -> notification(message);
                     }
 
                 }
@@ -58,8 +59,7 @@ public class WebSocketFacade extends Endpoint {
     }
 
 
-    public void joinGamePlayer(String authToken, String playerColor, int gameID, ChessGame game) throws ResponseException {
-        this.game = game;
+    public void joinGamePlayer(String authToken, String playerColor, int gameID) throws ResponseException {
         try {
             var newMessage = new JoinPlayer(authToken,gameID,playerColor);
             newMessage.setCommandType(UserGameCommand.CommandType.JOIN_PLAYER);
@@ -69,8 +69,7 @@ public class WebSocketFacade extends Endpoint {
         }
     }
 
-    public void joinGameObserver(String authToken, int gameID, ChessGame game) throws ResponseException {
-        this.game = game;
+    public void joinGameObserver(String authToken, int gameID) throws ResponseException {
         try {
             var newMessage = new JoinObserver(authToken,gameID);
             newMessage.setCommandType(UserGameCommand.CommandType.JOIN_OBSERVER);
@@ -82,14 +81,24 @@ public class WebSocketFacade extends Endpoint {
 
     public void redraw() throws ResponseException {
         System.out.print("redrawing board");
+        ChessImage.printCurrentBoard(this.game.getBoard());
     }
 
-    public void leave(String visitorName) throws ResponseException {
-        System.out.print("leaving");
+    public void leave(String authToken, int gameID) throws ResponseException {
+        try {
+            var newMessage = new Leave(authToken,gameID);
+            newMessage.setCommandType(UserGameCommand.CommandType.JOIN_OBSERVER);
+            this.session.getBasicRemote().sendText(new Gson().toJson(newMessage));
+        } catch (IOException ex) {
+            throw new ResponseException(500, ex.getMessage());
+        }
+        System.out.print("leaving game");
     }
 
     public void resign() throws ResponseException {
-        System.out.print("resigning");
+//        need to print out confirmation message
+
+        System.out.print("resigning game");
     }
 
     public void makeMove() throws ResponseException {
@@ -100,17 +109,20 @@ public class WebSocketFacade extends Endpoint {
         System.out.print("highlighting moves");
     }
 
-    private void loadGame(ServerMessage serverMessage){
+    private void loadGame(String message){
         System.out.print("got to the load board method\n");
-//        System.out.print(this.game.getBoard().toString());
-        ChessImage.printCurrentBoard(this.game.getBoard());
+        LoadGame loadGame = new Gson().fromJson(message, LoadGame.class);
+        ChessImage.printCurrentBoard(loadGame.getGame().getBoard());
     }
 
-    private void notification(ServerMessage serverMessage){
+    private void notification(String message){
         System.out.print("got to notification method\n");
+
+        Notification notification = new Gson().fromJson(message, Notification.class);
     }
 
-    private void error(ServerMessage serverMessage){
+    private void error(String message){
         System.out.print("got to the error method\n");
+        Error error = new Gson().fromJson(message, Error.class);
     }
 }

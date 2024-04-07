@@ -30,6 +30,7 @@ public class ChessClient {
     private final String serverUrl;
 
     private State state = State.LOGGEDOUT;
+    private int gameID;
 
     public ChessClient( String serverUrl) {
         server = new ServerFacade(serverUrl);
@@ -121,21 +122,21 @@ public class ChessClient {
 
     public String joinGame(String... params) throws ResponseException, IOException {
         assertLoggedIn();
-        int gameID = Integer.parseInt(params[0]);
+        this.gameID = Integer.parseInt(params[0]);
         state = State.GAMEPLAY;
         if(params.length > 1){
             String playerColor = params[1];
             ResultData resultData = server.joinGame(this.visitorAuthToken,playerColor,gameID);
             ChessGame chessGame = resultData.getGameData().getGame();
             ws = new WebSocketFacade(serverUrl);
-            ws.joinGamePlayer(visitorAuthToken,playerColor,gameID,chessGame);
+            ws.joinGamePlayer(visitorAuthToken,playerColor,gameID);
             new GameplayRepl(this);
         }
         else{
             ResultData resultData = server.joinGame(this.visitorAuthToken,null,gameID);
             ChessGame chessGame = resultData.getGameData().getGame();
             ws = new WebSocketFacade(serverUrl);
-            ws.joinGameObserver(visitorAuthToken,gameID,chessGame);
+            ws.joinGameObserver(visitorAuthToken,gameID);
             new GameplayRepl(this);
         }
         return "\njoined game\n";
@@ -149,7 +150,7 @@ public class ChessClient {
 
     public String leaveGame() throws ResponseException, IOException {
         ws = new WebSocketFacade(serverUrl);
-        ws.leave(visitorName);
+        ws.leave(visitorAuthToken,gameID);
         return String.format("%s has left the game", visitorName);
     }
 

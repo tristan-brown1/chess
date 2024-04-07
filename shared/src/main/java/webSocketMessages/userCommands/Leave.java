@@ -7,3 +7,4 @@ public class Leave extends UserGameCommand{
         this.gameID = gameID;
     }
 }
+

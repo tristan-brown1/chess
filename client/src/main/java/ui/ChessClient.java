@@ -132,9 +132,10 @@ public class ChessClient {
             new GameplayRepl(this);
         }
         else{
-            server.joinGame(this.visitorAuthToken,null,gameID);
+            ResultData resultData = server.joinGame(this.visitorAuthToken,null,gameID);
+            ChessGame chessGame = resultData.getGameData().getGame();
             ws = new WebSocketFacade(serverUrl);
-            ws.joinGameObserver(visitorAuthToken,gameID);
+            ws.joinGameObserver(visitorAuthToken,gameID,chessGame);
             new GameplayRepl(this);
         }
         return "\njoined game\n";

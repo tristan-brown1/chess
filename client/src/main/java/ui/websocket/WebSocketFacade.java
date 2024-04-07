@@ -69,7 +69,8 @@ public class WebSocketFacade extends Endpoint {
         }
     }
 
-    public void joinGameObserver(String authToken, int gameID) throws ResponseException {
+    public void joinGameObserver(String authToken, int gameID, ChessGame game) throws ResponseException {
+        this.game = game;
         try {
             var newMessage = new JoinObserver(authToken,gameID);
             newMessage.setCommandType(UserGameCommand.CommandType.JOIN_OBSERVER);

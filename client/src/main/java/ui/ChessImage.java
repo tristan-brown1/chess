@@ -394,7 +394,6 @@ public class ChessImage {
     }
 
     public static void printCurrentBoard(ChessBoard chessBoard){
-        int boardLine = 0;
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
         out.print(ERASE_SCREEN);
 

@@ -15,6 +15,7 @@ import webSocketMessages.serverMessages.ServerMessage;
 import dataAccess.ResponseException;
 import webSocketMessages.userCommands.JoinObserver;
 import webSocketMessages.userCommands.JoinPlayer;
+import webSocketMessages.userCommands.Redraw;
 import webSocketMessages.userCommands.UserGameCommand;
 
 
@@ -36,6 +37,7 @@ public class WebSocketHandler {
             case MAKE_MOVE -> makeMove(session);
             case LEAVE -> leave(session);
             case RESIGN -> resign(session);
+            case REDRAW -> redraw(session,message);
         }
     }
 
@@ -105,4 +107,22 @@ public class WebSocketHandler {
             throw new ResponseException(500, ex.getMessage());
         }
     }
+
+    private void redraw(Session session,String message) throws IOException, ResponseException {
+        Redraw redraw = new Gson().fromJson(message, Redraw.class);
+        int tempGameID = redraw.getGameID();
+//        String authToken = redraw.getAuthString();
+        try {
+            SQLGameDAO gameDAO = new SQLGameDAO();
+            SQLAuthDAO authDAO = new SQLAuthDAO();
+            GameData gameData = gameDAO.getGame(tempGameID);
+//            String username = authDAO.getAuth(authToken).getUsername();
+            var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
+            session.getRemote().sendString(new Gson().toJson(newMessage));
+        } catch (IOException ex) {
+            throw new ResponseException(500, ex.getMessage());
+        }
+    }
+
+
 }

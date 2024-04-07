@@ -84,7 +84,7 @@ public class WebSocketFacade extends Endpoint {
 
         try {
             var newMessage = new JoinObserver(authToken,gameID);
-            newMessage.setCommandType(UserGameCommand.CommandType.JOIN_OBSERVER);
+            newMessage.setCommandType(UserGameCommand.CommandType.REDRAW);
             this.session.getBasicRemote().sendText(new Gson().toJson(newMessage));
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
@@ -119,7 +119,6 @@ public class WebSocketFacade extends Endpoint {
     private void loadGame(String message){
         System.out.print("got to the load board method\n");
         LoadGame loadGame = new Gson().fromJson(message, LoadGame.class);
-        this.game = loadGame.getGame();
         ChessImage.printCurrentBoard(loadGame.getGame().getBoard());
     }
 

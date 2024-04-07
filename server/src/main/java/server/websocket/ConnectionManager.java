@@ -1,6 +1,7 @@
 package server.websocket;
 
 import org.eclipse.jetty.websocket.api.Session;
+import webSocketMessages.serverMessages.Notification;
 
 import java.io.IOException;
 import java.util.ArrayList;

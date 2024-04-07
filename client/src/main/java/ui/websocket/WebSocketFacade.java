@@ -7,10 +7,7 @@ import webSocketMessages.serverMessages.LoadGame;
 import webSocketMessages.serverMessages.Notification;
 import webSocketMessages.serverMessages.ServerMessage;
 import dataAccess.ResponseException;
-import webSocketMessages.userCommands.JoinObserver;
-import webSocketMessages.userCommands.JoinPlayer;
-import webSocketMessages.userCommands.Leave;
-import webSocketMessages.userCommands.UserGameCommand;
+import webSocketMessages.userCommands.*;
 //import exception.ResponseException;
 
 import javax.swing.*;
@@ -39,7 +36,6 @@ public class WebSocketFacade extends Endpoint {
                 @Override
                 public void onMessage(String message) {
                     ServerMessage serverMessage = new Gson().fromJson(message, ServerMessage.class);
-
                     switch (serverMessage.getServerMessageType()) {
                         case LOAD_GAME -> loadGame(message);
                         case ERROR -> error(message);
@@ -102,8 +98,16 @@ public class WebSocketFacade extends Endpoint {
         System.out.print("leaving game");
     }
 
-    public void resign() throws ResponseException {
+    public void resign(String authToken, int gameID) throws ResponseException {
 //        need to print out confirmation message
+
+        try {
+            var newMessage = new Resign(authToken,gameID);
+            newMessage.setCommandType(UserGameCommand.CommandType.RESIGN);
+            this.session.getBasicRemote().sendText(new Gson().toJson(newMessage));
+        } catch (IOException ex) {
+            throw new ResponseException(500, ex.getMessage());
+        }
 
         System.out.print("resigning game");
     }
@@ -117,19 +121,17 @@ public class WebSocketFacade extends Endpoint {
     }
 
     private void loadGame(String message){
-        System.out.print("got to the load board method\n");
         LoadGame loadGame = new Gson().fromJson(message, LoadGame.class);
         ChessImage.printCurrentBoard(loadGame.getGame().getBoard());
     }
 
     private void notification(String message){
-        System.out.print("got to notification method\n");
-
         Notification notification = new Gson().fromJson(message, Notification.class);
+        System.out.print(notification.getMessage());
     }
 
     private void error(String message){
-        System.out.print("got to the error method\n");
         Error error = new Gson().fromJson(message, Error.class);
+        System.out.print(error.getMessage());
     }
 }

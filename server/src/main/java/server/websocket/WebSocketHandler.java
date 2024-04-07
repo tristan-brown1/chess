@@ -36,7 +36,7 @@ public class WebSocketHandler {
             case JOIN_OBSERVER -> joinObserver(session,message);
             case MAKE_MOVE -> makeMove(session);
             case LEAVE -> leave(session);
-            case RESIGN -> resign(session);
+            case RESIGN -> resign(session, message);
             case REDRAW -> redraw(session,message);
         }
     }
@@ -88,6 +88,11 @@ public class WebSocketHandler {
     }
 
     private void leave(Session session) throws IOException, ResponseException {
+        //        need to actually leave game and then distribute responses correctly
+
+
+
+
         try {
             String message = "";
             var newMessage = new Notification(ServerMessage.ServerMessageType.NOTIFICATION, message);
@@ -97,10 +102,12 @@ public class WebSocketHandler {
         }
     }
 
-    private void resign(Session session) throws IOException, ResponseException {
+    private void resign(Session session, String message) throws IOException, ResponseException {
+//        need to actually resign game and then distribute responses correctly
+
+
+
         try {
-            ChessGame newGame = new ChessGame();
-            String message = "";
             var newMessage = new Notification(ServerMessage.ServerMessageType.NOTIFICATION, message);
             session.getRemote().sendString(new Gson().toJson(newMessage));
         } catch (IOException ex) {

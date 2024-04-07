@@ -162,7 +162,7 @@ public class ChessClient {
 
     public String resignGame() throws ResponseException, IOException {
         ws = new WebSocketFacade(serverUrl);
-        ws.resign();
+        ws.resign(visitorAuthToken,gameID);
         return String.format("%s has resigned. GG!", visitorName);
     }
 

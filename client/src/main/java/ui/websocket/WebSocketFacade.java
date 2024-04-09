@@ -1,6 +1,8 @@
 package ui.websocket;
 
 import chess.ChessGame;
+import chess.ChessMove;
+import chess.ChessPosition;
 import com.google.gson.Gson;
 import ui.ChessImage;
 import webSocketMessages.serverMessages.LoadGame;
@@ -90,7 +92,7 @@ public class WebSocketFacade extends Endpoint {
     public void leave(String authToken, int gameID) throws ResponseException {
         try {
             var newMessage = new Leave(authToken,gameID);
-            newMessage.setCommandType(UserGameCommand.CommandType.JOIN_OBSERVER);
+            newMessage.setCommandType(UserGameCommand.CommandType.LEAVE);
             this.session.getBasicRemote().sendText(new Gson().toJson(newMessage));
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
@@ -112,7 +114,19 @@ public class WebSocketFacade extends Endpoint {
         System.out.print("resigning game");
     }
 
-    public void makeMove() throws ResponseException {
+    public void makeMove(String authToken, int gameID, ChessPosition startPosition,ChessPosition endPosition) throws ResponseException {
+
+
+        try {
+            ChessMove newMove = new ChessMove(startPosition,endPosition);
+            var newMessage = new MakeMove(authToken,gameID,newMove);
+            newMessage.setCommandType(UserGameCommand.CommandType.RESIGN);
+            this.session.getBasicRemote().sendText(new Gson().toJson(newMessage));
+        } catch (IOException ex) {
+            throw new ResponseException(500, ex.getMessage());
+        }
+
+
         System.out.print("making a move");
     }
 

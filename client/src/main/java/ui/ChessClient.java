@@ -1,6 +1,7 @@
 package ui;
 
 import chess.ChessGame;
+import chess.ChessPosition;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -155,9 +156,53 @@ public class ChessClient {
     }
 
     public String makeMove(String... params) throws ResponseException, IOException {
+
+        String start1 = params[0];
+        int start1Int = decipherLetter(start1);
+        int start2 = Integer.parseInt(params[1]);
+
+        String end1 = params[3];
+        int end1Int = decipherLetter(end1);
+        int end2 = Integer.parseInt(params[4]);
+
+
+
+//        ChessPosition startPosition = new ChessPosition();
+//        ChessPosition endPosition = new ChessPosition();
+
+
         ws = new WebSocketFacade(serverUrl);
-        ws.makeMove();
+//        ws.makeMove(visitorAuthToken,gameID,startPosition,endPosition);
         return String.format("%s has made their move!", visitorName);
+    }
+
+    private static int decipherLetter(String start1) {
+        int start1Int;
+        if(start1.equalsIgnoreCase("a")){
+            start1Int = 1;
+        }
+        else if(start1.equalsIgnoreCase("b")){
+            start1Int = 2;
+        }
+        else if(start1.equalsIgnoreCase("c")){
+            start1Int = 3;
+        }
+        else if(start1.equalsIgnoreCase("d")){
+            start1Int = 4;
+        }
+        else if(start1.equalsIgnoreCase("e")){
+            start1Int = 5;
+        }
+        else if(start1.equalsIgnoreCase("f")){
+            start1Int = 6;
+        }
+        else if(start1.equalsIgnoreCase("g")){
+            start1Int = 7;
+        }
+        else if(start1.equalsIgnoreCase("h")){
+            start1Int = 8;
+        }
+        return start1Int;
     }
 
     public String resignGame() throws ResponseException, IOException {

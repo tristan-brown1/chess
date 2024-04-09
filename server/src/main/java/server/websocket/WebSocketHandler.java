@@ -35,7 +35,7 @@ public class WebSocketHandler {
             case JOIN_PLAYER -> joinPlayer(session,message);
             case JOIN_OBSERVER -> joinObserver(session,message);
             case MAKE_MOVE -> makeMove(session);
-            case LEAVE -> leave(session);
+            case LEAVE -> leave(session,message);
             case RESIGN -> resign(session, message);
             case REDRAW -> redraw(session,message);
         }
@@ -87,15 +87,14 @@ public class WebSocketHandler {
         }
     }
 
-    private void leave(Session session) throws IOException, ResponseException {
+    private void leave(Session session, String message) throws IOException, ResponseException {
         //        need to actually leave game and then distribute responses correctly
 
 
 
-
         try {
-            String message = "";
-            var newMessage = new Notification(ServerMessage.ServerMessageType.NOTIFICATION, message);
+            String notiMessage = "someone has left the game";
+            var newMessage = new Notification(ServerMessage.ServerMessageType.NOTIFICATION, notiMessage);
             session.getRemote().sendString(new Gson().toJson(newMessage));
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());

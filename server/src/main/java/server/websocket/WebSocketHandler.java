@@ -46,6 +46,7 @@ public class WebSocketHandler {
         int tempGameID = joinPlayer.getGameID();
         String playerColor = joinPlayer.getPlayerColor();
         String authToken = joinPlayer.getAuthString();
+        connections.add(session,authToken);
 
         try {
             SQLGameDAO gameDAO = new SQLGameDAO();
@@ -54,15 +55,18 @@ public class WebSocketHandler {
             String username = authDAO.getAuth(authToken).getUsername();
             var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
             session.getRemote().sendString(new Gson().toJson(newMessage));
+            connections.broadcast(authToken,"THE GUY has entered the game as a player \n");
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
         }
     }
 
     private void joinObserver(Session session,String message) throws IOException, ResponseException {
+
         JoinObserver joinObserver = new Gson().fromJson(message, JoinObserver.class);
         int tempGameID = joinObserver.getGameID();
         String authToken = joinObserver.getAuthString();
+        connections.add(session,authToken);
         try {
             SQLGameDAO gameDAO = new SQLGameDAO();
             SQLAuthDAO authDAO = new SQLAuthDAO();
@@ -70,6 +74,7 @@ public class WebSocketHandler {
             String username = authDAO.getAuth(authToken).getUsername();
             var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
             session.getRemote().sendString(new Gson().toJson(newMessage));
+            connections.broadcast(authToken,"THE GUY has entered the game as a watcher\n");
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
         }

@@ -79,7 +79,7 @@ public class WebSocketFacade extends Endpoint {
     }
 
     public void redraw(String authToken, int gameID) throws ResponseException {
-        System.out.print("redrawing board");
+//        System.out.print("redrawing board");
 
         try {
             var newMessage = new JoinObserver(authToken,gameID);

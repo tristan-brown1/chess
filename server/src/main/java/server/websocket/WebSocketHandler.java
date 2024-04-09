@@ -53,7 +53,8 @@ public class WebSocketHandler {
             String username = authDAO.getAuth(authToken).getUsername();
             var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
             session.getRemote().sendString(new Gson().toJson(newMessage));
-            connections.broadcastToGame(authToken,tempGameID,"THE GUY has entered the game as a player \n");
+            String responseMessage =  username + " has entered the game as a player \n";
+            connections.broadcastToGame(authToken,tempGameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
         }
@@ -72,7 +73,8 @@ public class WebSocketHandler {
             String username = authDAO.getAuth(authToken).getUsername();
             var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
             session.getRemote().sendString(new Gson().toJson(newMessage));
-            connections.broadcastToGame(authToken,tempGameID,"THE GUY has entered the game as a watcher\n");
+            String responseMessage =  username + " has entered the game as a watcher\n";
+            connections.broadcastToGame(authToken,tempGameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
         }
@@ -86,12 +88,16 @@ public class WebSocketHandler {
             ChessMove newMove = makeMove.getMove();
             SQLGameDAO gameDAO = new SQLGameDAO();
             SQLAuthDAO authDAO = new SQLAuthDAO();
-
             gameDAO.getGame(gameID).getGame().makeMove(newMove);
+            GameData gameData = gameDAO.getGame(gameID);
+
+            var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
+            session.getRemote().sendString(new Gson().toJson(newMessage));
 
             String responseMessage = "move has been made!";
-            var newMessage = new Notification(ServerMessage.ServerMessageType.NOTIFICATION, responseMessage);
-            session.getRemote().sendString(new Gson().toJson(newMessage));
+            connections.broadcastToGame(authToken,gameID,null,ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
+            connections.broadcastToGame(authToken,gameID,responseMessage,ServerMessage.ServerMessageType.NOTIFICATION,gameData.getGame());
+
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
         } catch (InvalidMoveException e) {

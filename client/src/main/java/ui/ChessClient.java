@@ -1,6 +1,7 @@
 package ui;
 
 import chess.ChessGame;
+import chess.ChessMove;
 import chess.ChessPosition;
 import com.google.gson.Gson;
 
@@ -157,22 +158,22 @@ public class ChessClient {
 
     public String makeMove(String... params) throws ResponseException, IOException {
 
-        String start1 = params[0];
-        int start1Int = decipherLetter(start1);
-        int start2 = Integer.parseInt(params[1]);
 
-        String end1 = params[3];
-        int end1Int = decipherLetter(end1);
-        int end2 = Integer.parseInt(params[4]);
+        int start1 = Integer.parseInt(params[1]);
+        String start2 = params[0];
+        int start2Int = decipherLetter(start2);
+
+        int end1 = Integer.parseInt(params[4]);
+        String end2 = params[3];
+        int end2Int = decipherLetter(end2);
 
 
-
-        ChessPosition startPosition = new ChessPosition(start1Int,start2);
-        ChessPosition endPosition = new ChessPosition(end1Int,end2);
-
+        ChessPosition startPosition = new ChessPosition(start1,start2Int);
+        ChessPosition endPosition = new ChessPosition(end1,end2Int);
+        ChessMove newMove = new ChessMove(startPosition,endPosition);
 
         ws = new WebSocketFacade(serverUrl);
-        ws.makeMove(visitorAuthToken,gameID,startPosition,endPosition);
+        ws.makeMove(visitorAuthToken,gameID,newMove);
         return String.format("%s has made their move!", visitorName);
     }
 

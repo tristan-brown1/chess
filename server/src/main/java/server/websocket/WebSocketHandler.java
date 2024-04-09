@@ -1,6 +1,8 @@
 package server.websocket;
 
 import chess.ChessGame;
+import chess.ChessMove;
+import chess.InvalidMoveException;
 import com.google.gson.Gson;
 
 import dataAccess.DAOs.SQLAuthDAO;
@@ -13,10 +15,7 @@ import webSocketMessages.serverMessages.LoadGame;
 import webSocketMessages.serverMessages.Notification;
 import webSocketMessages.serverMessages.ServerMessage;
 import dataAccess.ResponseException;
-import webSocketMessages.userCommands.JoinObserver;
-import webSocketMessages.userCommands.JoinPlayer;
-import webSocketMessages.userCommands.Redraw;
-import webSocketMessages.userCommands.UserGameCommand;
+import webSocketMessages.userCommands.*;
 
 
 import java.io.IOException;
@@ -34,7 +33,7 @@ public class WebSocketHandler {
         switch (userGameCommand.getCommandType()) {
             case JOIN_PLAYER -> joinPlayer(session,message);
             case JOIN_OBSERVER -> joinObserver(session,message);
-            case MAKE_MOVE -> makeMove(session);
+            case MAKE_MOVE -> makeMove(session, message);
             case LEAVE -> leave(session,message);
             case RESIGN -> resign(session, message);
             case REDRAW -> redraw(session,message);
@@ -76,14 +75,24 @@ public class WebSocketHandler {
         }
     }
 
-    private void makeMove(Session session) throws IOException, ResponseException {
+    private void makeMove(Session session, String message) throws IOException, ResponseException {
         try {
-            ChessGame newGame = new ChessGame();
-            String message = "";
-            var newMessage = new Notification(ServerMessage.ServerMessageType.NOTIFICATION, message);
+            MakeMove makeMove = new Gson().fromJson(message, MakeMove.class);
+            String authToken = makeMove.getAuthString();
+            int gameID = makeMove.getGameID();
+            ChessMove newMove = makeMove.getMove();
+            SQLGameDAO gameDAO = new SQLGameDAO();
+            SQLAuthDAO authDAO = new SQLAuthDAO();
+
+            gameDAO.getGame(gameID).getGame().makeMove(newMove);
+
+            String responseMessage = "move has been made!";
+            var newMessage = new Notification(ServerMessage.ServerMessageType.NOTIFICATION, responseMessage);
             session.getRemote().sendString(new Gson().toJson(newMessage));
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
+        } catch (InvalidMoveException e) {
+            throw new RuntimeException(e);
         }
     }
 

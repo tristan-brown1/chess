@@ -63,7 +63,7 @@ public class ChessImage {
     private static void drawTop(PrintStream out) {
         System.out.print(SET_BG_COLOR_BLACK);
         out.print(SET_TEXT_COLOR_WHITE);
-        out.print("    a  b  c  d  e  f  g  h    \n");
+        out.print("\n    a  b  c  d  e  f  g  h    \n");
     }
 
     private static void drawRotatedTop(PrintStream out) {
@@ -367,7 +367,7 @@ public class ChessImage {
     }
 
     private static void drawBot(PrintStream out) {
-        out.print("    a  b  c  d  e  f  g  h    ");
+        out.print("    a  b  c  d  e  f  g  h    \n");
     }
 
     private static void drawRotatedBot(PrintStream out) {
@@ -399,7 +399,7 @@ public class ChessImage {
 
 
         drawTop(out);
-        for (int boardCol = 0; boardCol <= 7; ++boardCol) {
+        for (int boardCol = 1; boardCol <= 8; ++boardCol) {
             printCheckeredPattern(out,boardCol,chessBoard);
         }
         drawBot(out);
@@ -411,7 +411,7 @@ public class ChessImage {
         out.print(boardLine);
         out.print(" ");
         for(int i = 0; i < 8; i++){
-            String pieceChar = getPieceChar(boardLine, chessBoard, i);
+            String pieceChar = getPieceChar(boardLine - 1, chessBoard, i);
             if(boardLine % 2 == 0){
                 if (i % 2 == 0){
                     System.out.print("\u001b[35;100m");

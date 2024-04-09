@@ -4,6 +4,7 @@ import chess.ChessGame;
 import chess.ChessMove;
 import chess.ChessPosition;
 import com.google.gson.Gson;
+import dataAccess.DAOs.SQLGameDAO;
 import ui.ChessImage;
 import webSocketMessages.serverMessages.LoadGame;
 import webSocketMessages.serverMessages.Notification;
@@ -116,11 +117,12 @@ public class WebSocketFacade extends Endpoint {
 
     public void makeMove(String authToken, int gameID, ChessPosition startPosition,ChessPosition endPosition) throws ResponseException {
 
-
         try {
+
+
             ChessMove newMove = new ChessMove(startPosition,endPosition);
             var newMessage = new MakeMove(authToken,gameID,newMove);
-            newMessage.setCommandType(UserGameCommand.CommandType.RESIGN);
+            newMessage.setCommandType(UserGameCommand.CommandType.MAKE_MOVE);
             this.session.getBasicRemote().sendText(new Gson().toJson(newMessage));
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());

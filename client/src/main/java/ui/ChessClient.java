@@ -167,17 +167,17 @@ public class ChessClient {
 
 
 
-//        ChessPosition startPosition = new ChessPosition();
-//        ChessPosition endPosition = new ChessPosition();
+        ChessPosition startPosition = new ChessPosition(start1Int,start2);
+        ChessPosition endPosition = new ChessPosition(end1Int,end2);
 
 
         ws = new WebSocketFacade(serverUrl);
-//        ws.makeMove(visitorAuthToken,gameID,startPosition,endPosition);
+        ws.makeMove(visitorAuthToken,gameID,startPosition,endPosition);
         return String.format("%s has made their move!", visitorName);
     }
 
     private static int decipherLetter(String start1) {
-        int start1Int;
+        int start1Int = 0;
         if(start1.equalsIgnoreCase("a")){
             start1Int = 1;
         }

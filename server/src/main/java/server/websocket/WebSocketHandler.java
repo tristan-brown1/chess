@@ -1,6 +1,5 @@
 package server.websocket;
 
-import chess.ChessGame;
 import chess.ChessMove;
 import chess.InvalidMoveException;
 import com.google.gson.Gson;
@@ -19,7 +18,6 @@ import webSocketMessages.userCommands.*;
 
 
 import java.io.IOException;
-import java.util.Timer;
 
 
 @WebSocket
@@ -46,7 +44,7 @@ public class WebSocketHandler {
         int tempGameID = joinPlayer.getGameID();
         String playerColor = joinPlayer.getPlayerColor();
         String authToken = joinPlayer.getAuthString();
-        connections.add(session,authToken);
+        connections.add(session,authToken,tempGameID);
 
         try {
             SQLGameDAO gameDAO = new SQLGameDAO();
@@ -55,7 +53,7 @@ public class WebSocketHandler {
             String username = authDAO.getAuth(authToken).getUsername();
             var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
             session.getRemote().sendString(new Gson().toJson(newMessage));
-            connections.broadcast(authToken,"THE GUY has entered the game as a player \n");
+            connections.broadcastToGame(authToken,tempGameID,"THE GUY has entered the game as a player \n");
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
         }
@@ -66,7 +64,7 @@ public class WebSocketHandler {
         JoinObserver joinObserver = new Gson().fromJson(message, JoinObserver.class);
         int tempGameID = joinObserver.getGameID();
         String authToken = joinObserver.getAuthString();
-        connections.add(session,authToken);
+        connections.add(session,authToken,tempGameID);
         try {
             SQLGameDAO gameDAO = new SQLGameDAO();
             SQLAuthDAO authDAO = new SQLAuthDAO();
@@ -74,7 +72,7 @@ public class WebSocketHandler {
             String username = authDAO.getAuth(authToken).getUsername();
             var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
             session.getRemote().sendString(new Gson().toJson(newMessage));
-            connections.broadcast(authToken,"THE GUY has entered the game as a watcher\n");
+            connections.broadcastToGame(authToken,tempGameID,"THE GUY has entered the game as a watcher\n");
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
         }

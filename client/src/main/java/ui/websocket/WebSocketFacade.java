@@ -124,8 +124,6 @@ public class WebSocketFacade extends Endpoint {
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
         }
-
-
         System.out.print("making a move");
     }
 

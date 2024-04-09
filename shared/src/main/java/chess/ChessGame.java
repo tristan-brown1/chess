@@ -19,7 +19,7 @@ public class ChessGame {
 
 
     public ChessGame() {
-
+        setTeamTurn(TeamColor.WHITE);
     }
 
     /**
@@ -97,13 +97,13 @@ public class ChessGame {
      * @param move chess move to preform
      * @throws InvalidMoveException if move is invalid
      */
-    public void makeMove(ChessMove move) throws InvalidMoveException {
+    public ChessGame makeMove(ChessMove move) throws InvalidMoveException {
         Collection<ChessMove> validMoves;
         validMoves = validMoves(move.getStartPosition());
         if(!validMoves.contains(move)){
             throw new InvalidMoveException("move is not contained in validMoves");
         }
-        else if(this.teamColor != this.gameBoard.getPiece(move.getStartPosition()).getTeamColor()){
+        else if(teamColor != this.gameBoard.getPiece(move.getStartPosition()).getTeamColor()){
             throw new InvalidMoveException("move is of the wrong color");
         }
         else if(move.getPromotionPiece() != null){
@@ -128,6 +128,8 @@ public class ChessGame {
             }
 
         }
+
+        return this;
 
     }
 

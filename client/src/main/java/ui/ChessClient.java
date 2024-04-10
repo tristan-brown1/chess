@@ -153,7 +153,8 @@ public class ChessClient {
     public String leaveGame() throws ResponseException, IOException {
         ws = new WebSocketFacade(serverUrl);
         ws.leave(visitorAuthToken,gameID,playerColor);
-        return String.format("%s has left the game", visitorName);
+        state = State.LOGGEDIN;
+        return "";
     }
 
     public String makeMove(String... params) throws ResponseException, IOException {

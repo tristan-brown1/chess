@@ -2,6 +2,7 @@ package ui.REPLs;
 
 import ui.ChessClient;
 import ui.ChessImage;
+import ui.State;
 
 import java.util.Scanner;
 
@@ -24,7 +25,7 @@ public class GameplayRepl {
 //        String line = scanner.nextLine();
 
 //        printPrompt();
-        while (!result.equals("leave")) {
+        while (client.getState() == State.GAMEPLAY) {
             printPrompt();
             String line = scanner.nextLine();
             try {

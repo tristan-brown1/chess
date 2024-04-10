@@ -54,8 +54,9 @@ public class WebSocketHandler {
             SQLAuthDAO authDAO = new SQLAuthDAO();
             GameData gameData = gameDAO.getGame(tempGameID);
             String username = authDAO.getAuth(authToken).getUsername();
+
             if(playerColor.equalsIgnoreCase("white")){
-                if(gameData.getWhiteUsername() == null){
+                if(gameData.getWhiteUsername() == null || gameData.getWhiteUsername().equalsIgnoreCase(username)){
                     var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
                     session.getRemote().sendString(new Gson().toJson(newMessage));
                     String responseMessage =  username + " has entered the game as a player \n";
@@ -65,10 +66,9 @@ public class WebSocketHandler {
                     var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Invalid join request: team is already taken");
                     session.getRemote().sendString(new Gson().toJson(newMessage));
                 }
-
             }
             else {
-                if(gameData.getBlackUsername() == null){
+                if(gameData.getBlackUsername() == null|| gameData.getBlackUsername().equalsIgnoreCase(username)){
                     var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
                     session.getRemote().sendString(new Gson().toJson(newMessage));
                     String responseMessage =  username + " has entered the game as a player \n";
@@ -155,8 +155,9 @@ public class WebSocketHandler {
 
 
             String notiMessage = username + " has left the game";
-            connections.broadcastToGame(authToken,gameID,notiMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
             connections.remove(authToken);
+            connections.broadcastToGame(authToken,gameID,notiMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
+
 
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());

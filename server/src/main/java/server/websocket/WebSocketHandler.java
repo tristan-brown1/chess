@@ -97,6 +97,7 @@ public class WebSocketHandler {
             GameData gameData = gameDAO.getGame(gameID);
             int tempGameID = gameData.getGameID();
             gameDAO.updateGameStatus(tempGameID, updatedGame);
+            gameData = gameDAO.getGame(gameID);
 
             var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
             session.getRemote().sendString(new Gson().toJson(newMessage));

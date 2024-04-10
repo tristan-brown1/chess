@@ -15,7 +15,7 @@ import java.util.Objects;
 public class ChessGame {
 
     private ChessBoard gameBoard = new ChessBoard();
-    private static TeamColor teamColor;
+    private TeamColor teamColor;
 
 
     public ChessGame() {
@@ -142,11 +142,11 @@ public class ChessGame {
     public boolean isInCheck(TeamColor teamColor) {
 //        check the current board to see if the passed in color is in check
         ChessGame.TeamColor otherTeam;
-        if(teamColor == ChessGame.teamColor.WHITE){
-            otherTeam = ChessGame.teamColor.BLACK;
+        if(teamColor == TeamColor.WHITE){
+            otherTeam = TeamColor.BLACK;
         }
         else{
-            otherTeam = ChessGame.teamColor.WHITE;
+            otherTeam = TeamColor.WHITE;
         }
         ChessPosition kingPosition = kingPosition(teamColor);
         Collection<ChessPosition> teamPositions = getTeamPositions(otherTeam);

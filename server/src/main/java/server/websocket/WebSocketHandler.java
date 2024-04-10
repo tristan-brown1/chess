@@ -124,8 +124,9 @@ public class WebSocketHandler {
         SQLAuthDAO authDAO = new SQLAuthDAO();
         SQLGameDAO gameDAO = new SQLGameDAO();
         String username = authDAO.getAuth(authToken).getUsername();
-        gameDAO.removePlayer(username,gameID,playerColor);
-
+        if(playerColor != null){
+            gameDAO.removePlayer(username,gameID,playerColor);
+        }
         try {
 
 

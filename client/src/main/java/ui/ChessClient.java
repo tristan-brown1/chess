@@ -234,7 +234,7 @@ public class ChessClient {
         }
         if (state == State.GAMEPLAY){
             return """
-                - move <LETTER,NUMBER> to <LETTER,NUMBER>
+                - move <LETTER NUMBER> to <LETTER NUMBER>
                 - redraw - redraws the chess board
                 - leave - return to logged-in menu
                 - highlight legal moves - highlights possible legal moves

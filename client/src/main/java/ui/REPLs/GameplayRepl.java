@@ -21,24 +21,19 @@ public class GameplayRepl {
 
         Scanner scanner = new Scanner(System.in);
         var result = "";
+//        String line = scanner.nextLine();
 
-        String line = scanner.nextLine();
-        if(line.equalsIgnoreCase("help")){
-            System.out.print(client.help());
-            while (!result.equals("leave")) {
-
-                line = scanner.nextLine();
-                try {
-                    result = client.eval(line);
-                    System.out.print(BLUE + result);
-                } catch (Throwable e) {
-                    var msg = e.toString();
-                    System.out.print(msg);
-                }
+//        printPrompt();
+        while (!result.equals("leave")) {
+            printPrompt();
+            String line = scanner.nextLine();
+            try {
+                result = client.eval(line);
+                System.out.print(BLUE + result);
+            } catch (Throwable e) {
+                var msg = e.toString();
+                System.out.print(msg);
             }
-        }
-        else{
-            System.out.println("boom pow you die");
         }
     }
 

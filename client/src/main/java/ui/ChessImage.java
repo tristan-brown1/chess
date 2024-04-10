@@ -413,7 +413,8 @@ public class ChessImage {
             System.out.print(RESET);
         }
         drawBot(out);
-        System.out.print(RESET);
+//        System.out.print("\n" + RESET + ">>> " + GREEN);
+
     }
 
     private static void printCheckeredPattern(PrintStream out,int boardLine, ChessBoard chessBoard){
@@ -494,7 +495,7 @@ public class ChessImage {
                 pieceChar = "R";
             }
             else if(pieceType.equals(ChessPiece.PieceType.BISHOP)){
-                pieceChar = "R";
+                pieceChar = "B";
             }
             else if(pieceType.equals(ChessPiece.PieceType.KNIGHT)){
                 pieceChar = "N";

@@ -136,6 +136,7 @@ public class WebSocketFacade extends Endpoint {
 
     private void loadGame(String message){
         LoadGame loadGame = new Gson().fromJson(message, LoadGame.class);
+        System.out.print("\n");
         ChessImage.printCurrentBoard(loadGame.getGame().getBoard());
         System.out.print("\n" + RESET + ">>> " + GREEN);
     }
@@ -143,10 +144,12 @@ public class WebSocketFacade extends Endpoint {
     private void notification(String message){
         Notification notification = new Gson().fromJson(message, Notification.class);
         System.out.print(notification.getMessage());
+        System.out.print("\n" + RESET + ">>> " + GREEN);
     }
 
     private void error(String message){
         Error error = new Gson().fromJson(message, Error.class);
         System.out.print(error.getMessage());
+        System.out.print("\n" + RESET + ">>> " + GREEN);
     }
 }

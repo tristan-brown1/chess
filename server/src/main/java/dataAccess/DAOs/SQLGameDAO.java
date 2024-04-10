@@ -33,6 +33,18 @@ public class SQLGameDAO implements GameDAO{
         executeUpdate(createGameStatement,new Gson().toJson(game),gameID);
     }
 
+    public void removePlayer(String username, int gameID,String playerColor) throws DataAccessException {
+
+        if(playerColor.equalsIgnoreCase("white")){
+            String createGameStatement = "UPDATE game SET whiteUsername = NULL WHERE gameID = ? AND whiteUsername = ?";
+            executeUpdate(createGameStatement,gameID,username);
+        }
+        else{
+            String createGameStatement = "UPDATE game SET blackUsername = NULL WHERE gameID = ? AND blackUsername = ?";
+            executeUpdate(createGameStatement,gameID,username);
+        }
+    }
+
     @Override
     public Object updateGame(GameData gameData, String playerColor, String username) throws DataAccessException {
 

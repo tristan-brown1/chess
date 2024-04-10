@@ -28,7 +28,7 @@ public class WebSocketHandler {
     private final ConnectionManager connections = new ConnectionManager();
 
     @OnWebSocketMessage
-    public void onMessage(Session session, String message) throws IOException, ResponseException {
+    public void onMessage(Session session, String message) throws IOException, ResponseException, DataAccessException {
         UserGameCommand userGameCommand = new Gson().fromJson(message, UserGameCommand.class);
         switch (userGameCommand.getCommandType()) {
             case JOIN_PLAYER -> joinPlayer(session,message);
@@ -115,15 +115,25 @@ public class WebSocketHandler {
         }
     }
 
-    private void leave(Session session, String message) throws IOException, ResponseException {
-        //        need to actually leave game and then distribute responses correctly
+    private void leave(Session session, String message) throws IOException, ResponseException, DataAccessException {
+        Leave leave = new Gson().fromJson(message, Leave.class);
+        String playerColor = leave.getPlayerColor();
+        String authToken = leave.getAuthString();
+        int gameID = leave.getGameID();
 
-
+        SQLAuthDAO authDAO = new SQLAuthDAO();
+        SQLGameDAO gameDAO = new SQLGameDAO();
+        String username = authDAO.getAuth(authToken).getUsername();
+        gameDAO.removePlayer(username,gameID,playerColor);
 
         try {
-            String notiMessage = "someone has left the game";
-            var newMessage = new Notification(ServerMessage.ServerMessageType.NOTIFICATION, notiMessage);
-            session.getRemote().sendString(new Gson().toJson(newMessage));
+
+
+
+            String notiMessage = username + " has left the game";
+            connections.broadcastToGame(authToken,gameID,notiMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
+            connections.remove(authToken);
+
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
         }

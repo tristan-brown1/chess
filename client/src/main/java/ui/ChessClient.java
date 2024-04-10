@@ -25,6 +25,7 @@ public class ChessClient {
     private String visitorEmail = null;
     private String visitorAuthToken = null;
     private String newGameName = null;
+    String playerColor;
 
 //    private final NotificationHandler notificationHandler;
     private WebSocketFacade ws;
@@ -127,7 +128,7 @@ public class ChessClient {
         this.gameID = Integer.parseInt(params[0]);
         state = State.GAMEPLAY;
         if(params.length > 1){
-            String playerColor = params[1];
+            this.playerColor = params[1];
             ResultData resultData = server.joinGame(this.visitorAuthToken,playerColor,gameID);
             ChessGame chessGame = resultData.getGameData().getGame();
             ws = new WebSocketFacade(serverUrl);
@@ -152,7 +153,7 @@ public class ChessClient {
 
     public String leaveGame() throws ResponseException, IOException {
         ws = new WebSocketFacade(serverUrl);
-        ws.leave(visitorAuthToken,gameID);
+        ws.leave(visitorAuthToken,gameID,playerColor);
         return String.format("%s has left the game", visitorName);
     }
 

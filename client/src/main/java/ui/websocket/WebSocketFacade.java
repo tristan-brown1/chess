@@ -90,9 +90,9 @@ public class WebSocketFacade extends Endpoint {
         }
     }
 
-    public void leave(String authToken, int gameID) throws ResponseException {
+    public void leave(String authToken, int gameID, String playerColor) throws ResponseException {
         try {
-            var newMessage = new Leave(authToken,gameID);
+            var newMessage = new Leave(authToken,gameID,playerColor);
             newMessage.setCommandType(UserGameCommand.CommandType.LEAVE);
             this.session.getBasicRemote().sendText(new Gson().toJson(newMessage));
         } catch (IOException ex) {

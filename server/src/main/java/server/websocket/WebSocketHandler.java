@@ -12,6 +12,7 @@ import model.GameData;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import webSocketMessages.serverMessages.Error;
 import webSocketMessages.serverMessages.LoadGame;
 import webSocketMessages.serverMessages.Notification;
 import webSocketMessages.serverMessages.ServerMessage;
@@ -53,10 +54,32 @@ public class WebSocketHandler {
             SQLAuthDAO authDAO = new SQLAuthDAO();
             GameData gameData = gameDAO.getGame(tempGameID);
             String username = authDAO.getAuth(authToken).getUsername();
-            var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
-            session.getRemote().sendString(new Gson().toJson(newMessage));
-            String responseMessage =  username + " has entered the game as a player \n";
-            connections.broadcastToGame(authToken,tempGameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
+            if(playerColor.equalsIgnoreCase("white")){
+                if(gameData.getWhiteUsername() == null){
+                    var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
+                    session.getRemote().sendString(new Gson().toJson(newMessage));
+                    String responseMessage =  username + " has entered the game as a player \n";
+                    connections.broadcastToGame(authToken,tempGameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
+                }
+                else{
+                    var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Invalid join request: team is already taken");
+                    session.getRemote().sendString(new Gson().toJson(newMessage));
+                }
+
+            }
+            else {
+                if(gameData.getBlackUsername() == null){
+                    var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
+                    session.getRemote().sendString(new Gson().toJson(newMessage));
+                    String responseMessage =  username + " has entered the game as a player \n";
+                    connections.broadcastToGame(authToken,tempGameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
+                }
+                else{
+                    var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Invalid join request: team is already taken");
+                    session.getRemote().sendString(new Gson().toJson(newMessage));
+                }
+            }
+
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
         }

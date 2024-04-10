@@ -126,12 +126,12 @@ public class ChessClient {
     public String joinGame(String... params) throws ResponseException, IOException {
         assertLoggedIn();
         this.gameID = Integer.parseInt(params[0]);
-        state = State.GAMEPLAY;
         if(params.length > 1){
             this.playerColor = params[1];
-            server.joinGame(this.visitorAuthToken,playerColor,gameID);
             ws = new WebSocketFacade(serverUrl);
             ws.joinGamePlayer(visitorAuthToken,playerColor,gameID);
+            server.joinGame(this.visitorAuthToken,playerColor,gameID);
+            state = State.GAMEPLAY;
             new GameplayRepl(this);
         }
         else{
@@ -139,6 +139,7 @@ public class ChessClient {
             ChessGame chessGame = resultData.getGameData().getGame();
             ws = new WebSocketFacade(serverUrl);
             ws.joinGameObserver(visitorAuthToken,gameID);
+            state = State.GAMEPLAY;
             new GameplayRepl(this);
         }
         return "\njoined game\n";

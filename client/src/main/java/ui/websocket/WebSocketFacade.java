@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import static ui.EscapeSequences.GREEN;
+import static ui.EscapeSequences.RESET;
+
 //need to extend Endpoint for websocket to work properly
 public class WebSocketFacade extends Endpoint {
 
@@ -134,6 +137,7 @@ public class WebSocketFacade extends Endpoint {
     private void loadGame(String message){
         LoadGame loadGame = new Gson().fromJson(message, LoadGame.class);
         ChessImage.printCurrentBoard(loadGame.getGame().getBoard());
+        System.out.print("\n" + RESET + ">>> " + GREEN);
     }
 
     private void notification(String message){

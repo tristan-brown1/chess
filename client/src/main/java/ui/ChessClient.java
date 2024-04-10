@@ -129,8 +129,7 @@ public class ChessClient {
         state = State.GAMEPLAY;
         if(params.length > 1){
             this.playerColor = params[1];
-            ResultData resultData = server.joinGame(this.visitorAuthToken,playerColor,gameID);
-            ChessGame chessGame = resultData.getGameData().getGame();
+            server.joinGame(this.visitorAuthToken,playerColor,gameID);
             ws = new WebSocketFacade(serverUrl);
             ws.joinGamePlayer(visitorAuthToken,playerColor,gameID);
             new GameplayRepl(this);
@@ -148,7 +147,7 @@ public class ChessClient {
     public String redraw() throws ResponseException, IOException {
         ws = new WebSocketFacade(serverUrl);
         ws.redraw(visitorAuthToken,gameID);
-        return "here is the updated board!";
+        return "here is the updated board!\n";
     }
 
     public String leaveGame() throws ResponseException, IOException {
@@ -175,7 +174,7 @@ public class ChessClient {
 
         ws = new WebSocketFacade(serverUrl);
         ws.makeMove(visitorAuthToken,gameID,newMove);
-        return String.format("%s has made their move!", visitorName);
+        return "\n";
     }
 
     private static int decipherLetter(String start1) {

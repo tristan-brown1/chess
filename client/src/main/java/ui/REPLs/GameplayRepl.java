@@ -21,12 +21,12 @@ public class GameplayRepl {
 
         Scanner scanner = new Scanner(System.in);
         var result = "";
-        printPrompt();
+
         String line = scanner.nextLine();
         if(line.equalsIgnoreCase("help")){
             System.out.print(client.help());
             while (!result.equals("leave")) {
-                printPrompt();
+
                 line = scanner.nextLine();
                 try {
                     result = client.eval(line);

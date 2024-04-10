@@ -1,6 +1,7 @@
 package ui.REPLs;
 
 import ui.ChessClient;
+import ui.State;
 
 import java.util.Scanner;
 
@@ -19,10 +20,9 @@ public class PostLoginRepl {
         System.out.print(client.help());
         Scanner scanner = new Scanner(System.in);
         var result = "";
-        printPrompt();
         String line = "";
 
-        while (!result.equals("quit") && !result.contains("joined game")) {
+        while (!result.equals("quit") && (client.getState()!= State.GAMEPLAY)) {
             printPrompt();
             line = scanner.nextLine();
             try {

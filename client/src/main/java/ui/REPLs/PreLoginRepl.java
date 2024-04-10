@@ -34,19 +34,6 @@ public class PreLoginRepl {
                 System.out.print(msg);
             }
         }
-//        while (!result.equals("quit")) {
-//            printPrompt();
-//            String line = scanner.nextLine();
-//
-//            try {
-//                result = client.eval(line);
-//                System.out.print(BLUE + result);
-//            } catch (Throwable e) {
-//                var msg = e.toString();
-//                System.out.print(msg);
-//            }
-//        }
-//        System.out.println();
     }
 
 

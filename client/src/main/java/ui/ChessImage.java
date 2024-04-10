@@ -1,6 +1,7 @@
 package ui;
 
 import chess.ChessBoard;
+import chess.ChessGame;
 import chess.ChessPiece;
 
 import java.io.PrintStream;
@@ -63,7 +64,8 @@ public class ChessImage {
     private static void drawTop(PrintStream out) {
         System.out.print(SET_BG_COLOR_BLACK);
         out.print(SET_TEXT_COLOR_WHITE);
-        out.print("\n    a  b  c  d  e  f  g  h    \n");
+        out.print("    a  b  c  d  e  f  g  h    \n");
+        System.out.print(RESET);
     }
 
     private static void drawRotatedTop(PrintStream out) {
@@ -367,7 +369,10 @@ public class ChessImage {
     }
 
     private static void drawBot(PrintStream out) {
+        System.out.print(SET_BG_COLOR_BLACK);
+        out.print(SET_TEXT_COLOR_WHITE);
         out.print("    a  b  c  d  e  f  g  h    \n");
+        System.out.print(RESET);
     }
 
     private static void drawRotatedBot(PrintStream out) {
@@ -397,12 +402,18 @@ public class ChessImage {
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
         out.print(ERASE_SCREEN);
 
-
+        System.out.print(SET_BG_COLOR_BLACK);
+        out.print(SET_TEXT_COLOR_WHITE);
         drawTop(out);
-        for (int boardCol = 1; boardCol <= 8; ++boardCol) {
+        System.out.print(RESET);
+        for (int boardCol = 8; boardCol >= 1; --boardCol) {
+            System.out.print(SET_BG_COLOR_BLACK);
+            out.print(SET_TEXT_COLOR_WHITE);
             printCheckeredPattern(out,boardCol,chessBoard);
+            System.out.print(RESET);
         }
         drawBot(out);
+        System.out.print(RESET);
     }
 
     private static void printCheckeredPattern(PrintStream out,int boardLine, ChessBoard chessBoard){
@@ -411,10 +422,27 @@ public class ChessImage {
         out.print(boardLine);
         out.print(" ");
         for(int i = 0; i < 8; i++){
+//            ChessPiece chessPiece = chessBoard.getBoard()[boardLine - 1][i];
+
+            try{
+                ChessPiece chessPiece = chessBoard.getBoard()[boardLine - 1][i];
+                if(chessPiece.getTeamColor().equals(ChessGame.TeamColor.WHITE)){
+                    System.out.print(SET_TEXT_COLOR_RED);
+                }
+                else {
+                    System.out.print(SET_TEXT_COLOR_BLUE);
+                }
+            }catch (Exception e){
+                System.out.print(SET_TEXT_COLOR_BLUE);
+            }
+
+
+
             String pieceChar = getPieceChar(boardLine - 1, chessBoard, i);
+//            ChessPiece chessPiece = getChessPiece()
             if(boardLine % 2 == 0){
                 if (i % 2 == 0){
-                    System.out.print("\u001b[35;100m");
+                    System.out.print(SET_BG_COLOR_LIGHT_GREY);
                     System.out.print(" ");
                     System.out.print(pieceChar);
                     System.out.print(" ");
@@ -435,7 +463,7 @@ public class ChessImage {
                     System.out.print(" ");
                 }
                 else{
-                    System.out.print("\u001b[35;100m");
+                    System.out.print(SET_BG_COLOR_LIGHT_GREY);
                     System.out.print(" ");
                     System.out.print(pieceChar);
                     System.out.print(" ");
@@ -457,7 +485,8 @@ public class ChessImage {
     private static String getPieceChar(int boardLine, ChessBoard chessBoard, int i) {
         String pieceChar = " ";
         try{
-            ChessPiece.PieceType pieceType = chessBoard.getBoard()[boardLine][i].getPieceType();
+            ChessPiece chessPiece = chessBoard.getBoard()[boardLine][i];
+            ChessPiece.PieceType pieceType = chessPiece.getPieceType();
             if(pieceType.equals(ChessPiece.PieceType.PAWN)){
                 pieceChar = "P";
             }

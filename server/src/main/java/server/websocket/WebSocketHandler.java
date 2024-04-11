@@ -162,28 +162,36 @@ public class WebSocketHandler {
 //            try this
 
 //            ChessGame.TeamColor playerColor = makeMove.getPlayerColor();
-            ChessGame.TeamColor playerColor = null;
-            if(gameDAO.getGame(gameID).getWhiteUsername().equals(authDAO.getAuth(authToken).getUsername())){
-                playerColor = ChessGame.TeamColor.WHITE;
+
+            if(gameDAO.getGame(gameID) != null){
+                ChessGame.TeamColor playerColor = null;
+                if(gameDAO.getGame(gameID).getWhiteUsername().equals(authDAO.getAuth(authToken).getUsername())){
+                    playerColor = ChessGame.TeamColor.WHITE;
+                }
+                else if(gameDAO.getGame(gameID).getBlackUsername().equals(authDAO.getAuth(authToken).getUsername())){
+                    playerColor = ChessGame.TeamColor.BLACK;
+                }
+
+
+                ChessGame updatedGame = gameDAO.getGame(gameID).getGame().setUserTeamColor(playerColor);
+                updatedGame = updatedGame.makeMove(newMove);
+                GameData gameData = gameDAO.getGame(gameID);
+                int tempGameID = gameData.getGameID();
+                gameDAO.updateGameStatus(tempGameID, updatedGame);
+                gameData = gameDAO.getGame(gameID);
+
+                var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
+                session.getRemote().sendString(new Gson().toJson(newMessage));
+
+                String responseMessage = "move has been made!";
+                connections.broadcastToGame(authToken,gameID,null,ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
+                connections.broadcastToGame(authToken,gameID,responseMessage,ServerMessage.ServerMessageType.NOTIFICATION,gameData.getGame());
+
             }
-            else if(gameDAO.getGame(gameID).getBlackUsername().equals(authDAO.getAuth(authToken).getUsername())){
-                playerColor = ChessGame.TeamColor.BLACK;
+            else{
+                var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Error: Game is not currently in progress");
+                session.getRemote().sendString(new Gson().toJson(newMessage));
             }
-
-
-            ChessGame updatedGame = gameDAO.getGame(gameID).getGame().setUserTeamColor(playerColor);
-            updatedGame = updatedGame.makeMove(newMove);
-            GameData gameData = gameDAO.getGame(gameID);
-            int tempGameID = gameData.getGameID();
-            gameDAO.updateGameStatus(tempGameID, updatedGame);
-            gameData = gameDAO.getGame(gameID);
-
-            var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
-            session.getRemote().sendString(new Gson().toJson(newMessage));
-
-            String responseMessage = "move has been made!";
-            connections.broadcastToGame(authToken,gameID,null,ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
-            connections.broadcastToGame(authToken,gameID,responseMessage,ServerMessage.ServerMessageType.NOTIFICATION,gameData.getGame());
 
 //            probably need to update these catch blocks to send error messages xd
 
@@ -230,14 +238,27 @@ public class WebSocketHandler {
             SQLAuthDAO authDAO = new SQLAuthDAO();
             SQLGameDAO gameDAO = new SQLGameDAO();
             String username = authDAO.getAuth(authToken).getUsername();
+            if(gameDAO.getGame(gameID) != null){
+                if(gameDAO.getGame(gameID).getBlackUsername().equalsIgnoreCase(username) || gameDAO.getGame(gameID).getWhiteUsername().equalsIgnoreCase(username)){
+                    gameDAO.clearGame(gameID);
+
+                    String responseMessage = username + " has resigned the game! GG";
+                    var newMessage = new Notification(ServerMessage.ServerMessageType.NOTIFICATION, responseMessage);
+                    session.getRemote().sendString(new Gson().toJson(newMessage));
+                    connections.broadcastToGame(authToken, gameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
+                }
+                else{
+                    var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Error: You are not authorized to resign");
+                    session.getRemote().sendString(new Gson().toJson(newMessage));
+                }
+            }
+            else{
+                var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Error: Game has already concluded");
+                session.getRemote().sendString(new Gson().toJson(newMessage));
+            }
 
 //            need to remove the game from connections and from the database
-            gameDAO.clearGame(gameID);
 
-            String responseMessage = username + " has resigned the game! GG";
-            var newMessage = new Notification(ServerMessage.ServerMessageType.NOTIFICATION, responseMessage);
-            session.getRemote().sendString(new Gson().toJson(newMessage));
-            connections.broadcastToGame(authToken, gameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
         } catch (DataAccessException e) {

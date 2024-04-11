@@ -128,9 +128,9 @@ public class ChessClient {
         this.gameID = Integer.parseInt(params[0]);
         if(params.length > 1){
             this.playerColor = params[1];
+            server.joinGame(this.visitorAuthToken,playerColor,gameID);
             ws = new WebSocketFacade(serverUrl);
             ws.joinGamePlayer(visitorAuthToken,playerColor,gameID);
-            server.joinGame(this.visitorAuthToken,playerColor,gameID);
             state = State.GAMEPLAY;
             new GameplayRepl(this);
         }

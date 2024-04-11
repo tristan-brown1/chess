@@ -54,30 +54,41 @@ public class WebSocketHandler {
             SQLAuthDAO authDAO = new SQLAuthDAO();
             GameData gameData = gameDAO.getGame(tempGameID);
             if(gameData != null){
-
                 if(authDAO.getAuth(authToken) != null){
                     String username = authDAO.getAuth(authToken).getUsername();
                     if(playerColor.equalsIgnoreCase("white")){
-                        if(gameData.getWhiteUsername() == null || gameData.getWhiteUsername().equalsIgnoreCase(username)){
-                            var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
-                            session.getRemote().sendString(new Gson().toJson(newMessage));
-                            String responseMessage =  username + " has entered the game as a player \n";
-                            connections.broadcastToGame(authToken,tempGameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
+                        if(gameData.getWhiteUsername() != null){
+                            if(gameData.getWhiteUsername().equalsIgnoreCase(username)){
+                                var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
+                                session.getRemote().sendString(new Gson().toJson(newMessage));
+                                String responseMessage =  username + " has entered the game as a player \n";
+                                connections.broadcastToGame(authToken,tempGameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
+                            }
+                            else{
+                                var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Invalid join request: team is already taken");
+                                session.getRemote().sendString(new Gson().toJson(newMessage));
+                            }
                         }
                         else{
-                            var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Invalid join request: team is already taken");
+                            var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Invalid join request: Empty Game");
                             session.getRemote().sendString(new Gson().toJson(newMessage));
                         }
                     }
                     else {
-                        if(gameData.getBlackUsername() == null|| gameData.getBlackUsername().equalsIgnoreCase(username)){
-                            var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
-                            session.getRemote().sendString(new Gson().toJson(newMessage));
-                            String responseMessage =  username + " has entered the game as a player \n";
-                            connections.broadcastToGame(authToken,tempGameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
+                        if(gameData.getBlackUsername() != null){
+                            if(gameData.getBlackUsername().equalsIgnoreCase(username)){
+                                var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
+                                session.getRemote().sendString(new Gson().toJson(newMessage));
+                                String responseMessage =  username + " has entered the game as a player \n";
+                                connections.broadcastToGame(authToken,tempGameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
+                            }
+                            else{
+                                var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Invalid join request: team is already taken");
+                                session.getRemote().sendString(new Gson().toJson(newMessage));
+                            }
                         }
                         else{
-                            var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Invalid join request: team is already taken");
+                            var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Invalid join request: Empty Game");
                             session.getRemote().sendString(new Gson().toJson(newMessage));
                         }
                     }

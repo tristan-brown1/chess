@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Scanner;
 
 import dataAccess.DataAccessException;
 import dataAccess.ResponseException;
@@ -16,6 +17,9 @@ import server.ResultData;
 import ui.REPLs.GameplayRepl;
 //import ui.websocket.NotificationHandler;
 import ui.websocket.WebSocketFacade;
+
+import static ui.EscapeSequences.GREEN;
+import static ui.EscapeSequences.RESET;
 
 
 public class ChessClient {
@@ -218,9 +222,19 @@ public class ChessClient {
     }
 
     public String resignGame() throws ResponseException, IOException {
-        ws = new WebSocketFacade(serverUrl);
-        ws.resign(visitorAuthToken,gameID);
-        return String.format("%s has resigned. GG!", visitorName);
+        System.out.print("Are you sure?  type 'yes' or 'no'\n");
+        System.out.print("\n" + RESET + ">>> " + GREEN);
+        Scanner scanner = new Scanner(System.in);
+        String line = scanner.nextLine();
+
+        if(line.equalsIgnoreCase("yes")){
+            ws = new WebSocketFacade(serverUrl);
+            ws.resign(visitorAuthToken,gameID);
+            return "";
+        }
+        else{
+            return "";
+        }
     }
 
     public String highlightMoves() throws ResponseException, IOException {
@@ -249,6 +263,7 @@ public class ChessClient {
                 - redraw - redraws the chess board
                 - leave - return to logged-in menu
                 - highlight legal moves - highlights possible legal moves
+                - resign - concede the game
                 - help - with possible commands
                 """;
         }

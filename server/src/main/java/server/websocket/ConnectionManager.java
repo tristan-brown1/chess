@@ -24,11 +24,11 @@ public class ConnectionManager {
         connections.remove(visitorName);
     }
 
-    public void broadcastToGame(String excludeVisitorName, int visitorGameID, String responseMessage, ServerMessage.ServerMessageType messageType, ChessGame game) throws IOException {
+    public void broadcastToGame(String excludeVisitorAuth, int visitorGameID, String responseMessage, ServerMessage.ServerMessageType messageType, ChessGame game) throws IOException {
         var removeList = new ArrayList<Connection>();
         for (var c : connections.values()) {
             if (c.session.isOpen()) {
-                if (!c.visitorAuth.equals(excludeVisitorName)) {
+                if (!c.visitorAuth.equals(excludeVisitorAuth)) {
                     if(c.gameID == visitorGameID){
                         if(messageType == ServerMessage.ServerMessageType.NOTIFICATION){
                             var newMessage = new Notification(ServerMessage.ServerMessageType.NOTIFICATION, responseMessage);

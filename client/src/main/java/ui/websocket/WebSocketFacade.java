@@ -106,8 +106,6 @@ public class WebSocketFacade extends Endpoint {
     }
 
     public void resign(String authToken, int gameID) throws ResponseException {
-//        need to print out confirmation message
-
         try {
             var newMessage = new Resign(authToken,gameID);
             newMessage.setCommandType(UserGameCommand.CommandType.RESIGN);

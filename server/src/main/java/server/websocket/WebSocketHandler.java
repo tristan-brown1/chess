@@ -223,14 +223,25 @@ public class WebSocketHandler {
 
     private void resign(Session session, String message) throws IOException, ResponseException {
 //        need to actually resign game and then distribute responses correctly
-
-
-
         try {
-            var newMessage = new Notification(ServerMessage.ServerMessageType.NOTIFICATION, message);
+            Resign resign = new Gson().fromJson(message, Resign.class);
+            String authToken = resign.getAuthString();
+            int gameID = resign.getGameID();
+            SQLAuthDAO authDAO = new SQLAuthDAO();
+            SQLGameDAO gameDAO = new SQLGameDAO();
+            String username = authDAO.getAuth(authToken).getUsername();
+
+//            need to remove the game from connections and from the database
+            gameDAO.clearGame(gameID);
+
+            String responseMessage = username + " has resigned the game! GG";
+            var newMessage = new Notification(ServerMessage.ServerMessageType.NOTIFICATION, responseMessage);
             session.getRemote().sendString(new Gson().toJson(newMessage));
+            connections.broadcastToGame(authToken, gameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 

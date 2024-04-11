@@ -6,4 +6,8 @@ public class Resign extends UserGameCommand{
         super(authToken);
         this.gameID = gameID;
     }
+
+    public int getGameID() {
+        return gameID;
+    }
 }

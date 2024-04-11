@@ -28,6 +28,11 @@ public class SQLGameDAO implements GameDAO{
         executeStatement(createStatements);
     }
 
+    public void clearGame(int gameID) throws DataAccessException {
+        String createGameStatement = "DELETE FROM game WHERE gameID = ?";
+        executeUpdate(createGameStatement,gameID);
+    }
+
     public void updateGameStatus(int gameID, ChessGame game) throws DataAccessException {
         String createGameStatement = "UPDATE game SET game = ? WHERE gameID = ?";
         executeUpdate(createGameStatement,new Gson().toJson(game),gameID);

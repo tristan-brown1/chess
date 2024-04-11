@@ -2,8 +2,8 @@ package ui;
 
 import com.google.gson.Gson;
 import exception.ResponseException;
-import model.UserData;
-import server.ResultData;
+import sharedDataClasses.UserData;
+import sharedDataClasses.ResultData;
 import ui.RequestClasses.CreateGameRequest;
 import ui.RequestClasses.JoinGameRequest;
 import ui.RequestClasses.LoginRequest;
@@ -13,8 +13,6 @@ import ui.RequestClasses.LogoutRequest;
 
 import java.io.*;
 import java.net.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ServerFacade {
 

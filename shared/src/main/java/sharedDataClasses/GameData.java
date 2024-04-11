@@ -1,4 +1,4 @@
-package model;
+package sharedDataClasses;
 
 import chess.ChessBoard;
 import chess.ChessGame;

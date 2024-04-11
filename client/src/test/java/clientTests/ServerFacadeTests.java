@@ -2,7 +2,7 @@ package clientTests;
 
 import dataAccess.ResponseException;
 import org.junit.jupiter.api.*;
-import server.ResultData;
+import sharedDataClasses.ResultData;
 import server.Server;
 import ui.ServerFacade;
 

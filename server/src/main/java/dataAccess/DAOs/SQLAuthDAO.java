@@ -2,12 +2,10 @@ package dataAccess.DAOs;
 
 import dataAccess.DataAccessException;
 import dataAccess.DatabaseManager;
-import model.AuthData;
-import model.UserData;
+import sharedDataClasses.AuthData;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.UUID;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;

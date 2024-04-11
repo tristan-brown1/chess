@@ -2,17 +2,13 @@ package dataAccessTests;
 
 import dataAccess.DAOs.AuthDAO;
 import dataAccess.DAOs.SQLAuthDAO;
-import dataAccess.DAOs.SQLUserDAO;
-import dataAccess.DAOs.UserDAO;
 import dataAccess.DataAccessException;
-import model.AuthData;
-import model.UserData;
+import sharedDataClasses.AuthData;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import passoffTests.obfuscatedTestClasses.TestServerFacade;
 import passoffTests.testClasses.TestModels;
-import server.ResultData;
 import server.Server;
 import service.ChessService;
 

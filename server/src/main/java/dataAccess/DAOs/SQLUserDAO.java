@@ -1,9 +1,8 @@
 package dataAccess.DAOs;
 
-import com.google.gson.Gson;
 import dataAccess.DataAccessException;
 import dataAccess.DatabaseManager;
-import model.UserData;
+import sharedDataClasses.UserData;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

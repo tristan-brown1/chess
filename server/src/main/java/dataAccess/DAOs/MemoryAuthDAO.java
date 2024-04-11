@@ -1,6 +1,6 @@
 package dataAccess.DAOs;
 
-import model.AuthData;
+import sharedDataClasses.AuthData;
 
 import java.util.HashMap;
 import java.util.UUID;

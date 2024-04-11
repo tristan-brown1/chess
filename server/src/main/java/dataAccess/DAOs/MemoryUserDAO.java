@@ -1,6 +1,6 @@
 package dataAccess.DAOs;
 
-import model.UserData;
+import sharedDataClasses.UserData;
 
 import java.util.HashMap;
 

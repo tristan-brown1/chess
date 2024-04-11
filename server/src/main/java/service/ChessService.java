@@ -3,11 +3,11 @@ package service;
 import dataAccess.DAOs.*;
 import dataAccess.DataAccessException;
 import dataAccess.DatabaseManager;
-import model.AuthData;
-import model.GameData;
+import sharedDataClasses.AuthData;
+import sharedDataClasses.GameData;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import server.ResultData;
-import model.UserData;
+import sharedDataClasses.ResultData;
+import sharedDataClasses.UserData;
 
 import java.sql.SQLException;
 

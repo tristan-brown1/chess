@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import dataAccess.DataAccessException;
 import server.websocket.WebSocketHandler;
 import service.ChessService;
+import sharedDataClasses.ResultData;
 import spark.*;
 
 import java.util.HashMap;

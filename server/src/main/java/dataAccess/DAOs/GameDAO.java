@@ -1,7 +1,7 @@
 package dataAccess.DAOs;
 
 import dataAccess.DataAccessException;
-import model.GameData;
+import sharedDataClasses.GameData;
 
 import java.util.HashSet;
 

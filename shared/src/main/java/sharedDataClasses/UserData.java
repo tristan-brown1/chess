@@ -1,4 +1,4 @@
-package model;
+package sharedDataClasses;
 
 public class UserData {
 

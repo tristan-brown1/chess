@@ -1,8 +1,8 @@
-package server;
+package sharedDataClasses;
 
-import model.AuthData;
-import model.GameData;
-import model.UserData;
+import sharedDataClasses.AuthData;
+import sharedDataClasses.GameData;
+import sharedDataClasses.UserData;
 
 import java.util.HashSet;
 

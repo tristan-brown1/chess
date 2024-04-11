@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 
 import exception.ResponseException;
-import model.GameData;
+import sharedDataClasses.GameData;
 import ui.REPLs.GameplayRepl;
 import ui.websocket.WebSocketFacade;
 

@@ -1,12 +1,11 @@
 package service;
 
-import dataAccess.DAOs.SQLUserDAO;
 import dataAccess.DataAccessException;
 import org.junit.jupiter.api.*;
 import passoffTests.obfuscatedTestClasses.TestServerFacade;
 import passoffTests.testClasses.TestException;
 import passoffTests.testClasses.TestModels;
-import server.ResultData;
+import sharedDataClasses.ResultData;
 import server.Server;
 
 class ChessServiceTest {

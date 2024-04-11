@@ -1,12 +1,9 @@
 package dataAccessTests;
 
-import dataAccess.DAOs.AuthDAO;
 import dataAccess.DAOs.GameDAO;
-import dataAccess.DAOs.SQLAuthDAO;
 import dataAccess.DAOs.SQLGameDAO;
 import dataAccess.DataAccessException;
-import model.AuthData;
-import model.GameData;
+import sharedDataClasses.GameData;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

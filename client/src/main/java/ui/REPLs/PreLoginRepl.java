@@ -2,12 +2,10 @@ package ui.REPLs;
 
 import ui.ChessClient;
 
-import java.util.Objects;
 import java.util.Scanner;
-import static ui.EscapeSequences.*;
 
 
-public class PreLoginRepl implements repl {
+public class PreLoginRepl implements Repl {
 
     private final ChessClient client;
 

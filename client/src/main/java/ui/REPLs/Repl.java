@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
 
-public interface repl {
+public interface Repl {
 
 
     default String getString(Scanner scanner, String result, ChessClient client) {

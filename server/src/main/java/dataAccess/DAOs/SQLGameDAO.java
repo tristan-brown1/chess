@@ -125,9 +125,6 @@ public class SQLGameDAO implements GameDAO{
             Random random = new Random();
             newGame.setGameID(random.nextInt(10,10000));
             newGame.setGameName(gameName);
-//            ChessBoard chessBoard = new ChessBoard();
-//            chessBoard.resetBoard();
-//            newGame.getGame().setBoard(chessBoard);
             String gameJson = new Gson().toJson(newGame.getGame());
 
             String createGameStatement =

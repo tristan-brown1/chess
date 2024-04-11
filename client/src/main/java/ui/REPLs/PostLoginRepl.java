@@ -5,9 +5,7 @@ import ui.State;
 
 import java.util.Scanner;
 
-import static ui.EscapeSequences.*;
-
-public class PostLoginRepl implements repl{
+public class PostLoginRepl implements Repl {
     private final ChessClient client;
 
     public PostLoginRepl(ChessClient client) {

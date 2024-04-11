@@ -71,32 +71,9 @@ public class ServerFacade {
         return this.makeRequest("PUT", path, joinGameRequest);
     }
 
-
-
-//
-//    public void deletePet(int id) throws ResponseException {
-//        var path = String.format("/pet/%s", id);
-//        this.makeRequest("DELETE", path, null, null);
-//    }
-//
-//    public void deleteAllPets() throws ResponseException {
-//        var path = "/pet";
-//        this.makeRequest("DELETE", path, null, null);
-//    }
-//
-//    public Pet[] listPets() throws ResponseException {
-//        var path = "/pet";
-//        record listPetResponse(Pet[] pet) {
-//        }
-//        var response = this.makeRequest("GET", path, null, listPetResponse.class);
-//        return response.pet();
-//    }
-
     private <T> T makeRequest(String method, String path, Object request) throws ResponseException {
         try {
             URL url = (new URI(serverUrl + path)).toURL();
-//            URI uri = new URI(serverUrl + path);
-//            HttpURLConnection http = (HttpURLConnection) uri.toURL().openConnection();
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestMethod(method);
             http.setDoOutput(true);
@@ -104,10 +81,6 @@ public class ServerFacade {
 
             writeBody(request, http);
             http.connect();
-//            try (InputStream respBody = http.getInputStream()) {
-//                InputStreamReader inputStreamReader = new InputStreamReader(respBody);
-//                System.out.println(new Gson().fromJson(inputStreamReader, Map.class));
-//            }
             throwIfNotSuccessful(http);
             return readBody(http, (Class<T>)ResultData.class);
         } catch (Exception ex) {

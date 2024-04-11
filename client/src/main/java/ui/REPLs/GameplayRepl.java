@@ -1,14 +1,13 @@
 package ui.REPLs;
 
 import ui.ChessClient;
-import ui.ChessImage;
 import ui.State;
 
 import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
 
-public class GameplayRepl implements repl{
+public class GameplayRepl implements Repl {
 
     private final ChessClient client;
 

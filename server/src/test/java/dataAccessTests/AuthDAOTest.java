@@ -1,6 +1,7 @@
 package dataAccessTests;
 
-import dataAccess.DAOs.AuthDAO;
+
+import dataAccess.DAOs.DAO;
 import dataAccess.DAOs.SQLAuthDAO;
 import exception.DataAccessException;
 import sharedDataClasses.AuthData;
@@ -30,7 +31,7 @@ class AuthDAOTest {
 
     private static TestServerFacade serverFacade;
     private static Server server;
-    private AuthDAO authDAO;
+    private DAO authDAO;
 
 
     AuthDAOTest() throws DataAccessException {

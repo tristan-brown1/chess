@@ -1,11 +1,15 @@
 package dataAccess.DAOs;
 
+import exception.DataAccessException;
 import sharedDataClasses.AuthData;
+import sharedDataClasses.GameData;
+import sharedDataClasses.UserData;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
 
-public class MemoryAuthDAO implements AuthDAO{
+public class MemoryAuthDAO implements DAO{
 
     final private HashMap<String,AuthData> auth;
 

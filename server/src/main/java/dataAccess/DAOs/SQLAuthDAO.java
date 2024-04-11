@@ -11,7 +11,7 @@ import java.util.UUID;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import static java.sql.Types.NULL;
 
-public class SQLAuthDAO implements AuthDAO{
+public class SQLAuthDAO implements DAO{
 
 
     public void clearAll() throws DataAccessException {
@@ -23,7 +23,7 @@ public class SQLAuthDAO implements AuthDAO{
         executeStatement(createStatements);
     }
 
-    @Override
+
     public AuthData createAuth(String username) throws DataAccessException {
         if(username == null){
             return null;
@@ -40,7 +40,6 @@ public class SQLAuthDAO implements AuthDAO{
         }
     }
 
-    @Override
     public AuthData getAuth(String authToken) {
 
         try (var conn = DatabaseManager.getConnection()) {
@@ -62,7 +61,6 @@ public class SQLAuthDAO implements AuthDAO{
         }
     }
 
-    @Override
     public void deleteAuth(String authToken) throws DataAccessException {
         String createUserStatements = "DELETE FROM auth WHERE authToken = ?";
         executeUpdate(createUserStatements,authToken);

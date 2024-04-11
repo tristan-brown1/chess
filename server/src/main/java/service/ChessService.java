@@ -13,7 +13,7 @@ import java.sql.SQLException;
 
 public class ChessService {
 
-    private  DAO authDAO;
+    private  AuthDAO authDAO;
     private  UserDAO userDAO;
     private  GameDAO gameDAO;
 

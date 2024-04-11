@@ -49,7 +49,7 @@ public class SQLGameDAO implements GameDAO{
         }
     }
 
-    @Override
+
     public Object updateGame(GameData gameData, String playerColor, String username) throws DataAccessException {
 
         if(gameData == null || playerColor == null || username == null){
@@ -73,7 +73,7 @@ public class SQLGameDAO implements GameDAO{
         
     }
 
-    @Override
+
     public GameData getGame(int gameID) {
 
         try (var conn = DatabaseManager.getConnection()) {
@@ -96,7 +96,6 @@ public class SQLGameDAO implements GameDAO{
 
     }
 
-    @Override
     public HashSet getGames() throws DataAccessException {
         var result = new HashSet<GameData>();
         try (var conn = DatabaseManager.getConnection()) {
@@ -114,7 +113,6 @@ public class SQLGameDAO implements GameDAO{
         return result;
     }
 
-    @Override
     public GameData createGame(String gameName) throws DataAccessException {
 
         if(gameName == null){
@@ -136,31 +134,7 @@ public class SQLGameDAO implements GameDAO{
 
     }
 
-    private void executeUpdate(String statement, Object... params) throws DataAccessException {
-        try (var conn = DatabaseManager.getConnection()) {
-            try (var ps = conn.prepareStatement(statement, RETURN_GENERATED_KEYS)) {
-                for (var i = 0; i < params.length; i++) {
-                    var param = params[i];
-                    switch (param) {
-                        case String p -> ps.setString(i + 1, p);
-                        case Integer p -> ps.setInt(i + 1, p);
-                        case null -> ps.setNull(i + 1, NULL);
-                        default -> {
-                        }
-                    }
-                }
-                ps.executeUpdate();
 
-                var rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    rs.getInt(1);
-                }
-
-            }
-        } catch (SQLException e) {
-            throw new DataAccessException(String.format("unable to update database: %s, %s", statement, e.getMessage()));
-        }
-    }
 
     private static void executeStatement(String[] createStatements) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {

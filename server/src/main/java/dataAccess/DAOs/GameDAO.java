@@ -5,7 +5,7 @@ import sharedDataClasses.GameData;
 
 import java.util.HashSet;
 
-public interface GameDAO{
+public interface GameDAO extends DAO{
 
     public void clearAll() throws DataAccessException;
 

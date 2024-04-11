@@ -3,7 +3,7 @@ package dataAccess.DAOs;
 import exception.DataAccessException;
 import sharedDataClasses.AuthData;
 
-public interface AuthDAO{
+public interface AuthDAO extends DAO {
 
 
     public void clearAll() throws DataAccessException;

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
 
-public class MemoryAuthDAO implements DAO{
+public class MemoryAuthDAO implements AuthDAO{
 
     final private HashMap<String,AuthData> auth;
 

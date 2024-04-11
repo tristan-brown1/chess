@@ -53,32 +53,49 @@ public class WebSocketHandler {
             SQLGameDAO gameDAO = new SQLGameDAO();
             SQLAuthDAO authDAO = new SQLAuthDAO();
             GameData gameData = gameDAO.getGame(tempGameID);
-            String username = authDAO.getAuth(authToken).getUsername();
+            if(gameData != null){
 
-            if(playerColor.equalsIgnoreCase("white")){
-                if(gameData.getWhiteUsername() == null || gameData.getWhiteUsername().equalsIgnoreCase(username)){
-                    var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
-                    session.getRemote().sendString(new Gson().toJson(newMessage));
-                    String responseMessage =  username + " has entered the game as a player \n";
-                    connections.broadcastToGame(authToken,tempGameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
+                if(authDAO.getAuth(authToken) != null){
+                    String username = authDAO.getAuth(authToken).getUsername();
+                    if(playerColor.equalsIgnoreCase("white")){
+                        if(gameData.getWhiteUsername() == null || gameData.getWhiteUsername().equalsIgnoreCase(username)){
+                            var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
+                            session.getRemote().sendString(new Gson().toJson(newMessage));
+                            String responseMessage =  username + " has entered the game as a player \n";
+                            connections.broadcastToGame(authToken,tempGameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
+                        }
+                        else{
+                            var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Invalid join request: team is already taken");
+                            session.getRemote().sendString(new Gson().toJson(newMessage));
+                        }
+                    }
+                    else {
+                        if(gameData.getBlackUsername() == null|| gameData.getBlackUsername().equalsIgnoreCase(username)){
+                            var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
+                            session.getRemote().sendString(new Gson().toJson(newMessage));
+                            String responseMessage =  username + " has entered the game as a player \n";
+                            connections.broadcastToGame(authToken,tempGameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
+                        }
+                        else{
+                            var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Invalid join request: team is already taken");
+                            session.getRemote().sendString(new Gson().toJson(newMessage));
+                        }
+                    }
+
+
                 }
                 else{
-                    var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Invalid join request: team is already taken");
+                    var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Invalid join request: authentication is invalid");
                     session.getRemote().sendString(new Gson().toJson(newMessage));
                 }
+
             }
-            else {
-                if(gameData.getBlackUsername() == null|| gameData.getBlackUsername().equalsIgnoreCase(username)){
-                    var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
-                    session.getRemote().sendString(new Gson().toJson(newMessage));
-                    String responseMessage =  username + " has entered the game as a player \n";
-                    connections.broadcastToGame(authToken,tempGameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
-                }
-                else{
-                    var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Invalid join request: team is already taken");
-                    session.getRemote().sendString(new Gson().toJson(newMessage));
-                }
+            else{
+                var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Invalid join request: game id number is incorrect");
+                session.getRemote().sendString(new Gson().toJson(newMessage));
             }
+
+
 
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
@@ -95,11 +112,26 @@ public class WebSocketHandler {
             SQLGameDAO gameDAO = new SQLGameDAO();
             SQLAuthDAO authDAO = new SQLAuthDAO();
             GameData gameData = gameDAO.getGame(tempGameID);
-            String username = authDAO.getAuth(authToken).getUsername();
-            var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
-            session.getRemote().sendString(new Gson().toJson(newMessage));
-            String responseMessage =  username + " has entered the game as a watcher\n";
-            connections.broadcastToGame(authToken,tempGameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
+            if(gameData != null){
+                if(authDAO.getAuth(authToken) != null){
+
+                    String username = authDAO.getAuth(authToken).getUsername();
+                    var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
+                    session.getRemote().sendString(new Gson().toJson(newMessage));
+                    String responseMessage =  username + " has entered the game as a watcher\n";
+                    connections.broadcastToGame(authToken,tempGameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
+
+                }
+                else{
+                    var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Invalid join request: authentication is invalid");
+                    session.getRemote().sendString(new Gson().toJson(newMessage));
+                }
+            }
+            else{
+                var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Invalid join request: game id number is incorrect");
+                session.getRemote().sendString(new Gson().toJson(newMessage));
+            }
+
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
         }
@@ -112,11 +144,24 @@ public class WebSocketHandler {
             String authToken = makeMove.getAuthString();
             int gameID = makeMove.getGameID();
             ChessMove newMove = makeMove.getMove();
+
             SQLGameDAO gameDAO = new SQLGameDAO();
             SQLAuthDAO authDAO = new SQLAuthDAO();
 
 //            try this
-            ChessGame updatedGame = gameDAO.getGame(gameID).getGame().makeMove(newMove);
+
+//            ChessGame.TeamColor playerColor = makeMove.getPlayerColor();
+            ChessGame.TeamColor playerColor = null;
+            if(gameDAO.getGame(gameID).getWhiteUsername().equals(authDAO.getAuth(authToken).getUsername())){
+                playerColor = ChessGame.TeamColor.WHITE;
+            }
+            else if(gameDAO.getGame(gameID).getBlackUsername().equals(authDAO.getAuth(authToken).getUsername())){
+                playerColor = ChessGame.TeamColor.BLACK;
+            }
+
+
+            ChessGame updatedGame = gameDAO.getGame(gameID).getGame().setUserTeamColor(playerColor);
+            updatedGame = updatedGame.makeMove(newMove);
             GameData gameData = gameDAO.getGame(gameID);
             int tempGameID = gameData.getGameID();
             gameDAO.updateGameStatus(tempGameID, updatedGame);
@@ -134,7 +179,8 @@ public class WebSocketHandler {
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
         } catch (InvalidMoveException | DataAccessException e) {
-            throw new RuntimeException(e);
+            var newMessage = new Error(ServerMessage.ServerMessageType.ERROR,"Error: move is invalid");
+            session.getRemote().sendString(new Gson().toJson(newMessage));
         }
     }
 

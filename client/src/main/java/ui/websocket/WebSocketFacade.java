@@ -119,10 +119,10 @@ public class WebSocketFacade extends Endpoint {
         System.out.print("resigning game");
     }
 
-    public void makeMove(String authToken, int gameID, ChessMove newMove) throws ResponseException {
+    public void makeMove(String authToken, int gameID, ChessMove newMove, ChessGame.TeamColor playerColor) throws ResponseException {
 
         try {
-            var newMessage = new MakeMove(authToken,gameID,newMove);
+            var newMessage = new MakeMove(authToken,gameID,newMove,playerColor);
             newMessage.setCommandType(UserGameCommand.CommandType.MAKE_MOVE);
             this.session.getBasicRemote().sendText(new Gson().toJson(newMessage));
         } catch (IOException ex) {

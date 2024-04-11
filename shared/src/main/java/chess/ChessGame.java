@@ -16,10 +16,16 @@ public class ChessGame {
 
     private ChessBoard gameBoard = new ChessBoard();
     private TeamColor teamColor;
+    private TeamColor userTeamColor;
 
 
     public ChessGame() {
         setTeamTurn(TeamColor.WHITE);
+    }
+
+    public ChessGame setUserTeamColor(TeamColor userTeamColor) {
+        this.userTeamColor = userTeamColor;
+        return this;
     }
 
     /**
@@ -103,8 +109,11 @@ public class ChessGame {
         if(!validMoves.contains(move)){
             throw new InvalidMoveException("move is not contained in validMoves");
         }
-        else if(teamColor != this.gameBoard.getPiece(move.getStartPosition()).getTeamColor()){
+        else if(this.userTeamColor != this.gameBoard.getPiece(move.getStartPosition()).getTeamColor()){
             throw new InvalidMoveException("move is of the wrong color");
+        }
+        else if(this.userTeamColor != this.teamColor){
+            throw new InvalidMoveException("Not your turn!");
         }
         else if(move.getPromotionPiece() != null){
             ChessPiece replacementPiece = new ChessPiece(this.gameBoard.getPiece(move.getStartPosition()).getTeamColor(),move.getPromotionPiece());

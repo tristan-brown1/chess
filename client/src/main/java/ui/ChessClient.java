@@ -173,9 +173,18 @@ public class ChessClient {
         ChessPosition startPosition = new ChessPosition(start1,start2Int);
         ChessPosition endPosition = new ChessPosition(end1,end2Int);
         ChessMove newMove = new ChessMove(startPosition,endPosition);
+        if(playerColor.equalsIgnoreCase("white")){
+            ChessGame.TeamColor playerColorType = ChessGame.TeamColor.WHITE;
+            ws = new WebSocketFacade(serverUrl);
+            ws.makeMove(visitorAuthToken,gameID,newMove, playerColorType);
+        }
+        else{
+            ChessGame.TeamColor playerColorType = ChessGame.TeamColor.BLACK;
+            ws = new WebSocketFacade(serverUrl);
+            ws.makeMove(visitorAuthToken,gameID,newMove, playerColorType);
+        }
 
-        ws = new WebSocketFacade(serverUrl);
-        ws.makeMove(visitorAuthToken,gameID,newMove);
+
         return "\n";
     }
 

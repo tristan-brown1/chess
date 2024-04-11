@@ -4,17 +4,14 @@ import chess.ChessGame;
 import chess.ChessMove;
 import chess.ChessPosition;
 import com.google.gson.Gson;
-import dataAccess.DAOs.SQLGameDAO;
 import ui.ChessImage;
 import webSocketMessages.serverMessages.Error;
 import webSocketMessages.serverMessages.LoadGame;
 import webSocketMessages.serverMessages.Notification;
 import webSocketMessages.serverMessages.ServerMessage;
-import dataAccess.ResponseException;
+import exception.ResponseException;
 import webSocketMessages.userCommands.*;
-//import exception.ResponseException;
 
-import javax.swing.*;
 import javax.websocket.*;
 import java.io.IOException;
 import java.net.URI;

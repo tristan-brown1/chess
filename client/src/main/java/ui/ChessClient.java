@@ -10,12 +10,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 
-import dataAccess.DataAccessException;
-import dataAccess.ResponseException;
+
+import exception.ResponseException;
 import model.GameData;
-import server.ResultData;
 import ui.REPLs.GameplayRepl;
-//import ui.websocket.NotificationHandler;
 import ui.websocket.WebSocketFacade;
 
 import static ui.EscapeSequences.GREEN;
@@ -139,8 +137,7 @@ public class ChessClient {
             new GameplayRepl(this);
         }
         else{
-            ResultData resultData = server.joinGame(this.visitorAuthToken,null,gameID);
-            ChessGame chessGame = resultData.getGameData().getGame();
+            server.joinGame(this.visitorAuthToken,null,gameID);
             ws = new WebSocketFacade(serverUrl);
             ws.joinGameObserver(visitorAuthToken,gameID);
             state = State.GAMEPLAY;

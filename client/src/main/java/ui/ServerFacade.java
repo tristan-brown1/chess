@@ -1,7 +1,7 @@
 package ui;
 
 import com.google.gson.Gson;
-import dataAccess.ResponseException;
+import exception.ResponseException;
 import model.UserData;
 import server.ResultData;
 import ui.RequestClasses.CreateGameRequest;

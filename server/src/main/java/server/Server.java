@@ -1,7 +1,7 @@
 package server;
 
 import com.google.gson.Gson;
-import dataAccess.DataAccessException;
+import exception.DataAccessException;
 import server.websocket.WebSocketHandler;
 import service.ChessService;
 import sharedDataClasses.ResultData;

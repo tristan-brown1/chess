@@ -1,6 +1,6 @@
 package clientTests;
 
-import dataAccess.ResponseException;
+import exception.ResponseException;
 import org.junit.jupiter.api.*;
 import sharedDataClasses.ResultData;
 import server.Server;

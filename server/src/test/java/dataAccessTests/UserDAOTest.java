@@ -2,7 +2,7 @@ package dataAccessTests;
 
 import dataAccess.DAOs.SQLUserDAO;
 import dataAccess.DAOs.UserDAO;
-import dataAccess.DataAccessException;
+import exception.DataAccessException;
 import sharedDataClasses.UserData;
 import org.junit.jupiter.api.*;
 import passoffTests.obfuscatedTestClasses.TestServerFacade;

@@ -1,6 +1,6 @@
 package dataAccess.DAOs;
 
-import dataAccess.DataAccessException;
+import exception.DataAccessException;
 import sharedDataClasses.UserData;
 
 public interface UserDAO {

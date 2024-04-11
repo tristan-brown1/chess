@@ -2,7 +2,6 @@ package ui.websocket;
 
 import chess.ChessGame;
 import chess.ChessMove;
-import chess.ChessPosition;
 import com.google.gson.Gson;
 import ui.ChessImage;
 import webSocketMessages.serverMessages.Error;

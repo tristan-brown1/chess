@@ -1,7 +1,7 @@
 package service;
 
 import dataAccess.DAOs.*;
-import dataAccess.DataAccessException;
+import exception.DataAccessException;
 import dataAccess.DatabaseManager;
 import sharedDataClasses.AuthData;
 import sharedDataClasses.GameData;

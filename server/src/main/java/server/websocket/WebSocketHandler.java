@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 
 import dataAccess.DAOs.SQLAuthDAO;
 import dataAccess.DAOs.SQLGameDAO;
-import dataAccess.DataAccessException;
+import exception.DataAccessException;
 import sharedDataClasses.GameData;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
@@ -16,7 +16,7 @@ import webSocketMessages.serverMessages.Error;
 import webSocketMessages.serverMessages.LoadGame;
 import webSocketMessages.serverMessages.Notification;
 import webSocketMessages.serverMessages.ServerMessage;
-import dataAccess.ResponseException;
+import exception.ResponseException;
 import webSocketMessages.userCommands.*;
 
 

@@ -1,6 +1,6 @@
 package service;
 
-import dataAccess.DataAccessException;
+import exception.DataAccessException;
 import org.junit.jupiter.api.*;
 import passoffTests.obfuscatedTestClasses.TestServerFacade;
 import passoffTests.testClasses.TestException;

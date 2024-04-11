@@ -19,20 +19,10 @@ public class SQLUserDAO implements UserDAO{
             DROP TABLE IF EXISTS user;
             """
         };
-        executeStatement(createStatements);
+        DAO.executeStatement(createStatements);
     }
 
-    private static void executeStatement(String[] createStatements) throws DataAccessException {
-        try (var conn = DatabaseManager.getConnection()) {
-            for (var statement : createStatements) {
-                try (var preparedStatement = conn.prepareStatement(statement)) {
-                    preparedStatement.executeUpdate();
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataAccessException(String.format("Unable to clear database: %s", ex.getMessage()));
-        }
-    }
+
 
     @Override
     public UserData getUser(String username) throws DataAccessException {
@@ -66,7 +56,7 @@ public class SQLUserDAO implements UserDAO{
                     "INSERT INTO user (username, password, email) VALUES ('" + username + "', '" + password + "', '" + email + "');"
             };
 
-            executeStatement(createUserStatements);
+            DAO.executeStatement(createUserStatements);
             return newUser;
         }
     }

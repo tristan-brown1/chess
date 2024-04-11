@@ -39,6 +39,18 @@ public interface DAO {
         }
     }
 
+    static void executeStatement(String[] createStatements) throws DataAccessException {
+        try (var conn = DatabaseManager.getConnection()) {
+            for (var statement : createStatements) {
+                try (var preparedStatement = conn.prepareStatement(statement)) {
+                    preparedStatement.executeUpdate();
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException(String.format("Unable to clear database: %s", ex.getMessage()));
+        }
+    }
+
 //    do the same things for user and game dao and then implement the copied code into the dao interface for all methods to use and then see if that appeases the autograder
 
 }

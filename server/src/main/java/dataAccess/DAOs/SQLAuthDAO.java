@@ -20,7 +20,7 @@ public class SQLAuthDAO implements AuthDAO{
             DROP TABLE IF EXISTS auth;
             """
         };
-        executeStatement(createStatements);
+        DAO.executeStatement(createStatements);
     }
 
 
@@ -66,17 +66,7 @@ public class SQLAuthDAO implements AuthDAO{
         executeUpdate(createUserStatements,authToken);
     }
 
-    private static void executeStatement(String[] createStatements) throws DataAccessException {
-        try (var conn = DatabaseManager.getConnection()) {
-            for (var statement : createStatements) {
-                try (var preparedStatement = conn.prepareStatement(statement)) {
-                    preparedStatement.executeUpdate();
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataAccessException(String.format("Unable to clear database: %s", ex.getMessage()));
-        }
-    }
+
 
 
 

@@ -3,7 +3,7 @@ package dataAccess.DAOs;
 import exception.DataAccessException;
 import sharedDataClasses.UserData;
 
-public interface UserDAO {
+public interface UserDAO extends DAO{
 
 
     void clear() throws DataAccessException;

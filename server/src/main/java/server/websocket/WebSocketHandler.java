@@ -59,8 +59,7 @@ public class WebSocketHandler {
                     if(playerColor.equalsIgnoreCase("white")){
                         if(gameData.getWhiteUsername() != null){
                             if(gameData.getWhiteUsername().equalsIgnoreCase(username)){
-                                var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
-                                session.getRemote().sendString(new Gson().toJson(newMessage));
+                                sendLoadGameMessage(session, gameData);
                                 String responseMessage =  username + " has entered the game as a player \n";
                                 connections.broadcastToGame(authToken,tempGameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
                             }
@@ -77,8 +76,7 @@ public class WebSocketHandler {
                     else {
                         if(gameData.getBlackUsername() != null){
                             if(gameData.getBlackUsername().equalsIgnoreCase(username)){
-                                var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
-                                session.getRemote().sendString(new Gson().toJson(newMessage));
+                                sendLoadGameMessage(session, gameData);
                                 String responseMessage =  username + " has entered the game as a player \n";
                                 connections.broadcastToGame(authToken,tempGameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
                             }
@@ -113,6 +111,11 @@ public class WebSocketHandler {
         }
     }
 
+    private static void sendLoadGameMessage(Session session, GameData gameData) throws IOException {
+        var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME, gameData.getGame());
+        session.getRemote().sendString(new Gson().toJson(newMessage));
+    }
+
     private void joinObserver(Session session,String message) throws IOException, ResponseException {
 
         JoinObserver joinObserver = new Gson().fromJson(message, JoinObserver.class);
@@ -127,8 +130,7 @@ public class WebSocketHandler {
                 if(authDAO.getAuth(authToken) != null){
 
                     String username = authDAO.getAuth(authToken).getUsername();
-                    var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
-                    session.getRemote().sendString(new Gson().toJson(newMessage));
+                    sendLoadGameMessage(session, gameData);
                     String responseMessage =  username + " has entered the game as a watcher\n";
                     connections.broadcastToGame(authToken,tempGameID,responseMessage, ServerMessage.ServerMessageType.NOTIFICATION,null);
 
@@ -180,8 +182,7 @@ public class WebSocketHandler {
                 gameDAO.updateGameStatus(tempGameID, updatedGame);
                 gameData = gameDAO.getGame(gameID);
 
-                var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
-                session.getRemote().sendString(new Gson().toJson(newMessage));
+                sendLoadGameMessage(session, gameData);
 
                 String responseMessage = "move has been made!";
                 connections.broadcastToGame(authToken,gameID,null,ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
@@ -275,8 +276,7 @@ public class WebSocketHandler {
             SQLAuthDAO authDAO = new SQLAuthDAO();
             GameData gameData = gameDAO.getGame(tempGameID);
 //            String username = authDAO.getAuth(authToken).getUsername();
-            var newMessage = new LoadGame(ServerMessage.ServerMessageType.LOAD_GAME,gameData.getGame());
-            session.getRemote().sendString(new Gson().toJson(newMessage));
+            sendLoadGameMessage(session, gameData);
         } catch (IOException ex) {
             throw new ResponseException(500, ex.getMessage());
         }

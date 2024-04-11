@@ -7,7 +7,7 @@ import java.util.Scanner;
 import static ui.EscapeSequences.*;
 
 
-public class PreLoginRepl {
+public class PreLoginRepl implements repl {
 
     private final ChessClient client;
 
@@ -24,22 +24,14 @@ public class PreLoginRepl {
         String line = scanner.nextLine();
         System.out.print(client.help());
         while (!result.equals("quit") && !result.contains("logged in")){
-            printPrompt();
-            line = scanner.nextLine();
-            try {
-                result = client.eval(line);
-                System.out.print(BLUE + result);
-            } catch (Throwable e) {
-                var msg = e.toString();
-                System.out.print(msg);
-            }
+            result = getString(scanner, result, client);
         }
     }
 
 
-    private void printPrompt() {
-        System.out.print("\n" + RESET + ">>> " + GREEN);
-    }
+
+
+
 
 
 }

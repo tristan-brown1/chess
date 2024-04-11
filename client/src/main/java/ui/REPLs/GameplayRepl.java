@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
 
-public class GameplayRepl {
+public class GameplayRepl implements repl{
 
     private final ChessClient client;
 
@@ -37,15 +37,5 @@ public class GameplayRepl {
             }
         }
     }
-
-
-    private void printPrompt() {
-        System.out.print("\n" + RESET + ">>> " + GREEN);
-    }
-
-    public void loadBoard() {
-        ChessImage.run();
-    }
-
 
 }
